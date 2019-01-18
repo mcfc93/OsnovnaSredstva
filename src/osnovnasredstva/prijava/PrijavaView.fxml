@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXCheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="anchorPane" prefHeight="450.0" prefWidth="400.0" styleClass="rootPrijava" stylesheets="@../osnovnasredstva.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="osnovnasredstva.prijava.PrijavaViewController">
+   <children>
+      <TextField fx:id="korisnickoImeTextField" layoutX="120.0" layoutY="185.0" onMouseClicked="#sakrijLabelu" prefHeight="30.0" prefWidth="200.0" promptText="Korisničko ime" />
+      <PasswordField fx:id="lozinkaTextField" layoutX="120.0" layoutY="225.0" onMouseClicked="#sakrijLabelu" prefHeight="30.0" prefWidth="200.0" promptText="Lozinka" />
+      <JFXButton fx:id="prijavaButton" buttonType="RAISED" layoutX="150.0" layoutY="340.0" onAction="#prijava" prefHeight="27.0" prefWidth="100.0" ripplerFill="WHITE" text="Prijava" textFill="WHITE">
+         <font>
+            <Font name="Verdana Bold" size="12.0" />
+         </font>
+      </JFXButton>
+      <Label fx:id="greskaBackgroundLabel" alignment="TOP_LEFT" layoutX="93.0" layoutY="301.0" prefHeight="17.0" prefWidth="215.0" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Label>
+      <Label fx:id="greskaTextLabel" layoutX="101.0" layoutY="301.0" prefHeight="17.0" prefWidth="200.0" text="Korisničko ime ili lozinka pogrešni!" textFill="WHITE" />
+      <JFXCheckBox fx:id="zapamtiMeCheckBox" checkedColor="#ff0095" layoutX="80.0" layoutY="268.0" text="Zapamti me" textFill="WHITE" unCheckedColor="WHITE">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </JFXCheckBox>
+      <Label fx:id="zaboravljenaLozinkaLabel" layoutX="195.0" layoutY="269.0" text="Zaboravljena lozinka?" textFill="WHITE" underline="true">
+         <font>
+            <Font name="System Bold Italic" size="12.0" />
+         </font>
+      </Label>
+      <Label fx:id="close" layoutX="373.0" layoutY="2.0" onMouseClicked="#close" prefHeight="20.0" prefWidth="20.0" styleClass="close" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <graphic>
+            <ImageView fitHeight="20.0" fitWidth="20.0" onMouseClicked="#close" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../img/close.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Label>
+      <Label layoutX="338.0" layoutY="6.0" onMouseClicked="#minimize" styleClass="minimize" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="0.0">
+         <graphic>
+            <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../img/minimize.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Label>
+      <Label fx:id="usernameLabel" layoutX="80.0" layoutY="185.0" prefHeight="30.0" prefWidth="40.0" textFill="#8aceff" />
+      <ImageView fitHeight="20.0" fitWidth="20.0" layoutX="90.0" layoutY="190.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../img/username.png" />
+         </image>
+      </ImageView>
+      <Label fx:id="passwordLabel" layoutX="80.0" layoutY="225.0" prefHeight="30.0" prefWidth="40.0" />
+      <ImageView fitHeight="20.0" fitWidth="20.0" layoutX="90.0" layoutY="230.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../img/password.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="90.0" fitWidth="90.0" layoutX="155.0" layoutY="50.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../img/avatar.png" />
+         </image>
+      </ImageView>
+      <Label layoutX="109.0" layoutY="421.0" text="Copyright © 2018. Sva prava zadržana." textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="10.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>

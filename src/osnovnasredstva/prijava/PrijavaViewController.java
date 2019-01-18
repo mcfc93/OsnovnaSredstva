@@ -1,0 +1,138 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package osnovnasredstva.prijava;
+
+import com.jfoenix.controls.JFXCheckBox;
+import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+
+/**
+ *
+ * @author mcfc93
+ */
+public class PrijavaViewController implements Initializable {
+    
+    @FXML
+    private AnchorPane anchorPane;
+	
+    @FXML
+    private TextField korisnickoImeTextField;
+
+    @FXML
+    private PasswordField lozinkaTextField;
+    
+    @FXML
+    private JFXCheckBox zapamtiMeCheckBox;
+    
+    @FXML
+    private Label greskaTextLabel;
+    
+    @FXML
+    private Label greskaBackgroundLabel;
+
+    @FXML
+    private Button prijavaButton;
+    
+    private double xOffset=0;
+    private double yOffset=0;
+    
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+        greskaTextLabel.setVisible(false);
+	greskaBackgroundLabel.setVisible(false);
+	zapamtiMeCheckBox.setSelected(true);
+	prijavaButton.setDefaultButton(true);
+        
+        //DragAndDrop
+        anchorPane.setOnMousePressed(event -> {
+            Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());
+            xOffset = stage.getX() - event.getScreenX();
+            yOffset = stage.getY() - event.getScreenY();
+        });
+
+        anchorPane.setOnMouseDragged(event -> {
+            Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());
+            stage.setX(event.getScreenX() + xOffset);
+            stage.setY(event.getScreenY() + yOffset);
+            stage.setOpacity(0.8);
+        });
+
+        anchorPane.setOnMouseReleased(event -> {
+            Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());
+            stage.setOpacity(1.0);
+        });
+        
+        prijavaButton.disableProperty().bind(
+	    korisnickoImeTextField.textProperty().isEmpty().or(lozinkaTextField.textProperty().isEmpty())
+	);
+    }
+    
+    @FXML
+    void prijava(ActionEvent event) {
+        if("mcfc93".equals(korisnickoImeTextField.getText()) && "student".equals(lozinkaTextField.getText())) {
+            ((Stage)((Node)event.getSource()).getScene().getWindow()).close();
+            try {
+                //Parent root = (AnchorPane)FXMLLoader.load(getClass().getResource("administrator/AdministratorView.fxml"));
+                Parent root = FXMLLoader.load(getClass().getResource("/osnovnasredstva/administrator/AdministratorView.fxml"));
+                Scene scene = new Scene(root);
+                //scene.getStylesheets().add(getClass().getResource("osnovnasredstva.css").toExternalForm());
+                Stage stage=new Stage();
+                stage.setScene(scene);
+                stage.setResizable(false);
+                stage.initStyle(StageStyle.UNDECORATED);
+                stage.show();
+            } catch(IOException e) {
+                e.printStackTrace();
+                //Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+            }
+        } else {
+            greskaTextLabel.setText("Korisničko ime ili lozinka pogrešni!");
+            greskaTextLabel.setVisible(true);
+            greskaBackgroundLabel.setVisible(true);
+            korisnickoImeTextField.clear();
+            lozinkaTextField.clear();
+            //korisnickoImeTextField.requestFocus();
+        }
+    }
+    
+    void odjava(ActionEvent event) {
+        ((Stage)anchorPane.getScene().getWindow()).show();
+    }
+
+    @FXML
+    void sakrijLabelu(MouseEvent event) {
+        greskaTextLabel.setVisible(false);
+        greskaBackgroundLabel.setVisible(false);
+    }
+
+    @FXML
+    void close(MouseEvent event) {
+        ((Stage)((Node)event.getSource()).getScene().getWindow()).close();
+    }
+
+    @FXML
+    void minimize(MouseEvent event) {
+        Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());
+        stage.setIconified(true);
+    }
+    
+}
