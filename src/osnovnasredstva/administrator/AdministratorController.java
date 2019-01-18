@@ -18,6 +18,7 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -29,7 +30,10 @@ import javafx.stage.StageStyle;
 public class AdministratorController implements Initializable {
     
     @FXML
-    private AnchorPane anchorPane;
+    private GridPane gridPane;
+    
+    @FXML
+    private AnchorPane menuLine;
 
     @FXML
     private AnchorPane dataAnchorPane;
@@ -66,13 +70,13 @@ public class AdministratorController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         //DragAndDrop
-        anchorPane.setOnMousePressed(event -> {
+        menuLine.setOnMousePressed(event -> {
             Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());
             xOffset = stage.getX() - event.getScreenX();
             yOffset = stage.getY() - event.getScreenY();
         });
 
-        anchorPane.setOnMouseDragged(event -> {
+        menuLine.setOnMouseDragged(event -> {
             Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());
             if(!stage.isMaximized()) {
                 stage.setX(event.getScreenX() + xOffset);
@@ -81,7 +85,7 @@ public class AdministratorController implements Initializable {
             }
         });
 
-        anchorPane.setOnMouseReleased(event -> {
+        menuLine.setOnMouseReleased(event -> {
             Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());
             stage.setOpacity(1.0);
         });
@@ -166,7 +170,7 @@ public class AdministratorController implements Initializable {
             stage.initStyle(StageStyle.UNDECORATED);
             stage.show();
             
-            ((Stage)anchorPane.getScene().getWindow()).close();
+            ((Stage)gridPane.getScene().getWindow()).close();
         } catch(IOException e) {
             e.printStackTrace();
         }

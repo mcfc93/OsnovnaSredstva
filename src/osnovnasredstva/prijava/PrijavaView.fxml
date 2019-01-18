@@ -70,7 +70,7 @@
             <Image url="@../img/avatar.png" />
          </image>
       </ImageView>
-      <Label layoutX="109.0" layoutY="421.0" text="Copyright © 2018. Sva prava zadržana." textFill="WHITE">
+      <Label layoutX="109.0" layoutY="421.0" text="Copyright © 2019. Sva prava zadržana." textFill="WHITE">
          <font>
             <Font name="System Bold" size="10.0" />
          </font>
