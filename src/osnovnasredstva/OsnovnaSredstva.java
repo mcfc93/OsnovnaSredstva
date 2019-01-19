@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package osnovnasredstva;
 
 import javafx.application.Application;
@@ -11,10 +6,11 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import osnovnasredstva.util.Util;
 
 /**
  *
- * @author w7
+ * @author mcfc93
  */
 public class OsnovnaSredstva extends Application {    
     @Override
@@ -28,7 +24,21 @@ public class OsnovnaSredstva extends Application {
         stage.setResizable(false);
         stage.initStyle(StageStyle.UNDECORATED);
         stage.show();
+        
+        Util.getNotifications("Warning", "Warning", "Warning").show();
+        Util.getNotifications("Information", "Information", "Information").show();
+        Util.getNotifications("Confirmation", "Confirmation", "Confirmation").show();
+        Util.getNotifications("Error", "Error", "Error").show();
+        Util.getNotifications("Default", "Default", "").show();
+        
+        Util.showBugAlert();
     }
+    
+    @Override
+	public void stop() {
+            System.out.println("CLOSE");
+            Util.fileHandler.close();
+	}
 
     /**
      * @param args the command line arguments

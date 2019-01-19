@@ -3,6 +3,7 @@ package osnovnasredstva.administrator;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -16,14 +17,15 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import osnovnasredstva.util.Util;
 
 /**
- * FXML Controller class
  *
  * @author mcfc93
  */
@@ -71,23 +73,29 @@ public class AdministratorController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         //DragAndDrop
         menuLine.setOnMousePressed(event -> {
-            Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());
-            xOffset = stage.getX() - event.getScreenX();
-            yOffset = stage.getY() - event.getScreenY();
+            if(event.getButton().equals(MouseButton.PRIMARY)) {
+                Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());
+                xOffset = stage.getX() - event.getScreenX();
+                yOffset = stage.getY() - event.getScreenY();
+            }
         });
 
         menuLine.setOnMouseDragged(event -> {
-            Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());
-            if(!stage.isMaximized()) {
-                stage.setX(event.getScreenX() + xOffset);
-                stage.setY(event.getScreenY() + yOffset);
-                stage.setOpacity(0.8);
+            if(event.getButton().equals(MouseButton.PRIMARY)) {
+                Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());
+                if(!stage.isMaximized()) {
+                    stage.setX(event.getScreenX() + xOffset);
+                    stage.setY(event.getScreenY() + yOffset);
+                    stage.setOpacity(0.8);
+                }
             }
         });
 
         menuLine.setOnMouseReleased(event -> {
-            Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());
-            stage.setOpacity(1.0);
+            if(event.getButton().equals(MouseButton.PRIMARY)) {
+                Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());
+                stage.setOpacity(1.0);
+            }
         });
 
         //toggleGroup
@@ -102,29 +110,36 @@ public class AdministratorController implements Initializable {
     
     @FXML
     void close(MouseEvent event) {
-        ((Stage)((Node)event.getSource()).getScene().getWindow()).close();
+        if(event.getButton().equals(MouseButton.PRIMARY)) {
+            ((Stage)((Node)event.getSource()).getScene().getWindow()).close();
+        }
     }
 
     @FXML
     void minimize(MouseEvent event) {
-        Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());
-        stage.setIconified(true);
+        if(event.getButton().equals(MouseButton.PRIMARY)) {
+            ((Stage)((Node)event.getSource()).getScene().getWindow()).setIconified(true);
+        }
     }
 
     @FXML
     void maximize(MouseEvent event) {
-        Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());
-        if(!stage.isMaximized()) {
+        if(event.getButton().equals(MouseButton.PRIMARY)) {
+            Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());
+            if(!stage.isMaximized()) {
                 stage.setMaximized(true);
-        } else {
+            } else {
                 stage.setMaximized(false);
+            }
         }
     }
     
     @FXML
     void doubleClick(MouseEvent event) {
-        if(event.getClickCount() > 1) {
-            maximize(event);
+        if(event.getButton().equals(MouseButton.PRIMARY)) {
+            if(event.getClickCount() > 1) {
+                maximize(event);
+            }
         }
     }
     
@@ -172,7 +187,7 @@ public class AdministratorController implements Initializable {
             
             ((Stage)gridPane.getScene().getWindow()).close();
         } catch(IOException e) {
-            e.printStackTrace();
+            Util.LOGGER.log(Level.SEVERE, e.toString(), e);
         }
     }
 }
