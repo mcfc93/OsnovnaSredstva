@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXCheckBox?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXDatePicker?>
+<?import com.jfoenix.controls.JFXPasswordField?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import com.jfoenix.controls.JFXTimePicker?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.image.Image?>
@@ -30,7 +38,7 @@
                   <Font name="System Bold" size="12.0" />
                </font>
             </Label>
-            <ToggleButton alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="15.0" layoutY="165.0" mnemonicParsing="false" onAction="#x" prefHeight="30.0" prefWidth="200.0" selected="true" text="Option1" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" fx:id="xButton">
+            <ToggleButton fx:id="osobeButton" alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="15.0" layoutY="165.0" mnemonicParsing="false" onAction="#x" prefHeight="40.0" prefWidth="200.0" selected="true" text="Osobe" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                <toggleGroup>
                   <ToggleGroup fx:id="toggleGroup" />
                </toggleGroup>
@@ -43,12 +51,12 @@
                <graphic>
                   <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../img/logout.png" />
+                        <Image url="@../img/osobe.png" />
                      </image>
                   </ImageView>
                </graphic>
             </ToggleButton>
-            <ToggleButton fx:id="yButton" alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="15.0" layoutY="195.0" mnemonicParsing="false" onAction="#y" prefHeight="30.0" prefWidth="200.0" text="Option2" toggleGroup="$toggleGroup" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+            <ToggleButton fx:id="lokacijeButton" alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="15.0" layoutY="205.0" mnemonicParsing="false" onAction="#y" prefHeight="40.0" prefWidth="200.0" text="Lokacije" toggleGroup="$toggleGroup" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                <opaqueInsets>
                   <Insets />
                </opaqueInsets>
@@ -58,12 +66,12 @@
                <graphic>
                   <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../img/logout.png" />
+                        <Image url="@../img/lokacije.png" />
                      </image>
                   </ImageView>
                </graphic>
             </ToggleButton>
-            <ToggleButton fx:id="zButton" alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="15.0" layoutY="225.0" mnemonicParsing="false" onAction="#z" prefHeight="30.0" prefWidth="200.0" text="Option3" toggleGroup="$toggleGroup" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+            <ToggleButton fx:id="osnovnaSredstvaButton" alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="15.0" layoutY="245.0" mnemonicParsing="false" onAction="#z" prefHeight="40.0" prefWidth="200.0" text="Osnovna sredstva" toggleGroup="$toggleGroup" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                <opaqueInsets>
                   <Insets />
                </opaqueInsets>
@@ -73,12 +81,12 @@
                <graphic>
                   <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../img/logout.png" />
+                        <Image url="@../img/osnovna_sredstva.png" />
                      </image>
                   </ImageView>
                </graphic>
             </ToggleButton>
-            <ToggleButton fx:id="wButton" alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="15.0" layoutY="452.0" mnemonicParsing="false" onAction="#odjava" prefHeight="30.0" prefWidth="200.0" text="Odjava" toggleGroup="$toggleGroup" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+            <ToggleButton fx:id="wButton" alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="15.0" layoutY="452.0" mnemonicParsing="false" onAction="#odjava" prefHeight="40.0" prefWidth="200.0" text="Odjava" toggleGroup="$toggleGroup" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                <opaqueInsets>
                   <Insets />
                </opaqueInsets>
@@ -108,6 +116,21 @@
                   </ImageView>
                </children>
             </GridPane>
+            <ToggleButton fx:id="korisnickiNaloziButton" alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="15.0" layoutY="285.0" mnemonicParsing="false" onAction="#z" prefHeight="40.0" prefWidth="200.0" text="Korisnički nalozi" toggleGroup="$toggleGroup" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <padding>
+                  <Insets left="20.0" />
+               </padding>
+               <graphic>
+                  <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../img/user.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </ToggleButton>
          </children>
       </AnchorPane>
       <AnchorPane fx:id="menuLine" onMouseClicked="#doubleClick" prefHeight="30.0" prefWidth="200.0" GridPane.columnSpan="2">
@@ -117,6 +140,17 @@
             <Button fx:id="minimizeButton" layoutX="518.0" layoutY="9.0" mnemonicParsing="false" onMouseClicked="#minimize" styleClass="minimizeButton" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="45.0" AnchorPane.topAnchor="5.0" />
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="dataAnchorPane" prefHeight="470.0" prefWidth="600.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+      <AnchorPane fx:id="dataAnchorPane" prefHeight="470.0" prefWidth="600.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+         <children>
+            <JFXTextField layoutX="117.0" layoutY="270.0" promptText="TextField" />
+            <JFXPasswordField layoutX="117.0" layoutY="344.0" text="TextField" />
+            <TextField layoutX="117.0" layoutY="143.0" promptText="TextField" />
+            <PasswordField layoutX="117.0" layoutY="208.0" text="TextField" />
+            <JFXCheckBox layoutX="363.0" layoutY="147.0" selected="true" />
+            <JFXComboBox layoutX="363.0" layoutY="208.0" prefHeight="25.0" prefWidth="149.0" />
+            <JFXDatePicker layoutX="363.0" layoutY="269.0" />
+            <JFXTimePicker layoutX="363.0" layoutY="343.0" />
+            <JFXCheckBox layoutX="457.0" layoutY="147.0" />
+         </children></AnchorPane>
    </children>
 </GridPane>

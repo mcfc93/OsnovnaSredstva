@@ -145,7 +145,17 @@ public class AdministratorController implements Initializable {
     
     @FXML
     void x(ActionEvent event) {
-    	System.out.println("X");
+    	try {
+            Parent root = FXMLLoader.load(getClass().getResource("/osnovnasredstva/administrator/OsobeView.fxml"));
+            AnchorPane.setTopAnchor(root,0.0);
+            AnchorPane.setBottomAnchor(root,0.0);
+            AnchorPane.setLeftAnchor(root,0.0);
+            AnchorPane.setRightAnchor(root,0.0);
+            dataAnchorPane.getChildren().removeAll();
+            dataAnchorPane.getChildren().setAll(root);
+        } catch(IOException e) {
+            Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+        }
     }
 
     @FXML

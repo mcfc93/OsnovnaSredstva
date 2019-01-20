@@ -1,6 +1,14 @@
+.root {
+    -fx-primary-color: #303F9F;
+    -fx-secondary-color: #1976D2;
+    -fx-text-color: white;
+    -fx-hover-color: #212121;
+}
+
 .rootPrijava {
-    -fx-background-image: url('file:src/osnovnasredstva/img/background.png');
-/*-fx-background-image: url('file:C:/JavaProjects/LanacAutobuskihStanica/src/org/unibl/etf/prijava/img/background.png');*/
+    /*-fx-background-image: url('file:src/osnovnasredstva/img/background.png');*/
+/*-fx-background-image: url('file:C:/NetBeans Projects/OsnovnaSredstva/src/osnovnasredstva/img/background.png');*/
+-fx-background-image: url('file:C:/JavaProjects/LanacAutobuskihStanica/src/org/unibl/etf/prijava/img/background.png');
     -fx-background-size: 500 500;
     -fx-background-position: center center;
 }
@@ -8,39 +16,39 @@
 #korisnickoImeTextField {
     -fx-background-color: #FFFFFF;
     -fx-background-radius: 0px;
-    -fx-prompt-text-fill: #ff0095;
-    -fx-text-fill: #ff0095;
+    -fx-prompt-text-fill: -fx-primary-color;
+    -fx-text-fill: -fx-primary-color;
     -fx-font-weight: bold;
-    -fx-highlight-fill: #ff0095;
+    -fx-highlight-fill: -fx-primary-color;
 }
 
-#korisnickoImeTextField:focused {
+.korisnickoImeTextField:focused {
     -fx-background-color: #000000;
     -fx-background-radius: 0px;
     -fx-prompt-text-fill: #FFFFFF;
-    -fx-text-fill: #ff0095;
+    -fx-text-fill: -fx-primary-color;
     -fx-font-weight: normal;
 }
 
 #lozinkaTextField {
     -fx-background-color: #FFFFFF;
     -fx-background-radius: 0px;
-    -fx-prompt-text-fill: #ff0095;
-    -fx-text-fill: #ff0095;
+    -fx-prompt-text-fill: -fx-primary-color;
+    -fx-text-fill: -fx-primary-color;
     -fx-font-weight:bold;
-    -fx-highlight-fill: #ff0095;
+    -fx-highlight-fill: -fx-primary-color;
 }
 
 #lozinkaTextField:focused {
     -fx-background-color: #000000;
     -fx-background-radius: 0px;
     -fx-prompt-text-fill: #FFFFFF;
-    -fx-text-fill: #ff0095;
+    -fx-text-fill: -fx-primary-color;
     -fx-font-weight: normal;
 }
 
 #prijavaButton {
-    -fx-background-color: #ff00ff;
+    -fx-background-color: -fx-secondary-color;
     -fx-text-fill: WHITE;
     -fx-background-radius: 0px;
     -fx-font-size: 12px !important;
@@ -48,7 +56,7 @@
 }
 
 #prijavaButton:hover {
-    -fx-background-color: #ff0095;
+    -fx-background-color: -fx-primary-color;
     -fx-text-fill: WHITE;
 }
 
@@ -57,13 +65,13 @@
 }
 
 #zaboravljenaLozinkaLabel:hover {
-    -fx-text-fill: #0645AD;
+    -fx-text-fill: #1976D2;
     -fx-cursor: hand;
 }
 
 #greskaBackgroundLabel {
     -fx-prompt-text-fill: WHITE;
-    -fx-font-weight:bold;
+    -fx-font-weight: bold;
     -fx-background-color: RED;
     -fx-opacity: 0.6;
     -fx-background-radius: 3px;
@@ -72,63 +80,62 @@
 
 #greskaTextLabel {
     -fx-prompt-text-fill: WHITE;
-    -fx-font-weight:bold;
+    -fx-font-weight: bold;
 }
 
 #usernameLabel {
-    -fx-background-color: #ff0095;
+    -fx-background-color: -fx-secondary-color;
 }
 
 #passwordLabel {
-    -fx-background-color: #ff0095;
+    -fx-background-color: -fx-secondary-color;
 }
 
 .naslovLabel {
-    -fx-text-fill: #ff0095;
+    -fx-text-fill: -fx-primary-color;
     -fx-font-size: 14px;
     -fx-font-weight: bold;
 }
 
 .opisLabel {
-    -fx-text-fill: BLACK;
+    -fx-text-fill: -fx-hover-color;
     -fx-font-weight: bold;
 }
 
 .opisTextField {
-	-fx-text-fill: BLACK;
-	-fx-prompt-text-fill: #ff0095;
-	-fx-highlight-fill: null;
-	-fx-highlight-text-fill: null;
-	-fx-border-radius: 20px;
-	-fx-border-color: #ff0095;
-	-fx-background-radius: 20px;
-	-fx-background-color: transparent;
-	-fx-border-width: 1.5px;
-	-fx-cursor: normal;
-	-fx-focus-traversable: false;
+    -fx-text-fill: -fx-hover-color;
+    -fx-prompt-text-fill: -fx-primary-color;
+    -fx-highlight-fill: null;
+    -fx-highlight-text-fill: null;
+    -fx-border-radius: 20px;
+    -fx-border-color: -fx-primary-color;
+    -fx-background-radius: 20px;
+    -fx-background-color: transparent;
+    -fx-border-width: 1.5px;
+    -fx-cursor: normal;
+    -fx-focus-traversable: false;
 }
 
 .rootBorder {
-	-fx-border-color: BLACK;
-	-fx-border-width: 2px;
-	-fx-background-color: white;
+    -fx-border-color: linear-gradient(-fx-hover-color 10%, -fx-primary-color 90%);
+    -fx-border-width: 2px;
+    -fx-background-color: white;
 }
 
 .anchorMenu {
-	-fx-background-color: linear-gradient(black 20%, #ff0095 80%);
+    -fx-background-color: linear-gradient(-fx-hover-color 10%, -fx-primary-color 90%);
 }
 
 #dataAnchorPane {
-	/*linear-gradient( [ [from <point> to <point>] | [ to <side-or-corner>], ]? [ [ repeat | reflect ], ]? <color-stop>[, <color-stop>]+)
-	 *where <side-or-corner> = [left | right] || [top | bottom]
-	 * -fx-background-color: linear-gradient(to right bottom, #4b0082, #8b008b 50%, #9c27b0 80%, #9932cc);
- 	 */
- 	-fx-background-color: white;
+    /*linear-gradient( [ [from <point> to <point>] | [ to <side-or-corner>], ]? [ [ repeat | reflect ], ]? <color-stop>[, <color-stop>]+)
+     *where <side-or-corner> = [left | right] || [top | bottom]
+     * -fx-background-color: linear-gradient(to right bottom, #4b0082, #8b008b 50%, #9c27b0 80%, #9932cc);
+     */
+    -fx-background-color: white;
 }
 
 #menuLine {
-	-fx-background-color: black;
-	/*-fx-background-color: white;*/
+    -fx-background-color: -fx-hover-color;
 }
 
 /* * * * * * *
@@ -136,10 +143,9 @@
  * Button
  * 
  * * * * * * */
-
 .button {
-    -fx-background-color: #ff0095;
-    -fx-text-fill: white;
+    -fx-background-color: -fx-primary-color;
+    -fx-text-fill: -fx-text-color;
     -fx-font-weight: bold;
     -fx-border: none;
     -fx-border-radius: 0px;
@@ -148,7 +154,7 @@
 }
 
 .button:hover {
-    -fx-background-color: black;
+    -fx-background-color: -fx-hover-color;
     -fx-alignment: center;
 }
 
@@ -159,7 +165,7 @@
  * * * * * * */
 .toggle-button {
     -fx-background-color: transparent;
-    -fx-text-fill: white;
+    -fx-text-fill: -fx-text-color;
     -fx-font-weight: bold;
     -fx-border: none;
     -fx-border-radius: 0px;
@@ -167,26 +173,22 @@
 }
 
 .toggle-button:hover {
-    /*-fx-background-color: #9c27b0;*/
-    -fx-background-color: hotpink;
+    -fx-background-color: -fx-hover-color;
     -fx-cursor: hand;
-    /*-fx-border-color: #2196f3;*/
-    -fx-border-color: black;
+    -fx-border-color: -fx-secondary-color;
     -fx-border-width: 0px 4px 0px 0px;
 }
 
 .toggle-button:selected {
-    /*-fx-background-color: #ff0095;*/
-    -fx-background-color: BLACK;
-    -fx-border-color: hotpink;
+    -fx-background-color: -fx-secondary-color;
+    -fx-border-color: -fx-hover-color;
     -fx-border-width: 0px 4px 0px 0px;
     -fx-cursor: normal;
 }
 
 .toggle-button:disabled {
-    /*-fx-background-color: #ff0095;*/
-    -fx-background-color: BLACK;
-    -fx-border-color: hotpink;
+    -fx-background-color: -fx-secondary-color;
+    -fx-border-color: -fx-hover-color;
     -fx-border-width: 0px 4px 0px 0px;
     -fx-cursor: normal;
     -fx-opacity: 1;
@@ -238,7 +240,7 @@
 }
 
 .maximizeButton:hover {
-    -fx-background-color: #2800ae;
+    -fx-background-color: -fx-secondary-color;
 }
 
 .minimizeButton {
@@ -260,7 +262,7 @@
 }
 
 .minimizeButton:hover {
-    -fx-background-color: #2800ae;
+    -fx-background-color: -fx-secondary-color;
 }
 
 /* * * * * * *
@@ -268,11 +270,10 @@
  * TextField / PasswordField
  * 
  * * * * * * */
-
 .text-field, .password-field, .combo-box {
-    -fx-text-fill: #ff0095;
-    -fx-prompt-text-fill: BLACK;
-    -fx-highlight-fill: #ff0095;
+    -fx-text-fill: -fx-primary-color;
+    -fx-prompt-text-fill: -fx-hover-color;
+    -fx-highlight-fill: -fx-primary-color;
 }
 
 /* * * * * * *
@@ -280,11 +281,10 @@
  * JFXTextField / JFXPasswordField
  * 
  * * * * * * */
-
 .jfx-text-field, .jfx-password-field, .jfx-combo-box{
-    -fx-text-fill: #ff0095;
-    -jfx-focus-color: BLACK;
-    -jfx-unfocus-color: #ff0095;
+    -fx-text-fill: -fx-primary-color;
+    -jfx-focus-color: -fx-hover-color;
+    -jfx-unfocus-color: -fx-primary-color;
     -jfx-label-float: true;
     -jfx-disable-animation: false;
 }
@@ -304,7 +304,7 @@
 
 .jfx-text-field .error-icon, .jfx-password-field .error-icon, .jfx-combo-box .error-icon {
     /*-fx-fill: red;*/
-    -fx-image: url("/org/unibl/etf/administrator/img/warning-24.png");
+    -fx-image: url("/osnovnasredstva/img/warning-24.png");
 }
 
 /* * * * * * *
@@ -313,13 +313,12 @@
  * 
  * * * * * * */
 .jfx-autocomplete-popup {
-	-fx-fixed-cell-size: 24;
-	-jfx-cell-limit: 3;
-   	-fx-pref-width: 150.0px;
-	-fx-text-fill: RED;
-	-fx-background-color: BLACK;
+    -fx-fixed-cell-size: 24;
+    -jfx-cell-limit: 3;
+    -fx-pref-width: 150.0px;
+    -fx-text-fill: RED;
+    -fx-background-color: -fx-hover-color;
 }
-
 
 /* * * * * * *
  * 
@@ -351,7 +350,7 @@
 
 .scroll-bar:horizontal .thumb,
 .scroll-bar:vertical .thumb {
-    -fx-background-color: BLACK;
+    -fx-background-color: -fx-hover-color;
     -fx-background-insets: 0;
     -fx-background-insets: 2.0, 0.0, 0.0;
     -fx-background-radius: 1.0em;
@@ -359,10 +358,7 @@
 
 .scroll-bar:horizontal .thumb:hover,
 .scroll-bar:vertical .thumb:hover {
-    /*-fx-background-color: derive(#4D4C4F,10.0%);*/
-    -fx-background-color: #ff0095;
-    
-    /*-fx-background-color: BLACK;*/
+    -fx-background-color: -fx-primary-color;
     -fx-background-insets: 0;
     -fx-background-insets: 2.0, 0.0, 0.0;
     -fx-background-radius: 1.0em;
@@ -383,19 +379,17 @@
     -fx-padding: 0.0 0.5 0.0 0.0;
 }
 
- .scroll-bar:horizontal .increment-arrow,
- .scroll-bar:horizontal .decrement-arrow {
+.scroll-bar:horizontal .increment-arrow,
+.scroll-bar:horizontal .decrement-arrow {
     -fx-shape: " ";    
     -fx-padding: 0.5em 0.0;
 }
 
- .scroll-bar:vertical .increment-arrow,
- .scroll-bar:vertical .decrement-arrow {
+.scroll-bar:vertical .increment-arrow,
+.scroll-bar:vertical .decrement-arrow {
     -fx-shape: " ";    
     -fx-padding: 0.0 0.5em;
 }
-
-
 
 /* * * * * * *
  * 
@@ -406,13 +400,8 @@
     -fx-background-color: transparent;
     -fx-background-insets: 0;
     -fx-padding: 10;
-    /*-fx-table-header-border-color: transparent;*/
-    /*-fx-table-cell-border-color: derive(-fx-color,5%);*/
-    
     -fx-focus-traversable: false;
-    
     -fx-border-color: transparent;
-    /*-fx-background-color: pink;*/
 }
 
 .table-view:focused {
@@ -420,7 +409,7 @@
 }
 
 .table-view .placeholder .label {
-     -fx-text-fill: #ff0095;
+     -fx-text-fill: -fx-primary-color;
      -fx-font-size: 15px;
      -fx-font-weight: bold;
  }
@@ -434,38 +423,27 @@
     -fx-border-color: transparent transparent rgba(0,0,0,0.9) transparent;
     -fx-border-width: 2;
     -fx-background-insets: 0;
-    
-    
-    
-	-fx-background-color: transparent;
-	/*-fx-background-color: BLACK;*/
+    -fx-background-color: transparent;
 }
 
 .table-view .column-header-background .label{
     -fx-background-color: transparent;
-    -fx-text-fill: #ff0095;
+    -fx-text-fill: -fx-primary-color;
     -fx-alignment: center-left;
 }
-
-
-
-
 
 .table-view .table-cell{
-    -fx-text-fill: BLACK;
+    -fx-text-fill: -fx-hover-color;
     -fx-alignment: center-left;
 }
-
 
 .table-row-cell {
     -fx-background-color: -fx-table-cell-border-color, transparent;
     -fx-background-insets: 0, 0 0 0 0;
     -fx-padding: 0;
-    
     -fx-border-color: transparent;
-	-fx-table-cell-border-color: transparent;
+    -fx-table-cell-border-color: transparent;
 }
-
 
 .table-row-cell:odd {
     -fx-background-color: -fx-table-cell-border-color, transparent;
@@ -474,12 +452,12 @@
 }
 
 .table-row-cell:selected {
-    -fx-background-color: pink;
+    -fx-background-color: -fx-secondary-color;
     -fx-background-insets: 0;
     -fx-background-radius: 1;
 }
 .table-row-cell:selected .text {
-       /*-fx-fill: black;*/
+    /*-fx-fill: black;*/
 }
 /*
 .table-cell {
@@ -502,7 +480,6 @@
 	-fx-background-color: #005797;
 }
 */
-
 /*
 .table-view > .virtual-flow > .scroll-bar:vertical,
 .table-view > .virtual-flow > .scroll-bar:vertical > .track,
@@ -518,8 +495,6 @@
     -fx-opacity: 0;
 }
 */
-
-
 /*
 .table-view .column-resize-line {
     -fx-background: -fx-accent;
@@ -533,94 +508,69 @@
  * 
  * * * * * * */
 .buttonTableEdit {
-	-fx-background-image: url('img/edit.png');
-	-fx-background-position: center;
-	-fx-background-repeat: no-repeat;
-	-fx-background-size: 20,20;
-	-fx-pref-height: 25px;
+    -fx-background-image: url('img/edit.png');
+    -fx-background-position: center;
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: 20,20;
+    -fx-pref-height: 25px;
     -fx-pref-width: 25px;
-	-fx-background-color: transparent;
-	-fx-border: none;
-	-fx-border-radius: 0px;
-	-fx-background-radius: 0px;
-	-fx-focus-traversable: false;
-	-fx-border-radius: 5;
- 	-fx-background-radius: 5;
+    -fx-background-color: transparent;
+    -fx-border: none;
+    -fx-border-radius: 0px;
+    -fx-background-radius: 0px;
+    -fx-focus-traversable: false;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
 }
 
 .buttonTableEdit:hover {
-	/*DRUGA SLIKA */
-	-fx-background-color: black;
-	-fx-cursor: hand;
+    /*DRUGA SLIKA */
+    -fx-background-color: -fx-hover-color;
+    -fx-cursor: hand;
 }
 
 .buttonTableDelete {
-	-fx-background-image: url('img/delete.png');
-	-fx-background-position: center;
-	-fx-background-repeat: no-repeat;
-	-fx-background-size: 20,20;
-	-fx-pref-height: 25px;
+    -fx-background-image: url('img/delete.png');
+    -fx-background-position: center;
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: 20,20;
+    -fx-pref-height: 25px;
     -fx-pref-width: 25px;
-	-fx-background-color: transparent;
-	-fx-border: none;
-	-fx-border-radius: 0px;
-	-fx-background-radius: 0px;
-	-fx-focus-traversable: false;
-	-fx-border-radius: 5;
- 	-fx-background-radius: 5;
+    -fx-background-color: transparent;
+    -fx-border: none;
+    -fx-border-radius: 0px;
+    -fx-background-radius: 0px;
+    -fx-focus-traversable: false;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
 }
 
 .buttonTableDelete:hover {
-	/*DRUGA SLIKA */
-	/*-fx-background-color: #9c27b0;*/
-	-fx-background-color: black;
-	-fx-cursor: hand;
+    /*DRUGA SLIKA */
+    -fx-background-color: -fx-hover-color;
+    -fx-cursor: hand;
 }
 
-.buttonTableBlock {
-	-fx-background-image: url('img/block.png');
-	-fx-background-position: center;
-	-fx-background-repeat: no-repeat;
-	-fx-background-size: 25,25;
-	-fx-pref-height: 25px;
+.buttonTableShow {
+    -fx-background-image: url('img/show.png');
+    -fx-background-position: center;
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: 25,25;
+    -fx-pref-height: 25px;
     -fx-pref-width: 25px;
-	-fx-background-color: transparent;
-	-fx-border: none;
-	-fx-border-radius: 0px;
-	-fx-background-radius: 0px;
-	-fx-focus-traversable: false;
-	-fx-border-radius: 5;
- 	-fx-background-radius: 5;
+    -fx-background-color: transparent;
+    -fx-border: none;
+    -fx-border-radius: 0px;
+    -fx-background-radius: 0px;
+    -fx-focus-traversable: false;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
 }
 
-.buttonTableBlock:hover {
-	/*DRUGA SLIKA */
-	/*-fx-background-color: #9c27b0;*/
-	-fx-background-color: black;
-	-fx-cursor: hand;
-}
-
-.buttonTableUnblock {
-	-fx-background-image: url('img/unblock.png');
-	-fx-background-position: center;
-	-fx-background-repeat: no-repeat;
-	-fx-background-size: 25,25;
-	-fx-pref-height: 25px;
-    -fx-pref-width: 25px;
-	-fx-background-color: transparent;
-	-fx-border: none;
-	-fx-border-radius: 0px;
-	-fx-background-radius: 0px;
-	-fx-focus-traversable: false;
-	-fx-border-radius: 5;
- 	-fx-background-radius: 5;
-}
-
-.buttonTableUnblock:hover {
-	/*DRUGA SLIKA */
-	/*-fx-background-color: #9c27b0;*/
-	-fx-background-color: black;
-	-fx-cursor: hand;
+.buttonTableShow:hover {
+    /*DRUGA SLIKA */
+    -fx-background-color: -fx-hover-color;
+    -fx-cursor: hand;
 }
 
 /* * * * * * *
@@ -656,8 +606,8 @@
  * 
  * * * * * * */
 .jfx-radio-button{
-    -jfx-selected-color: #ff0095;
-    -jfx-unselected-color: BLACK;
+    -jfx-selected-color: -fx-primary-color;
+    -jfx-unselected-color: -fx-hover-color;
 }
 
 .jfx-radio-button .radio-container:hover{
@@ -666,37 +616,13 @@
 
 /* * * * * * *
  * 
- * mjesecna karta
- * 
- * * * * * * */
-.mjesecnaAnchor {
-	-fx-border-color: BLACK;
-	-fx-border-radius: 5 5 5 5;
- 	-fx-background-radius: 7 7 7 7;
-	-fx-border-width: 2px;
-}
-
-.mjesecnaDjacka {
-	-fx-background-color: blue;
-}
-
-.mjesecnaPenzionerska {
-	-fx-background-color: red;
-}
-
-.mjesecnaRadnicka {
-	-fx-background-color: pink;
-}
-
-/* * * * * * *
- * 
  * - - - - -
  * 
  * * * * * * */
 .naslovLabel {
-	-fx-text-fill: #ff0095;
-	-fx-font-size: 14px;
-	-fx-font-weight: bold;
+    -fx-text-fill: #ff0095;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
 }
 
 /* * * * * * *
@@ -705,60 +631,54 @@
  * 
  * * * * * * */
 .searchTextField {
-	-fx-border-radius: 20px;
-	-fx-border-color: #ff0095;
-	-fx-background-radius: 20px;
-	-fx-background-color: transparent;
-	-fx-border-width: 2px;
-	
-	-fx-text-fill: #ff0095;
-	-fx-prompt-text-fill: BLACK;
-	-fx-highlight-fill: #ff0095;
-	
-	-fx-background-image:url('img/search.png');
+    -fx-border-radius: 20px;
+    -fx-border-color: -fx-primary-color;
+    -fx-background-radius: 20px;
+    -fx-background-color: transparent;
+    -fx-border-width: 2px;
+    -fx-text-fill: -fx-hover-color;
+    -fx-prompt-text-fill: -fx-hover-color;
+    -fx-highlight-fill: -fx-primary-color;
+    -fx-background-image:url('img/search.png');
     -fx-background-repeat: no-repeat;
     -fx-background-position: left 5px center;
-   	-fx-background-size: 15px 15px;
-   	-fx-padding: 0px 20px 0px 20px;
-}
-
-.searchTextFieldJFX {
-	-fx-border-radius: 20px;
-	-fx-border-color: #ff0095;
-	-fx-background-radius: 20px;
-	-fx-background-color: transparent;
-	-fx-border-width: 2px;
-	
-	/*-fx-text-fill: #ff0095;*/
-	-fx-text-fill: BLACK;
-	/*-fx-font-weight: bold;*/
-	-fx-prompt-text-fill: BLACK;
-	-fx-highlight-fill: #ff0095;
-	
-	-fx-background-image:url('img/search.png');
-    -fx-background-repeat: no-repeat;
-    -fx-background-position: left 5px center;
-   	-fx-background-size: 15px 15px;
-   	-fx-padding: 0px 20px 0px 20px;
-   	
-	-jfx-focus-color: transparent;
-	-jfx-unfocus-color: transparent;
-	-jfx-label-float: false;
-	-jfx-disable-animation: true;
+    -fx-background-size: 15px 15px;
+    -fx-padding: 0px 20px 0px 20px;
 }
 /*
+.searchTextFieldJFX {
+    -fx-border-radius: 20px;
+    -fx-border-color: -fx-primary-color;
+    -fx-background-radius: 20px;
+    -fx-background-color: transparent;
+    -fx-border-width: 2px;
+    -fx-text-fill: -fx-hover-color;
+    -fx-prompt-text-fill: -fx-hover-color;
+    -fx-highlight-fill: -fx-primary-color;
+    -fx-background-image:url('img/search.png');
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: left 5px center;
+    -fx-background-size: 15px 15px;
+    -fx-padding: 0px 20px 0px 20px;
+    -jfx-focus-color: transparent;
+    -jfx-unfocus-color: transparent;
+    -jfx-label-float: false;
+    -jfx-disable-animation: true;
+}
+*/
+/*
 .searchTextFieldJFX:focused {
-	-fx-font-weight: normal;
-	-fx-prompt-text-fill: transparent;
+    -fx-font-weight: normal;
+    -fx-prompt-text-fill: transparent;
 }
 */
 
 .clearImageView {
-	-fx-image:url('img/clear.png');
+    -fx-image:url('img/clear.png');
 }
 
 .clearImageView:hover {
-	-fx-cursor: hand;
+    -fx-cursor: hand;
 }
 
 /* * * * * * *
@@ -767,17 +687,19 @@
  * 
  * * * * * * */
 .jfx-check-box {
-	-jfx-focus-color: #1fdbf8;
-	-jfx-unfocus-color: #5a5a5a;
+    /*-jfx-focus-color: #1fdbf8;*/
+    -jfx-focus-color: -fx-secondary-color;
+    -jfx-unfocus-color: -fx-primary-color;
 }
 
 .jfx-check-box {
-     -jfx-checked-color: #1fdbf8;
-     -jfx-unchecked-color: #5a5a5a;
+    /*-jfx-checked-color: #1fdbf8;*/
+    -jfx-checked-color: -fx-secondary-color;
+    -jfx-unchecked-color: -fx-primary-color;
 }
 
 .jfx-check-box .mark {
-     -fx-border-color: white;
+    -fx-border-color: white;
 }
 
 /* * * * * * *
@@ -786,7 +708,7 @@
  * 
  * * * * * * */
 .jfx-time-picker {
-    -jfx-default-color: #ff0095;
+    -jfx-default-color: -fx-primary-color;
 }
 
 .jfx-time-picker,
@@ -824,7 +746,7 @@
  * 
  * * * * * * */
  .jfx-date-picker {
-    -jfx-default-color: #ff0095;
+    -jfx-default-color: -fx-primary-color;
 }
 
 .jfx-date-picker,
@@ -842,24 +764,23 @@
 }
 
 .jfx-date-picker .jfx-button {
-	-fx-background-color: #ff0095;
-	-fx-text-fill: white;
-	-fx-font-weight: bold;
-	-fx-border: none;
-	-fx-border-radius: 0px;
-	-fx-background-radius: 0px;
-	-fx-alignment: center;
-	
-	-fx-effect: dropshadow(three-pass-box, black, 10.0, 0.0, 4.0, 4.0);
+    -fx-background-color: -fx-primary-color;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-border: none;
+    -fx-border-radius: 0px;
+    -fx-background-radius: 0px;
+    -fx-alignment: center;
+    -fx-effect: dropshadow(three-pass-box, -fx-hover-color, 10.0, 0.0, 4.0, 4.0);
 }
 
 .jfx-date-picker .jfx-button:hover {
-	-fx-background-color: pink;
-	-fx-alignment: center;
+    -fx-background-color: -fx-secondary-color;
+    -fx-alignment: center;
 }
 
 .jfx-date-picker .jfx-button > .jfx-svg-glyph {
-	-fx-background-color: white;
+    -fx-background-color: white;
 }
 
 .jfx-date-picker > .arrow-button > .jfx-svg-glyph {
@@ -917,12 +838,12 @@
 
 /**Costumization of The Bar where the buttons are located**/
 .alert > .button-bar > .container {
-  -fx-background-color:black;
+  -fx-background-color: -fx-hover-color;
 }
 
 .alert > .content.label {
    /*-fx-padding: 0.5em 0.5em 0.5em 0.5em;*/
-   -fx-background-color: black;
+   -fx-background-color: -fx-hover-color;
    -fx-text-fill:white;
    -fx-font-size:13.0px;
    -fx-font-weight:bold;
@@ -930,28 +851,28 @@
 
 /**Costumization of DialogPane Header**/
 .alert:header .header-panel {
-  -fx-background-color: black;
+  -fx-background-color: -fx-hover-color;
 }
 
 .alert:header .header-panel .label{
-  	-fx-background-color: black;
+  	-fx-background-color: -fx-hover-color;
 	-fx-background-radius:5px;
-  	-fx-text-fill:#ff0095;
+  	-fx-text-fill:-fx-primary-color;
   	-fx-font-size:15.0px;
   	-fx-font-weight:bold;
   	/*-fx-padding: 25px;*/
 }
 
 .alert:no-header .graphic-container {
--fx-background-color: black;
+-fx-background-color: -fx-hover-color;
     -fx-padding: 0.833em 0 0 0.833em; /* 10px 0px 0px 10px */
 }
 
 /**Costumization of Buttons**/
 
 .alert .button{
-   -fx-background-color:#ff0095;
-   -fx-text-fill:white;
+   -fx-background-color: -fx-primary-color;
+   -fx-text-fill: -fx-text-color;
    -fx-wrap-text: true;
    /*-fx-effect: dropshadow(three-pass-box, white, 10.0, 0.0, 0.0, 0.0);*/
    -fx-cursor:hand;
@@ -961,7 +882,7 @@
 
 .alert .button:hover{     
   -fx-background-color:white;
-  -fx-text-fill:#ff0095;
+  -fx-text-fill: -fx-primary-color;
   -fx-font-weight:bold; 
  }
  
@@ -1020,7 +941,7 @@
 
 .notification-bar > .pane .title {
     -fx-font-size: 1.166667em; /*15px;*/
-    -fx-text-fill: #ff0095;
+    -fx-text-fill: -fx-primary-color;
     -fx-font-weight: bold;
 }
 
@@ -1055,8 +976,8 @@
 }
 
 .notification-bar > .pane .close-button:pressed > .graphic {
-    /*-fx-background-color: #cfcfcf;*/
-    -fx-background-color: #5CBFEB;
+    -fx-background-color: -fx-secondary-color;
+    /*-fx-background-color: #5CBFEB;*/
 }
 
 .notification-bar > .pane .close-button > .graphic {
@@ -1068,3 +989,47 @@
  * 
  * 
  * * * * * * */
+#dodajOsobuButton {
+    -fx-background-image: url('img/add-user.png');
+    -fx-background-position: center;
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: 25,25;
+    -fx-pref-height: 30px;
+    -fx-pref-width: 30px;
+    -fx-border: none;
+    -fx-border-radius: 0px;
+    -fx-background-radius: 0px;
+    -fx-focus-traversable: false;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+}
+
+#pdfButton {
+    -fx-background-image: url('img/pdf.png');
+    -fx-background-position: center;
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: 25,25;
+    -fx-pref-height: 30px;
+    -fx-pref-width: 30px;
+    -fx-border: none;
+    -fx-border-radius: 0px;
+    -fx-background-radius: 0px;
+    -fx-focus-traversable: false;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+}
+
+#nazadButton {
+    -fx-background-image: url('img/back.png');
+    -fx-background-position: center;
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: 25,25;
+    -fx-pref-height: 30px;
+    -fx-pref-width: 30px;
+    -fx-border: none;
+    -fx-border-radius: 0px;
+    -fx-background-radius: 0px;
+    -fx-focus-traversable: false;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+}

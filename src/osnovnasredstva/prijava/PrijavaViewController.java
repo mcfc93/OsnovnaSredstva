@@ -90,6 +90,9 @@ public class PrijavaViewController implements Initializable {
         prijavaButton.disableProperty().bind(
 	    korisnickoImeTextField.textProperty().isEmpty().or(lozinkaTextField.textProperty().isEmpty())
 	);
+        
+        korisnickoImeTextField.setText("mcfc93");
+        lozinkaTextField.setText("student");
     }
     
     @FXML
@@ -112,7 +115,7 @@ public class PrijavaViewController implements Initializable {
                     try {
                         Parent root = FXMLLoader.load(getClass().getResource("/osnovnasredstva/administrator/AdministratorView.fxml"));
                         Scene scene = new Scene(root);
-                        //scene.getStylesheets().add(getClass().getResource("osnovnasredstva.css").toExternalForm());
+                        scene.getStylesheets().add(getClass().getResource("/osnovnasredstva/osnovnasredstva.css").toExternalForm());
                         Stage stage=new Stage();
                         stage.setScene(scene);
                         stage.setResizable(false);
