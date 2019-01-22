@@ -20,33 +20,29 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.util.Duration;
 import osnovnasredstva.beans.Osoba;
 import osnovnasredstva.util.Util;
 
 /**
  *
- * @author mcfc93
+ * @author w7
  */
-public class OsobeController implements Initializable {
+public class KorisnickiNaloziController implements Initializable {
 
     @FXML
     private AnchorPane anchorPane;
-    
-    @FXML
-    private TableView<Osoba> osobeTableView;
 
     @FXML
-    private TableColumn<?, ?> imeColumn;
+    private TableView<Osoba> korisnickiNaloziTableView;
 
     @FXML
-    private TableColumn<?, ?> prezimeColumn;
+    private TableColumn<?, ?> korisnickoImeColumn;
 
     @FXML
-    private TableColumn<?, ?> jmbgColumn;
+    private TableColumn<?, ?> hashColumn;
 
     @FXML
-    private TableColumn<?, ?> titulaColumn;
+    private TableColumn<?, ?> tipColumn;
 
     @FXML
     private TableColumn<Osoba, Osoba> prikaziColumn;
@@ -58,21 +54,15 @@ public class OsobeController implements Initializable {
     private TableColumn<Osoba, Osoba> obrisiColumn;
 
     @FXML
-    private JFXButton nazadButton;
-
-    @FXML
-    private JFXButton pdfButton;
-
-    @FXML
-    private JFXButton dodajOsobuButton;
+    private JFXButton dodajButton;
 
     @FXML
     private TextField traziTextField;
 
     @FXML
     private ImageView clearImageView;
-    
-    private ObservableList<Osoba> osobeList;
+
+    private ObservableList<Osoba> korisnickiNaloziList;
     
     /**
      * Initializes the controller class.
@@ -89,7 +79,7 @@ public class OsobeController implements Initializable {
             }
         });
 
-        osobeList=FXCollections.observableArrayList(
+        korisnickiNaloziList=FXCollections.observableArrayList(
                 new Osoba("A", "A", "A", "A"),
                 new Osoba("B", "B", "B", "B"),
                 new Osoba("C", "C", "C", "C"),
@@ -103,17 +93,13 @@ public class OsobeController implements Initializable {
                 new Osoba("B", "B", "B", "B"),
                 new Osoba("C", "C", "C", "C")
         );
-        osobeTableView.setItems(osobeList);
-        osobeTableView.setPlaceholder(new Label("Nema osoba u tabeli."));
-        osobeTableView.setFocusTraversable(false);
-        imeColumn.setCellValueFactory(new PropertyValueFactory<>("ime"));
-        prezimeColumn.setCellValueFactory(new PropertyValueFactory<>("prezime"));
-        jmbgColumn.setCellValueFactory(new PropertyValueFactory<>("jmbg"));
-        titulaColumn.setCellValueFactory(new PropertyValueFactory<>("titula"));
-        //prikaziColumn.setCellValueFactory(new PropertyValueFactory<>("pregled"));
-        //izmjeniColumn.setCellValueFactory(new PropertyValueFactory<>("izmjeni"));
-        //obrisiColumn.setCellValueFactory(new PropertyValueFactory<>("obrisi"));
+        korisnickiNaloziTableView.setItems(korisnickiNaloziList);
+        korisnickiNaloziTableView.setPlaceholder(new Label("Odaberite prvo zgradu."));
+        korisnickiNaloziTableView.setFocusTraversable(false);
         
+        korisnickoImeColumn.setCellValueFactory(new PropertyValueFactory<>("ime"));
+        hashColumn.setCellValueFactory(new PropertyValueFactory<>("prezime"));
+        tipColumn.setCellValueFactory(new PropertyValueFactory<>("jmbg"));
         
         prikaziColumn.setCellValueFactory(
             param -> new ReadOnlyObjectWrapper<>(param.getValue())
@@ -200,11 +186,11 @@ public class OsobeController implements Initializable {
                     	//dodavanje u kolonu
                     	setGraphic(button);
                     	button.setOnMouseClicked(event -> {
-                            osobeList.remove(item);
+                            korisnickiNaloziList.remove(item);
                             //getTableView().getItems().remove(item);
-                            osobeTableView.refresh();
+                            korisnickiNaloziTableView.refresh();
                             System.out.println("Obrisano: " + item);
-		            Util.getNotifications("Obavještenje", "Osoba obrisana.", "Information").show();
+		            Util.getNotifications("Obavještenje", "Korisnički nalog obrisan.", "Information").show();
                         });
                     } else {
                     	setGraphic(null);
@@ -229,11 +215,10 @@ public class OsobeController implements Initializable {
         obrisiColumn.setMaxWidth(35);
         obrisiColumn.setResizable(false);
         obrisiColumn.setSortable(false);
-    }
+    }    
     
     @FXML
     void clear(MouseEvent event) {
         traziTextField.clear();
     }
-    
 }

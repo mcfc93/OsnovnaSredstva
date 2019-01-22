@@ -160,25 +160,47 @@ public class AdministratorController implements Initializable {
 
     @FXML
     void y(ActionEvent event) {
-    	System.out.println("Y");
-    }
-
-    @FXML
-    void z(ActionEvent event) {
-    	System.out.println("Z");
-        /*
     	try {
-            Parent root = FXMLLoader.load(getClass().getResource(".fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/osnovnasredstva/administrator/LokacijeView.fxml"));
             AnchorPane.setTopAnchor(root,0.0);
             AnchorPane.setBottomAnchor(root,0.0);
             AnchorPane.setLeftAnchor(root,0.0);
             AnchorPane.setRightAnchor(root,0.0);
             dataAnchorPane.getChildren().removeAll();
             dataAnchorPane.getChildren().setAll(root);
-        } catch(Exception e) {
-            e.printStackTrace();
+        } catch(IOException e) {
+            Util.LOGGER.log(Level.SEVERE, e.toString(), e);
         }
-        */
+    }
+
+    @FXML
+    void z(ActionEvent event) {
+    	try {
+            Parent root = FXMLLoader.load(getClass().getResource("/osnovnasredstva/administrator/OsnovnaSredstvaView.fxml"));
+            AnchorPane.setTopAnchor(root,0.0);
+            AnchorPane.setBottomAnchor(root,0.0);
+            AnchorPane.setLeftAnchor(root,0.0);
+            AnchorPane.setRightAnchor(root,0.0);
+            dataAnchorPane.getChildren().removeAll();
+            dataAnchorPane.getChildren().setAll(root);
+        } catch(IOException e) {
+            Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+        }
+    }
+    
+    @FXML
+    void w(ActionEvent event) {
+    	try {
+            Parent root = FXMLLoader.load(getClass().getResource("/osnovnasredstva/administrator/KorisnickiNaloziView.fxml"));
+            AnchorPane.setTopAnchor(root,0.0);
+            AnchorPane.setBottomAnchor(root,0.0);
+            AnchorPane.setLeftAnchor(root,0.0);
+            AnchorPane.setRightAnchor(root,0.0);
+            dataAnchorPane.getChildren().removeAll();
+            dataAnchorPane.getChildren().setAll(root);
+        } catch(IOException e) {
+            Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+        }
     }
     
     @FXML

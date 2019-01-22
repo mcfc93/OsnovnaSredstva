@@ -123,7 +123,7 @@ System.out.println(Util.PROPERTY);
         Alert alert=new Alert(AlertType.ERROR);
         alert.setTitle("Greška");
         alert.setHeaderText("NEOČEKIVANO PONAŠANJE!");
-        alert.setContentText("Popunite podatke ponovo, a u slučaju iste greške kontakrirajte Administratora sistema.");
+        alert.setContentText("Kontakrirajte Administratora sistema.");
 
         alert.getDialogPane().getStylesheets().add(Util.class.getResource("/osnovnasredstva/osnovnasredstva.css").toExternalForm());
         alert.getDialogPane().getStyleClass().addAll("alert", "alertBug");

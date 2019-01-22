@@ -40,16 +40,16 @@
       <Label fx:id="usernameLabel" layoutX="80.0" layoutY="185.0" prefHeight="30.0" prefWidth="40.0" textFill="#8aceff" />
       <ImageView fitHeight="20.0" fitWidth="20.0" layoutX="90.0" layoutY="190.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../img/username.png" />
+            <Image url="@../img/user.png" />
          </image>
       </ImageView>
       <Label fx:id="passwordLabel" layoutX="80.0" layoutY="225.0" prefHeight="30.0" prefWidth="40.0" />
       <ImageView fitHeight="20.0" fitWidth="20.0" layoutX="90.0" layoutY="230.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../img/password.png" />
+            <Image url="@../img/lock.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="90.0" fitWidth="90.0" layoutX="155.0" layoutY="50.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="100.0" fitWidth="100.0" layoutX="150.0" layoutY="45.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../img/avatar.png" />
          </image>

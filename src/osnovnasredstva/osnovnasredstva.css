@@ -1,20 +1,20 @@
 .root {
     -fx-primary-color: #303F9F;
     -fx-secondary-color: #1976D2;
+    -fx-back-color: white;
     -fx-text-color: white;
     -fx-hover-color: #212121;
 }
 
 .rootPrijava {
-    /*-fx-background-image: url('file:src/osnovnasredstva/img/background.png');*/
-/*-fx-background-image: url('file:C:/NetBeans Projects/OsnovnaSredstva/src/osnovnasredstva/img/background.png');*/
--fx-background-image: url('file:C:/JavaProjects/LanacAutobuskihStanica/src/org/unibl/etf/prijava/img/background.png');
+    -fx-background-image: url('file:src/osnovnasredstva/img/background.png');
+/*-fx-background-image: url('file:C:/NetBeans%20Projects/OsnovnaSredstva/src/osnovnasredstva/img/background.png');*/
     -fx-background-size: 500 500;
     -fx-background-position: center center;
 }
 
 #korisnickoImeTextField {
-    -fx-background-color: #FFFFFF;
+    -fx-background-color: -fx-back-color;
     -fx-background-radius: 0px;
     -fx-prompt-text-fill: -fx-primary-color;
     -fx-text-fill: -fx-primary-color;
@@ -22,16 +22,16 @@
     -fx-highlight-fill: -fx-primary-color;
 }
 
-.korisnickoImeTextField:focused {
-    -fx-background-color: #000000;
+#korisnickoImeTextField:focused {
+    -fx-background-color: -fx-hover-color;
     -fx-background-radius: 0px;
-    -fx-prompt-text-fill: #FFFFFF;
+    -fx-prompt-text-fill: -fx-text-color;
     -fx-text-fill: -fx-primary-color;
     -fx-font-weight: normal;
 }
 
 #lozinkaTextField {
-    -fx-background-color: #FFFFFF;
+    -fx-background-color: -fx-back-color;
     -fx-background-radius: 0px;
     -fx-prompt-text-fill: -fx-primary-color;
     -fx-text-fill: -fx-primary-color;
@@ -40,9 +40,9 @@
 }
 
 #lozinkaTextField:focused {
-    -fx-background-color: #000000;
+    -fx-background-color: -fx-hover-color;
     -fx-background-radius: 0px;
-    -fx-prompt-text-fill: #FFFFFF;
+    -fx-prompt-text-fill: -fx-text-color;
     -fx-text-fill: -fx-primary-color;
     -fx-font-weight: normal;
 }
@@ -119,7 +119,7 @@
 .rootBorder {
     -fx-border-color: linear-gradient(-fx-hover-color 10%, -fx-primary-color 90%);
     -fx-border-width: 2px;
-    -fx-background-color: white;
+    -fx-background-color: -fx-back-color;
 }
 
 .anchorMenu {
@@ -131,7 +131,7 @@
      *where <side-or-corner> = [left | right] || [top | bottom]
      * -fx-background-color: linear-gradient(to right bottom, #4b0082, #8b008b 50%, #9c27b0 80%, #9932cc);
      */
-    -fx-background-color: white;
+    -fx-background-color: -fx-back-color;
 }
 
 #menuLine {
@@ -334,7 +334,7 @@
 
 /* autocomplete */
 .scroll-bar {
-    -fx-background-color: white;
+    -fx-background-color: -fx-back-color;
     -fx-background-insets: 0;
     -fx-padding: 0;
 }
@@ -342,7 +342,7 @@
 .scroll-bar .track  {
     -fx-background-color: transparent;
     -fx-background-insets:  0;
-    -fx-border-color: rgba(0,0,0,0.9);
+    -fx-border-color: -fx-hover-color;
     
     -fx-background-radius: 0.0em;
     -fx-border-radius: 1.0em;
@@ -420,7 +420,7 @@
 
 .table-view .column-header-background {
     -fx-background-color: transparent;
-    -fx-border-color: transparent transparent rgba(0,0,0,0.9) transparent;
+    -fx-border-color: transparent transparent -fx-hover-color transparent;
     -fx-border-width: 2;
     -fx-background-insets: 0;
     -fx-background-color: transparent;
@@ -525,6 +525,7 @@
 
 .buttonTableEdit:hover {
     /*DRUGA SLIKA */
+    -fx-background-image: url('img/edit_hover.png');
     -fx-background-color: -fx-hover-color;
     -fx-cursor: hand;
 }
@@ -547,6 +548,7 @@
 
 .buttonTableDelete:hover {
     /*DRUGA SLIKA */
+    -fx-background-image: url('img/delete_hover.png');
     -fx-background-color: -fx-hover-color;
     -fx-cursor: hand;
 }
@@ -569,6 +571,7 @@
 
 .buttonTableShow:hover {
     /*DRUGA SLIKA */
+    -fx-background-image: url('img/show_hover.png');
     -fx-background-color: -fx-hover-color;
     -fx-cursor: hand;
 }
@@ -620,7 +623,7 @@
  * 
  * * * * * * */
 .naslovLabel {
-    -fx-text-fill: #ff0095;
+    -fx-text-fill: -fx-primary-color;
     -fx-font-size: 14px;
     -fx-font-weight: bold;
 }
@@ -674,7 +677,7 @@
 */
 
 .clearImageView {
-    -fx-image:url('img/clear.png');
+    -fx-image: url('img/clear.png');
 }
 
 .clearImageView:hover {
@@ -759,13 +762,13 @@
 .jfx-date-picker:editable > .arrow-button,
 .jfx-date-picker:focused > .arrow-button,
 .jfx-date-picker:editable:focused > .arrow-button {
-    -fx-background-color: white;
+    -fx-background-color: -fx-back-color;
     -fx-padding: 1 8 1 8;
 }
 
 .jfx-date-picker .jfx-button {
     -fx-background-color: -fx-primary-color;
-    -fx-text-fill: white;
+    -fx-text-fill: -fx-text-color;
     -fx-font-weight: bold;
     -fx-border: none;
     -fx-border-radius: 0px;
@@ -780,7 +783,7 @@
 }
 
 .jfx-date-picker .jfx-button > .jfx-svg-glyph {
-    -fx-background-color: white;
+    -fx-background-color: -fx-back-color;
 }
 
 .jfx-date-picker > .arrow-button > .jfx-svg-glyph {
@@ -805,7 +808,7 @@
 .date-picker-popup > * > .date-picker-list-view > .virtual-flow > .clipped-container > .sheet > .data-picker-list-cell {
     -fx-font-size: 16;
     -fx-font-weight: NORMAL;
-    -fx-background-color: WHITE;
+    -fx-background-color: -fx-back-color;
     -fx-alignment: center;
     -fx-text-fill: #313131;
 }
@@ -838,56 +841,56 @@
 
 /**Costumization of The Bar where the buttons are located**/
 .alert > .button-bar > .container {
-  -fx-background-color: -fx-hover-color;
+  -fx-background-color: -fx-back-color;
 }
 
 .alert > .content.label {
    /*-fx-padding: 0.5em 0.5em 0.5em 0.5em;*/
-   -fx-background-color: -fx-hover-color;
-   -fx-text-fill:white;
-   -fx-font-size:13.0px;
-   -fx-font-weight:bold;
+   -fx-background-color: -fx-back-color;
+   -fx-text-fill: -fx-hover-color;
+   -fx-font-size: 13.0px;
+   -fx-font-weight: bold;
 }
 
 /**Costumization of DialogPane Header**/
 .alert:header .header-panel {
-  -fx-background-color: -fx-hover-color;
+  -fx-background-color: -fx-back-color;
 }
 
 .alert:header .header-panel .label{
-  	-fx-background-color: -fx-hover-color;
-	-fx-background-radius:5px;
-  	-fx-text-fill:-fx-primary-color;
-  	-fx-font-size:15.0px;
-  	-fx-font-weight:bold;
-  	/*-fx-padding: 25px;*/
+    -fx-background-color: -fx-back-color;
+    -fx-background-radius:5px;
+    -fx-text-fill:-fx-primary-color;
+    -fx-font-size:15.0px;
+    -fx-font-weight:bold;
+    /*-fx-padding: 25px;*/
 }
 
 .alert:no-header .graphic-container {
--fx-background-color: -fx-hover-color;
+    -fx-background-color: -fx-back-color;
     -fx-padding: 0.833em 0 0 0.833em; /* 10px 0px 0px 10px */
 }
 
 /**Costumization of Buttons**/
 
 .alert .button{
-   -fx-background-color: -fx-primary-color;
-   -fx-text-fill: -fx-text-color;
-   -fx-wrap-text: true;
-   /*-fx-effect: dropshadow(three-pass-box, white, 10.0, 0.0, 0.0, 0.0);*/
-   -fx-cursor:hand;
-   -fx-border-radius: 0px;
-	-fx-background-radius: 0px;
+    -fx-background-color: -fx-primary-color;
+    -fx-text-fill: -fx-text-color;
+    -fx-wrap-text: true;
+    /*-fx-effect: dropshadow(three-pass-box, white, 10.0, 0.0, 0.0, 0.0);*/
+    -fx-cursor:hand;
+    -fx-border-radius: 0px;
+    -fx-background-radius: 0px;
  }
 
 .alert .button:hover{     
-  -fx-background-color:white;
-  -fx-text-fill: -fx-primary-color;
-  -fx-font-weight:bold; 
+    -fx-background-color: -fx-hover-color;
+    -fx-text-fill: -fx-text-color;
+    -fx-font-weight: bold; 
  }
  
  .alert .button:default {
-    -fx-effect: dropshadow(three-pass-box, white, 10.0, 0.0, 0.0, 0.0);
+    -fx-effect: dropshadow(three-pass-box, -fx-hover-color, 10.0, 0.0, 0.0, 0.0);
 }
 
  
@@ -926,16 +929,16 @@
  * * * * * * */
 .notification-bar > .pane {
     /*-fx-background-color: -fx-outer-border, -fx-inner-border, -fx-body-color;*/
-    -fx-background-color: white;
+    -fx-background-color: -fx-back-color;
     -fx-padding: 7 7 7 7;
     /*-fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.4), 11, 0.0, 0, 3);*/
-    -fx-effect: dropshadow(three-pass-box, black, 10.0, 0.0, 0.0, 0.0);
+    -fx-effect: dropshadow(three-pass-box, -fx-hover-color, 10.0, 0.0, 0.0, 0.0);
     -fx-background-insets: 0, 1, 2;
 }
 
 .notification-bar > .pane .label {
     -fx-font-size: 1.166667em; /*15px;*/
-    -fx-text-fill: #292929;
+    -fx-text-fill: -fx-hover-color;
     -fx-alignment: top-left;
 }
 
@@ -972,7 +975,7 @@
 
 .notification-bar > .pane .close-button:hover > .graphic {
     /*-fx-background-color: #fefeff;*/
-    -fx-background-color: white;
+    -fx-background-color: -fx-back-color;
 }
 
 .notification-bar > .pane .close-button:pressed > .graphic {
@@ -989,20 +992,6 @@
  * 
  * 
  * * * * * * */
-#dodajOsobuButton {
-    -fx-background-image: url('img/add-user.png');
-    -fx-background-position: center;
-    -fx-background-repeat: no-repeat;
-    -fx-background-size: 25,25;
-    -fx-pref-height: 30px;
-    -fx-pref-width: 30px;
-    -fx-border: none;
-    -fx-border-radius: 0px;
-    -fx-background-radius: 0px;
-    -fx-focus-traversable: false;
-    -fx-border-radius: 5;
-    -fx-background-radius: 5;
-}
 
 #pdfButton {
     -fx-background-image: url('img/pdf.png');
@@ -1021,6 +1010,36 @@
 
 #nazadButton {
     -fx-background-image: url('img/back.png');
+    -fx-background-position: center;
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: 25,25;
+    -fx-pref-height: 30px;
+    -fx-pref-width: 30px;
+    -fx-border: none;
+    -fx-border-radius: 0px;
+    -fx-background-radius: 0px;
+    -fx-focus-traversable: false;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+}
+
+#dodajButton {
+    -fx-background-image: url('img/dodaj.png');
+    -fx-background-position: center;
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: 25,25;
+    -fx-pref-height: 30px;
+    -fx-pref-width: 30px;
+    -fx-border: none;
+    -fx-border-radius: 0px;
+    -fx-background-radius: 0px;
+    -fx-focus-traversable: false;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+}
+
+#dodajOsobuButton {
+    -fx-background-image: url('img/add-user.png');
     -fx-background-position: center;
     -fx-background-repeat: no-repeat;
     -fx-background-size: 25,25;
