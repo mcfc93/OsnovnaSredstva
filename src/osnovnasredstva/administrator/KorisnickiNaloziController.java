@@ -1,14 +1,20 @@
 package osnovnasredstva.administrator;
 
 import com.jfoenix.controls.JFXButton;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
@@ -20,12 +26,15 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import osnovnasredstva.beans.Osoba;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import osnovnasredstva.DTO.Korisnik;
 import osnovnasredstva.util.Util;
 
 /**
  *
- * @author w7
+ * @author mcfc93
  */
 public class KorisnickiNaloziController implements Initializable {
 
@@ -33,25 +42,22 @@ public class KorisnickiNaloziController implements Initializable {
     private AnchorPane anchorPane;
 
     @FXML
-    private TableView<Osoba> korisnickiNaloziTableView;
+    private TableView<Korisnik> korisnickiNaloziTableView;
 
     @FXML
     private TableColumn<?, ?> korisnickoImeColumn;
 
     @FXML
-    private TableColumn<?, ?> hashColumn;
-
-    @FXML
     private TableColumn<?, ?> tipColumn;
 
     @FXML
-    private TableColumn<Osoba, Osoba> prikaziColumn;
+    private TableColumn<Korisnik, Korisnik> prikaziColumn;
 
     @FXML
-    private TableColumn<Osoba, Osoba> izmjeniColumn;
+    private TableColumn<Korisnik, Korisnik> izmjeniColumn;
 
     @FXML
-    private TableColumn<Osoba, Osoba> obrisiColumn;
+    private TableColumn<Korisnik, Korisnik> obrisiColumn;
 
     @FXML
     private JFXButton dodajButton;
@@ -62,7 +68,7 @@ public class KorisnickiNaloziController implements Initializable {
     @FXML
     private ImageView clearImageView;
 
-    private ObservableList<Osoba> korisnickiNaloziList;
+    private ObservableList<Korisnik> korisnickiNaloziList;
     
     /**
      * Initializes the controller class.
@@ -80,36 +86,24 @@ public class KorisnickiNaloziController implements Initializable {
         });
 
         korisnickiNaloziList=FXCollections.observableArrayList(
-                new Osoba("A", "A", "A", "A"),
-                new Osoba("B", "B", "B", "B"),
-                new Osoba("C", "C", "C", "C"),
-                new Osoba("A", "A", "A", "A"),
-                new Osoba("B", "B", "B", "B"),
-                new Osoba("C", "C", "C", "C"),
-                new Osoba("A", "A", "A", "A"),
-                new Osoba("B", "B", "B", "B"),
-                new Osoba("C", "C", "C", "C"),
-                new Osoba("A", "A", "A", "A"),
-                new Osoba("B", "B", "B", "B"),
-                new Osoba("C", "C", "C", "C")
+                new Korisnik("A", "A", "A", 0)
         );
         korisnickiNaloziTableView.setItems(korisnickiNaloziList);
         korisnickiNaloziTableView.setPlaceholder(new Label("Odaberite prvo zgradu."));
         korisnickiNaloziTableView.setFocusTraversable(false);
         
-        korisnickoImeColumn.setCellValueFactory(new PropertyValueFactory<>("ime"));
-        hashColumn.setCellValueFactory(new PropertyValueFactory<>("prezime"));
-        tipColumn.setCellValueFactory(new PropertyValueFactory<>("jmbg"));
+        korisnickoImeColumn.setCellValueFactory(new PropertyValueFactory<>("korisnickoIme"));
+        tipColumn.setCellValueFactory(new PropertyValueFactory<>("tip"));
         
         prikaziColumn.setCellValueFactory(
             param -> new ReadOnlyObjectWrapper<>(param.getValue())
         );
         
         prikaziColumn.setCellFactory(tableCell -> {
-            TableCell<Osoba, Osoba> cell = new TableCell<Osoba, Osoba>() {
+            TableCell<Korisnik, Korisnik> cell = new TableCell<Korisnik, Korisnik>() {
                 private final Button button = new Button("");
                 @Override
-                protected void updateItem(Osoba item, boolean empty) {
+                protected void updateItem(Korisnik item, boolean empty) {
                     super.updateItem(item, empty);
                     if (!empty) {
                         //System.out.println(item);
@@ -122,7 +116,7 @@ public class KorisnickiNaloziController implements Initializable {
                     	//dodavanje u kolonu
                     	setGraphic(button);
                     	button.setOnMouseClicked(event -> {
-                            //Osoba o=getTableView().getItems().get(getIndex());
+                            //Korisnik o=getTableView().getItems().get(getIndex());
                             System.out.println(item);
                         });
                     } else {
@@ -138,10 +132,10 @@ public class KorisnickiNaloziController implements Initializable {
         );
         
         izmjeniColumn.setCellFactory(tableCell -> {
-            TableCell<Osoba, Osoba> cell = new TableCell<Osoba, Osoba>() {
+            TableCell<Korisnik, Korisnik> cell = new TableCell<Korisnik, Korisnik>() {
                 private final Button button = new Button("");
                 @Override
-                protected void updateItem(Osoba item, boolean empty) {
+                protected void updateItem(Korisnik item, boolean empty) {
                     super.updateItem(item, empty);
                     if (!empty) {
                         //System.out.println(item);
@@ -154,8 +148,20 @@ public class KorisnickiNaloziController implements Initializable {
                     	//dodavanje u kolonu
                     	setGraphic(button);
                     	button.setOnMouseClicked(event -> {
-                            //Osoba o=getTableView().getItems().get(getIndex());
+                            //Korisnik o=getTableView().getItems().get(getIndex());
                             System.out.println(item);
+                            try {
+                                Parent root = FXMLLoader.load(getClass().getResource("/osnovnasredstva/administrator/DodavanjeKorisnickogNalogaView.fxml"));
+                                Scene scene = new Scene(root);
+                                Stage stage=new Stage();
+                                stage.setScene(scene);
+                                stage.setResizable(false);
+                                stage.initStyle(StageStyle.UNDECORATED);
+                                stage.initModality(Modality.APPLICATION_MODAL);
+                                stage.showAndWait();
+                            } catch(IOException e) {
+                                Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+                            }
                         });
                     } else {
                     	setGraphic(null);
@@ -170,10 +176,10 @@ public class KorisnickiNaloziController implements Initializable {
         );
         
         obrisiColumn.setCellFactory(tableCell -> {
-            TableCell<Osoba, Osoba> cell = new TableCell<Osoba, Osoba>() {
+            TableCell<Korisnik, Korisnik> cell = new TableCell<Korisnik, Korisnik>() {
                 private final Button button = new Button("");
                 @Override
-                protected void updateItem(Osoba item, boolean empty) {
+                protected void updateItem(Korisnik item, boolean empty) {
                     super.updateItem(item, empty);
                     if (!empty) {
                         //System.out.println(item);
@@ -220,5 +226,21 @@ public class KorisnickiNaloziController implements Initializable {
     @FXML
     void clear(MouseEvent event) {
         traziTextField.clear();
+    }
+    
+    @FXML
+    void dodaj(ActionEvent event) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/osnovnasredstva/administrator/DodavanjeKorisnickogNalogaView.fxml"));
+            Scene scene = new Scene(root);
+            Stage stage=new Stage();
+            stage.setScene(scene);
+            stage.setResizable(false);
+            stage.initStyle(StageStyle.UNDECORATED);
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.showAndWait();
+        } catch(IOException e) {
+            Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+        }
     }
 }

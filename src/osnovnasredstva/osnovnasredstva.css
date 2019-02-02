@@ -6,9 +6,13 @@
     -fx-hover-color: #212121;
 }
 
+/* * * * * * *
+ * 
+ * Login
+ * 
+ * * * * * * */
 .rootPrijava {
-    -fx-background-image: url('file:src/osnovnasredstva/img/background.png');
-/*-fx-background-image: url('file:C:/NetBeans%20Projects/OsnovnaSredstva/src/osnovnasredstva/img/background.png');*/
+    -fx-background-image: url('img/background.png');
     -fx-background-size: 500 500;
     -fx-background-position: center center;
 }
@@ -91,31 +95,11 @@
     -fx-background-color: -fx-secondary-color;
 }
 
-.naslovLabel {
-    -fx-text-fill: -fx-primary-color;
-    -fx-font-size: 14px;
-    -fx-font-weight: bold;
-}
-
-.opisLabel {
-    -fx-text-fill: -fx-hover-color;
-    -fx-font-weight: bold;
-}
-
-.opisTextField {
-    -fx-text-fill: -fx-hover-color;
-    -fx-prompt-text-fill: -fx-primary-color;
-    -fx-highlight-fill: null;
-    -fx-highlight-text-fill: null;
-    -fx-border-radius: 20px;
-    -fx-border-color: -fx-primary-color;
-    -fx-background-radius: 20px;
-    -fx-background-color: transparent;
-    -fx-border-width: 1.5px;
-    -fx-cursor: normal;
-    -fx-focus-traversable: false;
-}
-
+/* * * * * * *
+ * 
+ * Dashboard Menu
+ * 
+ * * * * * * */
 .rootBorder {
     -fx-border-color: linear-gradient(-fx-hover-color 10%, -fx-primary-color 90%);
     -fx-border-width: 2px;
@@ -619,17 +603,6 @@
 
 /* * * * * * *
  * 
- * - - - - -
- * 
- * * * * * * */
-.naslovLabel {
-    -fx-text-fill: -fx-primary-color;
-    -fx-font-size: 14px;
-    -fx-font-weight: bold;
-}
-
-/* * * * * * *
- * 
  * SearchBox
  * 
  * * * * * * */
@@ -762,7 +735,7 @@
 .jfx-date-picker:editable > .arrow-button,
 .jfx-date-picker:focused > .arrow-button,
 .jfx-date-picker:editable:focused > .arrow-button {
-    -fx-background-color: -fx-back-color;
+    -fx-background-color: transparent;
     -fx-padding: 1 8 1 8;
 }
 
@@ -1008,7 +981,7 @@
     -fx-background-radius: 5;
 }
 
-#nazadButton {
+#backButton {
     -fx-background-image: url('img/back.png');
     -fx-background-position: center;
     -fx-background-repeat: no-repeat;
@@ -1051,4 +1024,61 @@
     -fx-focus-traversable: false;
     -fx-border-radius: 5;
     -fx-background-radius: 5;
+}
+
+/* * * * * * *
+ * 
+ * - - - - -
+ * 
+ * * * * * * */
+.naslovLabel {
+    -fx-text-fill: -fx-primary-color;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.naslovLabel {
+    -fx-text-fill: -fx-primary-color;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.opisLabel {
+    -fx-text-fill: -fx-hover-color;
+    -fx-font-weight: bold;
+}
+
+.opisTextField {
+    -fx-text-fill: -fx-hover-color;
+    -fx-prompt-text-fill: -fx-primary-color;
+    -fx-highlight-fill: null;
+    -fx-highlight-text-fill: null;
+    -fx-border-radius: 20px;
+    -fx-border-color: -fx-primary-color;
+    -fx-background-radius: 20px;
+    -fx-background-color: transparent;
+    -fx-border-width: 1.5px;
+    -fx-cursor: normal;
+    -fx-focus-traversable: false;
+}
+
+
+
+
+
+
+
+
+
+/*Change selected cells of autocomplete popup*/
+.jfx-autocomplete-popup .list-cell:filled:selected {
+    -fx-background-color: #64ffe6;
+}
+/*Change cells of autocomplete popup*/
+.jfx-autocomplete-popup .list-cell {
+    -fx-background-color: #5f68ff;
+}
+/*Change cells of combobox*/
+.combo-box .list-cell {
+    -fx-background-color: #ff92b8;
 }

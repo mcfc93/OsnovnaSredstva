@@ -24,7 +24,7 @@ public class OsnovnaSredstva extends Application {
         stage.setResizable(false);
         stage.initStyle(StageStyle.UNDECORATED);
         stage.show();
-        
+        /*
         Util.getNotifications("Warning", "Warning", "Warning").show();
         Util.getNotifications("Information", "Information", "Information").show();
         Util.getNotifications("Confirmation", "Confirmation", "Confirmation").show();
@@ -32,13 +32,14 @@ public class OsnovnaSredstva extends Application {
         Util.getNotifications("Default", "Default", "").show();
         
         Util.showBugAlert();
+        */
     }
     
     @Override
-	public void stop() {
-            System.out.println("CLOSE");
-            Util.fileHandler.close();
-	}
+    public void stop() {
+        System.out.println("CLOSE");
+        Util.fileHandler.close();
+    }
 
     /**
      * @param args the command line arguments

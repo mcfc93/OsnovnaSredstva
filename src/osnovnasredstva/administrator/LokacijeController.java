@@ -21,7 +21,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import osnovnasredstva.beans.Osoba;
+import osnovnasredstva.DTO.Zgrada;
 import osnovnasredstva.util.Util;
 
 /**
@@ -34,7 +34,7 @@ public class LokacijeController implements Initializable {
     private AnchorPane anchorPane;
 
     @FXML
-    private TableView<Osoba> lokacijeTableView;
+    private TableView<Zgrada> lokacijeTableView;
 
     @FXML
     private TableColumn<?, ?> sifraColumn;
@@ -46,13 +46,13 @@ public class LokacijeController implements Initializable {
     private TableColumn<?, ?> opisColumn;
 
     @FXML
-    private TableColumn<Osoba, Osoba> prikaziColumn;
+    private TableColumn<Zgrada, Zgrada> prikaziColumn;
 
     @FXML
-    private TableColumn<Osoba, Osoba> izmjeniColumn;
+    private TableColumn<Zgrada, Zgrada> izmjeniColumn;
 
     @FXML
-    private TableColumn<Osoba, Osoba> obrisiColumn;
+    private TableColumn<Zgrada, Zgrada> obrisiColumn;
 
     @FXML
     private JFXButton nazadButton;
@@ -72,7 +72,7 @@ public class LokacijeController implements Initializable {
     @FXML
     private JFXComboBox<?> zgradaComboBox;
     
-    private ObservableList<Osoba> lokacijeList;
+    private ObservableList<Zgrada> lokacijeList;
     
     /**
      * Initializes the controller class.
@@ -89,20 +89,7 @@ public class LokacijeController implements Initializable {
             }
         });
 
-        lokacijeList=FXCollections.observableArrayList(
-                new Osoba("A", "A", "A", "A"),
-                new Osoba("B", "B", "B", "B"),
-                new Osoba("C", "C", "C", "C"),
-                new Osoba("A", "A", "A", "A"),
-                new Osoba("B", "B", "B", "B"),
-                new Osoba("C", "C", "C", "C"),
-                new Osoba("A", "A", "A", "A"),
-                new Osoba("B", "B", "B", "B"),
-                new Osoba("C", "C", "C", "C"),
-                new Osoba("A", "A", "A", "A"),
-                new Osoba("B", "B", "B", "B"),
-                new Osoba("C", "C", "C", "C")
-        );
+        lokacijeList=FXCollections.observableArrayList();
         lokacijeTableView.setItems(lokacijeList);
         lokacijeTableView.setPlaceholder(new Label("Odaberite prvo zgradu."));
         lokacijeTableView.setFocusTraversable(false);
@@ -116,10 +103,10 @@ public class LokacijeController implements Initializable {
         );
         
         prikaziColumn.setCellFactory(tableCell -> {
-            TableCell<Osoba, Osoba> cell = new TableCell<Osoba, Osoba>() {
+            TableCell<Zgrada, Zgrada> cell = new TableCell<Zgrada, Zgrada>() {
                 private final Button button = new Button("");
                 @Override
-                protected void updateItem(Osoba item, boolean empty) {
+                protected void updateItem(Zgrada item, boolean empty) {
                     super.updateItem(item, empty);
                     if (!empty) {
                         //System.out.println(item);
@@ -132,7 +119,7 @@ public class LokacijeController implements Initializable {
                     	//dodavanje u kolonu
                     	setGraphic(button);
                     	button.setOnMouseClicked(event -> {
-                            //Osoba o=getTableView().getItems().get(getIndex());
+                            //Zgrada o=getTableView().getItems().get(getIndex());
                             System.out.println(item);
                         });
                     } else {
@@ -148,10 +135,10 @@ public class LokacijeController implements Initializable {
         );
         
         izmjeniColumn.setCellFactory(tableCell -> {
-            TableCell<Osoba, Osoba> cell = new TableCell<Osoba, Osoba>() {
+            TableCell<Zgrada, Zgrada> cell = new TableCell<Zgrada, Zgrada>() {
                 private final Button button = new Button("");
                 @Override
-                protected void updateItem(Osoba item, boolean empty) {
+                protected void updateItem(Zgrada item, boolean empty) {
                     super.updateItem(item, empty);
                     if (!empty) {
                         //System.out.println(item);
@@ -164,7 +151,7 @@ public class LokacijeController implements Initializable {
                     	//dodavanje u kolonu
                     	setGraphic(button);
                     	button.setOnMouseClicked(event -> {
-                            //Osoba o=getTableView().getItems().get(getIndex());
+                            //Zgrada o=getTableView().getItems().get(getIndex());
                             System.out.println(item);
                         });
                     } else {
@@ -180,10 +167,10 @@ public class LokacijeController implements Initializable {
         );
         
         obrisiColumn.setCellFactory(tableCell -> {
-            TableCell<Osoba, Osoba> cell = new TableCell<Osoba, Osoba>() {
+            TableCell<Zgrada, Zgrada> cell = new TableCell<Zgrada, Zgrada>() {
                 private final Button button = new Button("");
                 @Override
-                protected void updateItem(Osoba item, boolean empty) {
+                protected void updateItem(Zgrada item, boolean empty) {
                     super.updateItem(item, empty);
                     if (!empty) {
                         //System.out.println(item);

@@ -10,8 +10,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-
-<AnchorPane id="AnchorPane" prefHeight="465.0" prefWidth="600.0" stylesheets="@../osnovnasredstva.css" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/10.0.1" fx:controller="osnovnasredstva.administrator.OsnovnaSredstvaController">
+<AnchorPane id="AnchorPane" prefHeight="465.0" prefWidth="600.0" stylesheets="@../osnovnasredstva.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="osnovnasredstva.administrator.OsnovnaSredstvaController">
    <children>
       <TableView fx:id="osnovnaSredstvaTableView" layoutX="24.0" layoutY="145.0" prefHeight="316.0" prefWidth="574.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="135.0">
          <columns>
@@ -26,8 +25,8 @@
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
          </columnResizePolicy>
       </TableView>
-      <JFXButton fx:id="nazadButton" layoutX="25.0" layoutY="28.0" prefHeight="30.0" prefWidth="30.0" text=" " />
-      <JFXButton fx:id="dodajButton" layoutX="90.0" layoutY="28.0" prefHeight="30.0" prefWidth="30.0" text=" " />
+      <JFXButton fx:id="backButton" layoutX="25.0" layoutY="28.0" prefHeight="30.0" prefWidth="30.0" text=" " />
+      <JFXButton fx:id="dodajButton" layoutX="90.0" layoutY="28.0" onAction="#dodaj" prefHeight="30.0" prefWidth="30.0" text=" " />
       <TextField fx:id="traziTextField" layoutX="445.0" layoutY="88.0" maxWidth="150.0" minWidth="100.0" prefHeight="25.0" prefWidth="150.0" promptText="Traži" styleClass="searchTextField" AnchorPane.rightAnchor="15.0">
          <opaqueInsets>
             <Insets />
@@ -43,6 +42,6 @@
       </ImageView>
       <JFXButton fx:id="pdfButton" layoutX="154.0" layoutY="28.0" prefHeight="30.0" prefWidth="30.0" text=" " />
       <JFXComboBox fx:id="vrstaComboBox" layoutX="21.0" layoutY="88.0" prefHeight="25.0" prefWidth="129.0" promptText="Vrsta" AnchorPane.leftAnchor="25.0" />
-      <JFXButton id="dodajButton" fx:id="dodajVrstuButton" layoutX="184.0" layoutY="93.0" prefHeight="30.0" prefWidth="30.0" text=" " />
+      <JFXButton id="dodajButton" fx:id="dodajVrstuButton" layoutX="184.0" layoutY="93.0" onAction="#dodajVrstu" prefHeight="30.0" prefWidth="30.0" text=" " />
    </children>
 </AnchorPane>

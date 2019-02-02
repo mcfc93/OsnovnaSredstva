@@ -2,14 +2,20 @@ package osnovnasredstva.administrator;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
@@ -20,7 +26,10 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import osnovnasredstva.beans.Osoba;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import osnovnasredstva.DTO.OsnovnoSredstvo;
 import osnovnasredstva.util.Util;
 
 /**
@@ -30,7 +39,7 @@ import osnovnasredstva.util.Util;
 public class OsnovnaSredstvaController implements Initializable {
 
     @FXML
-    private TableView<Osoba> osnovnaSredstvaTableView;
+    private TableView<OsnovnoSredstvo> osnovnaSredstvaTableView;
 
     @FXML
     private TableColumn<?, ?> invertarniBrojColumn;
@@ -42,13 +51,13 @@ public class OsnovnaSredstvaController implements Initializable {
     private TableColumn<?, ?> vrstaColumn;
 
     @FXML
-    private TableColumn<Osoba, Osoba> prikaziColumn;
+    private TableColumn<OsnovnoSredstvo, OsnovnoSredstvo> prikaziColumn;
 
     @FXML
-    private TableColumn<Osoba, Osoba> izmjeniColumn;
+    private TableColumn<OsnovnoSredstvo, OsnovnoSredstvo> izmjeniColumn;
 
     @FXML
-    private TableColumn<Osoba, Osoba> obrisiColumn;
+    private TableColumn<OsnovnoSredstvo, OsnovnoSredstvo> obrisiColumn;
 
     @FXML
     private JFXButton nazadButton;
@@ -71,7 +80,7 @@ public class OsnovnaSredstvaController implements Initializable {
     @FXML
     private JFXButton dodajVrstuButton;
     
-    private ObservableList<Osoba> osnovnaSredstvaList;
+    private ObservableList<OsnovnoSredstvo> osnovnaSredstvaList;
     
     /**
      * Initializes the controller class.
@@ -89,18 +98,7 @@ public class OsnovnaSredstvaController implements Initializable {
         });
 
         osnovnaSredstvaList=FXCollections.observableArrayList(
-                new Osoba("A", "A", "A", "A"),
-                new Osoba("B", "B", "B", "B"),
-                new Osoba("C", "C", "C", "C"),
-                new Osoba("A", "A", "A", "A"),
-                new Osoba("B", "B", "B", "B"),
-                new Osoba("C", "C", "C", "C"),
-                new Osoba("A", "A", "A", "A"),
-                new Osoba("B", "B", "B", "B"),
-                new Osoba("C", "C", "C", "C"),
-                new Osoba("A", "A", "A", "A"),
-                new Osoba("B", "B", "B", "B"),
-                new Osoba("C", "C", "C", "C")
+                new OsnovnoSredstvo("A", "A", "A", null, null, 0, 0, 0, 0)
         );
         osnovnaSredstvaTableView.setItems(osnovnaSredstvaList);
         osnovnaSredstvaTableView.setPlaceholder(new Label("Odaberite prvo zgradu."));
@@ -115,10 +113,10 @@ public class OsnovnaSredstvaController implements Initializable {
         );
         
         prikaziColumn.setCellFactory(tableCell -> {
-            TableCell<Osoba, Osoba> cell = new TableCell<Osoba, Osoba>() {
+            TableCell<OsnovnoSredstvo, OsnovnoSredstvo> cell = new TableCell<OsnovnoSredstvo, OsnovnoSredstvo>() {
                 private final Button button = new Button("");
                 @Override
-                protected void updateItem(Osoba item, boolean empty) {
+                protected void updateItem(OsnovnoSredstvo item, boolean empty) {
                     super.updateItem(item, empty);
                     if (!empty) {
                         //System.out.println(item);
@@ -131,7 +129,7 @@ public class OsnovnaSredstvaController implements Initializable {
                     	//dodavanje u kolonu
                     	setGraphic(button);
                     	button.setOnMouseClicked(event -> {
-                            //Osoba o=getTableView().getItems().get(getIndex());
+                            //OsnovnoSredstvo o=getTableView().getItems().get(getIndex());
                             System.out.println(item);
                         });
                     } else {
@@ -147,10 +145,10 @@ public class OsnovnaSredstvaController implements Initializable {
         );
         
         izmjeniColumn.setCellFactory(tableCell -> {
-            TableCell<Osoba, Osoba> cell = new TableCell<Osoba, Osoba>() {
+            TableCell<OsnovnoSredstvo, OsnovnoSredstvo> cell = new TableCell<OsnovnoSredstvo, OsnovnoSredstvo>() {
                 private final Button button = new Button("");
                 @Override
-                protected void updateItem(Osoba item, boolean empty) {
+                protected void updateItem(OsnovnoSredstvo item, boolean empty) {
                     super.updateItem(item, empty);
                     if (!empty) {
                         //System.out.println(item);
@@ -163,8 +161,21 @@ public class OsnovnaSredstvaController implements Initializable {
                     	//dodavanje u kolonu
                     	setGraphic(button);
                     	button.setOnMouseClicked(event -> {
-                            //Osoba o=getTableView().getItems().get(getIndex());
+                            //OsnovnoSredstvo o=getTableView().getItems().get(getIndex());
                             System.out.println(item);
+                            
+                            try {
+                                Parent root = FXMLLoader.load(getClass().getResource("/osnovnasredstva/administrator/DodavanjeOsnovnogSredstvaView.fxml"));
+                                Scene scene = new Scene(root);
+                                Stage stage=new Stage();
+                                stage.setScene(scene);
+                                stage.setResizable(false);
+                                stage.initStyle(StageStyle.UNDECORATED);
+                                stage.initModality(Modality.APPLICATION_MODAL);
+                                stage.showAndWait();
+                            } catch(IOException e) {
+                                Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+                            }
                         });
                     } else {
                     	setGraphic(null);
@@ -179,10 +190,10 @@ public class OsnovnaSredstvaController implements Initializable {
         );
         
         obrisiColumn.setCellFactory(tableCell -> {
-            TableCell<Osoba, Osoba> cell = new TableCell<Osoba, Osoba>() {
+            TableCell<OsnovnoSredstvo, OsnovnoSredstvo> cell = new TableCell<OsnovnoSredstvo, OsnovnoSredstvo>() {
                 private final Button button = new Button("");
                 @Override
-                protected void updateItem(Osoba item, boolean empty) {
+                protected void updateItem(OsnovnoSredstvo item, boolean empty) {
                     super.updateItem(item, empty);
                     if (!empty) {
                         //System.out.println(item);
@@ -229,6 +240,38 @@ public class OsnovnaSredstvaController implements Initializable {
     @FXML
     void clear(MouseEvent event) {
         traziTextField.clear();
+    }
+    
+    @FXML
+    void dodaj(ActionEvent event) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/osnovnasredstva/administrator/DodavanjeOsnovnogSredstvaView.fxml"));
+            Scene scene = new Scene(root);
+            Stage stage=new Stage();
+            stage.setScene(scene);
+            stage.setResizable(false);
+            stage.initStyle(StageStyle.UNDECORATED);
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.showAndWait();
+        } catch(IOException e) {
+            Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+        }
+    }
+
+    @FXML
+    void dodajVrstu(ActionEvent event) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/osnovnasredstva/administrator/DodavanjeVrsteOSView.fxml"));
+            Scene scene = new Scene(root);
+            Stage stage=new Stage();
+            stage.setScene(scene);
+            stage.setResizable(false);
+            stage.initStyle(StageStyle.UNDECORATED);
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.showAndWait();
+        } catch(IOException e) {
+            Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+        }
     }
     
 }

@@ -1,14 +1,20 @@
 package osnovnasredstva.administrator;
 
 import com.jfoenix.controls.JFXButton;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
@@ -20,8 +26,10 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.util.Duration;
-import osnovnasredstva.beans.Osoba;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import osnovnasredstva.DTO.Osoba;
 import osnovnasredstva.util.Util;
 
 /**
@@ -90,18 +98,7 @@ public class OsobeController implements Initializable {
         });
 
         osobeList=FXCollections.observableArrayList(
-                new Osoba("A", "A", "A", "A"),
-                new Osoba("B", "B", "B", "B"),
-                new Osoba("C", "C", "C", "C"),
-                new Osoba("A", "A", "A", "A"),
-                new Osoba("B", "B", "B", "B"),
-                new Osoba("C", "C", "C", "C"),
-                new Osoba("A", "A", "A", "A"),
-                new Osoba("B", "B", "B", "B"),
-                new Osoba("C", "C", "C", "C"),
-                new Osoba("A", "A", "A", "A"),
-                new Osoba("B", "B", "B", "B"),
-                new Osoba("C", "C", "C", "C")
+                new Osoba("A", "A", "A", "A", "A", "A", "A", "A")
         );
         osobeTableView.setItems(osobeList);
         osobeTableView.setPlaceholder(new Label("Nema osoba u tabeli."));
@@ -170,6 +167,19 @@ public class OsobeController implements Initializable {
                     	button.setOnMouseClicked(event -> {
                             //Osoba o=getTableView().getItems().get(getIndex());
                             System.out.println(item);
+                            
+                            try {
+                                Parent root = FXMLLoader.load(getClass().getResource("/osnovnasredstva/administrator/DodavanjeOsobeView.fxml"));
+                                Scene scene = new Scene(root);
+                                Stage stage=new Stage();
+                                stage.setScene(scene);
+                                stage.setResizable(false);
+                                stage.initStyle(StageStyle.UNDECORATED);
+                                stage.initModality(Modality.APPLICATION_MODAL);
+                                stage.showAndWait();
+                            } catch(IOException e) {
+                                Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+                            }
                         });
                     } else {
                     	setGraphic(null);
@@ -236,4 +246,19 @@ public class OsobeController implements Initializable {
         traziTextField.clear();
     }
     
+    @FXML
+    void dodaj(ActionEvent event) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/osnovnasredstva/administrator/DodavanjeOsobeView.fxml"));
+            Scene scene = new Scene(root);
+            Stage stage=new Stage();
+            stage.setScene(scene);
+            stage.setResizable(false);
+            stage.initStyle(StageStyle.UNDECORATED);
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.showAndWait();
+        } catch(IOException e) {
+            Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+        }
+    }
 }

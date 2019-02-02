@@ -24,9 +24,8 @@
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
          </columnResizePolicy>
       </TableView>
-      <JFXButton fx:id="nazadButton" layoutX="36.0" layoutY="53.0" text=" " />
       <JFXButton fx:id="pdfButton" layoutX="144.0" layoutY="53.0" text=" " />
-      <JFXButton fx:id="dodajOsobuButton" layoutX="241.0" layoutY="53.0" text=" " />
+      <JFXButton fx:id="dodajOsobuButton" layoutX="241.0" layoutY="53.0" onAction="#dodaj" text=" " />
       <TextField fx:id="traziTextField" layoutX="434.0" layoutY="93.0" maxWidth="150.0" minWidth="100.0" prefHeight="25.0" prefWidth="150.0" promptText="Traži" styleClass="searchTextField" AnchorPane.rightAnchor="15.0">
          <opaqueInsets>
             <Insets />
