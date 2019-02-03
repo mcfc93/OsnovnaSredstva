@@ -16,6 +16,12 @@ public class VrstaOS {
         this.opis = opis;
     }
 
+    public VrstaOS(int id, String naziv, String opis) {
+        this.id = id;
+        this.naziv = naziv;
+        this.opis = opis;
+    }
+
     public int getId() {
           return this.id;
     }

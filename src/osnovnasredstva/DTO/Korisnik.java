@@ -20,6 +20,15 @@ public class Korisnik {
         this.status=true;
     }
 
+    public Korisnik(int id, String korisnickoIme, String hashLozinke, String salt, int tip, boolean status) {
+        this.id = id;
+        this.korisnickoIme = korisnickoIme;
+        this.hashLozinke = hashLozinke;
+        this.salt = salt;
+        this.tip = tip;
+        this.status = status;
+    }
+
     public int getId() {
         return this.id;
     }
@@ -66,5 +75,5 @@ public class Korisnik {
     public String toString() {
         return "Korisnik{" + "id=" + id + ", korisnickoIme=" + korisnickoIme + ", hashLozinke=" + hashLozinke + ", salt=" + salt + ", tip=" + tip + ", status=" + status + '}';
     }
-   
+
 }

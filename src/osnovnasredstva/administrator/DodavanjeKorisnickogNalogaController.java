@@ -1,6 +1,7 @@
 package osnovnasredstva.administrator;
 
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXTextField;
 import java.net.URL;
@@ -14,12 +15,16 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import osnovnasredstva.DTO.Korisnik;
 
 /**
  *
  * @author mcfc93
  */
 public class DodavanjeKorisnickogNalogaController implements Initializable {
+    
+    public static Korisnik odabraniKorisnik;
+    public static boolean izmjena=false;
 
     @FXML
     private AnchorPane menuLine;
@@ -34,10 +39,10 @@ public class DodavanjeKorisnickogNalogaController implements Initializable {
     private JFXTextField korisnickoImeTextField;
 
     @FXML
-    private JFXTextField lozinka1TextField;
+    private JFXPasswordField lozinka1PasswordField;
 
     @FXML
-    private JFXTextField lozinka2TextField;
+    private JFXPasswordField lozinka2PasswordField;
 
     @FXML
     private JFXRadioButton administratorRadioButton;
@@ -80,7 +85,17 @@ public class DodavanjeKorisnickogNalogaController implements Initializable {
             }
         });
         
+
         nazadButton.setDefaultButton(true);
+        
+        if(izmjena) {
+            korisnickoImeTextField.setText(odabraniKorisnik.getKorisnickoIme());
+            if(odabraniKorisnik.getTip()==0) {
+                administratorRadioButton.setSelected(true);
+            } else {
+                nadzornikRadioButton.setSelected(true);
+            }
+        }
     }    
     
     @FXML
@@ -92,6 +107,15 @@ public class DodavanjeKorisnickogNalogaController implements Initializable {
     
     @FXML
     void sacuvaj(ActionEvent event) {
-
+        if(izmjena) {
+            odabraniKorisnik.setKorisnickoIme(korisnickoImeTextField.getText().trim());
+            //odabraniKorisnik.setHashLozinke();
+            odabraniKorisnik.setTip(administratorRadioButton.isSelected()? 0: 1);
+        }
+        //upisivanje u bazu
+        
+        
+        
+        ((Stage)((Node)event.getSource()).getScene().getWindow()).close();
     }
 }

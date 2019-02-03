@@ -28,6 +28,19 @@ public class Osoba {
         this.status = true;
     }
 
+    public Osoba(int id, String ime, String prezime, String titula, String jmbg, String zaposlenje, String telefon, String email, String adresa, boolean status) {
+        this.id = id;
+        this.ime = ime;
+        this.prezime = prezime;
+        this.titula = titula;
+        this.jmbg = jmbg;
+        this.zaposlenje = zaposlenje;
+        this.telefon = telefon;
+        this.email = email;
+        this.adresa = adresa;
+        this.status = status;
+    }
+
     public int getId() {
           return this.id;
     }

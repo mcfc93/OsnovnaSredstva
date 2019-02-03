@@ -151,6 +151,9 @@ public class KorisnickiNaloziController implements Initializable {
                             //Korisnik o=getTableView().getItems().get(getIndex());
                             System.out.println(item);
                             try {
+                                DodavanjeKorisnickogNalogaController.odabraniKorisnik=item;
+                                DodavanjeKorisnickogNalogaController.izmjena=true;
+                                
                                 Parent root = FXMLLoader.load(getClass().getResource("/osnovnasredstva/administrator/DodavanjeKorisnickogNalogaView.fxml"));
                                 Scene scene = new Scene(root);
                                 Stage stage=new Stage();
@@ -159,6 +162,9 @@ public class KorisnickiNaloziController implements Initializable {
                                 stage.initStyle(StageStyle.UNDECORATED);
                                 stage.initModality(Modality.APPLICATION_MODAL);
                                 stage.showAndWait();
+                                
+                                DodavanjeKorisnickogNalogaController.izmjena=false;
+                                korisnickiNaloziTableView.refresh();
                             } catch(IOException e) {
                                 Util.LOGGER.log(Level.SEVERE, e.toString(), e);
                             }

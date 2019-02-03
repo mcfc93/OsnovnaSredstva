@@ -71,6 +71,6 @@ public class DodavanjeVrsteOSController implements Initializable {
     
     @FXML
     void sacuvaj(ActionEvent event) {
-
+        ((Stage)((Node)event.getSource()).getScene().getWindow()).close();
     }
 }

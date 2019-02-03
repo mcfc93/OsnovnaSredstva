@@ -18,6 +18,14 @@ public class Zgrada {
         this.status = true;
     }
 
+    public Zgrada(int id, String sifra, String naziv, String opis, boolean status) {
+        this.id = id;
+        this.sifra = sifra;
+        this.naziv = naziv;
+        this.opis = opis;
+        this.status = status;
+    }
+
     public int getId() {
           return this.id;
     }

@@ -28,6 +28,18 @@ public class Prelaznica {
         this.idOsnovnogSredstva = idOsnovnogSredstva;
     }
 
+    public Prelaznica(int id, Timestamp datumPrelaska, String napomena, boolean status, int idProstorijeIz, int idProstorijeU, int idOsobeSa, int idOsobeNa, int idOsnovnogSredstva) {
+        this.id = id;
+        this.datumPrelaska = datumPrelaska;
+        this.napomena = napomena;
+        this.status = status;
+        this.idProstorijeIz = idProstorijeIz;
+        this.idProstorijeU = idProstorijeU;
+        this.idOsobeSa = idOsobeSa;
+        this.idOsobeNa = idOsobeNa;
+        this.idOsnovnogSredstva = idOsnovnogSredstva;
+    }
+
     public int getId() {
           return this.id;
     }
@@ -92,4 +104,3 @@ public class Prelaznica {
     }
 
 }
-

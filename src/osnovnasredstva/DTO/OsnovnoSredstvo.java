@@ -33,6 +33,20 @@ public class OsnovnoSredstvo {
         this.idVrste = idVrste;
     }
 
+    public OsnovnoSredstvo(int id, String inventarniBroj, String naziv, String opis, Timestamp datumNabavke, BigDecimal nabavnaVrijednost, int stopaAmortizacije, boolean status, int idLokacije, int idOsobe, int idVrste) {
+        this.id = id;
+        this.inventarniBroj = inventarniBroj;
+        this.naziv = naziv;
+        this.opis = opis;
+        this.datumNabavke = datumNabavke;
+        this.nabavnaVrijednost = nabavnaVrijednost;
+        this.stopaAmortizacije = stopaAmortizacije;
+        this.status = status;
+        this.idLokacije = idLokacije;
+        this.idOsobe = idOsobe;
+        this.idVrste = idVrste;
+    }
+
     public int getId() {
           return this.id;
     }

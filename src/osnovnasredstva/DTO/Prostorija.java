@@ -20,6 +20,15 @@ public class Prostorija {
         this.idZgrade = idZgrade;
     }
 
+    public Prostorija(int id, String sifra, String naziv, String opis, boolean status, int idZgrade) {
+        this.id = id;
+        this.sifra = sifra;
+        this.naziv = naziv;
+        this.opis = opis;
+        this.status = status;
+        this.idZgrade = idZgrade;
+    }
+
     public int getId() {
           return this.id;
     }
