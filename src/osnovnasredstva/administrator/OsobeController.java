@@ -135,6 +135,19 @@ public class OsobeController implements Initializable {
                     	button.setOnMouseClicked(event -> {
                             //Osoba o=getTableView().getItems().get(getIndex());
                             System.out.println(item);
+                            
+                            try {
+                                Parent root = FXMLLoader.load(getClass().getResource("/osnovnasredstva/administrator/PrikazOsobeView.fxml"));
+                                Scene scene = new Scene(root);
+                                Stage stage=new Stage();
+                                stage.setScene(scene);
+                                stage.setResizable(false);
+                                stage.initStyle(StageStyle.UNDECORATED);
+                                stage.initModality(Modality.APPLICATION_MODAL);
+                                stage.showAndWait();
+                            } catch(IOException e) {
+                                Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+                            }
                         });
                     } else {
                     	setGraphic(null);

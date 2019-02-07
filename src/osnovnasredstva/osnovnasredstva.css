@@ -1046,6 +1046,7 @@
 .opisLabel {
     -fx-text-fill: -fx-hover-color;
     -fx-font-weight: bold;
+    -fx-text-alignment: right;
 }
 
 .opisTextField {

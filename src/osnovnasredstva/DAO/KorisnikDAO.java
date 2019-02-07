@@ -133,7 +133,7 @@ public class KorisnikDAO {
           }
     }
 
-    public void delete(Connection conn, Korisnik valueObject) 
+    public boolean delete(Connection conn, Korisnik valueObject) 
           throws NotFoundException, SQLException {
 
           String sql = "UPDATE korisnik SET status=false WHERE (id = ? ) ";
@@ -147,17 +147,20 @@ public class KorisnikDAO {
               if (rowcount == 0) {
                    //System.out.println("Object could not be deleted (PrimaryKey not found)");
                    //*****NOTIFIKACIJA PROZOR UPOZORENJE*****
-                   throw new NotFoundException("Object could not be deleted! (PrimaryKey not found)");
+                   return false;
+                   //throw new NotFoundException("Object could not be deleted! (PrimaryKey not found)");
               }
               if (rowcount > 1) {
                    //System.out.println("PrimaryKey Error when updating DB! (Many objects were deleted!)");
                    //*****NOTIFIKACIJA PROZOR UPOZORENJE*****
-                   throw new SQLException("PrimaryKey Error when updating DB! (Many objects were deleted!)");
+                   return false;
+                   //throw new SQLException("PrimaryKey Error when updating DB! (Many objects were deleted!)");
               }
           } finally {
               if (stmt != null)
                   stmt.close();
           }
+          return true;
     }
 
     public int countAll(Connection conn) throws SQLException {

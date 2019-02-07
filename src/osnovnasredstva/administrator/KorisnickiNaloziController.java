@@ -37,6 +37,7 @@ import org.controlsfx.control.MaskerPane;
 import osnovnasredstva.DAO.KorisnikDAO;
 import osnovnasredstva.DTO.Korisnik;
 import osnovnasredstva.prijava.PrijavaController;
+import osnovnasredstva.util.NotFoundException;
 import osnovnasredstva.util.Util;
 
 /**
@@ -124,6 +125,8 @@ public class KorisnickiNaloziController implements Initializable {
         korisnickoImeColumn.setCellValueFactory(new PropertyValueFactory<>("korisnickoIme"));
         tipColumn.setCellValueFactory(new PropertyValueFactory<>("tip"));
         
+        prikaziColumn.setVisible(false);
+        /*
         prikaziColumn.setCellValueFactory(
             param -> new ReadOnlyObjectWrapper<>(param.getValue())
         );
@@ -155,7 +158,7 @@ public class KorisnickiNaloziController implements Initializable {
             };
             return cell;
         });
-        
+        */
         izmjeniColumn.setCellValueFactory(
             param -> new ReadOnlyObjectWrapper<>(param.getValue())
         );
@@ -227,11 +230,18 @@ public class KorisnickiNaloziController implements Initializable {
                     	//dodavanje u kolonu
                     	setGraphic(button);
                     	button.setOnMouseClicked(event -> {
-                            korisnickiNaloziList.remove(item);
-                            //getTableView().getItems().remove(item);
-                            korisnickiNaloziTableView.refresh();
-                            System.out.println("Obrisano: " + item);
-		            Util.getNotifications("Obavještenje", "Korisnički nalog obrisan.", "Information").show();
+                                try {
+                                    if(korisnikDAO.delete(PrijavaController.konekcija, item)){
+                                        korisnickiNaloziList.remove(item);
+                                        //getTableView().getItems().remove(item);
+                                        korisnickiNaloziTableView.refresh();
+                                        System.out.println("Obrisano: " + item);
+                                        Util.getNotifications("Obavještenje", "Korisnički nalog obrisan.", "Information").show();
+                                    }
+                                } catch (SQLException | NotFoundException e) {
+                                    Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+                                }
+                            
                         });
                     } else {
                     	setGraphic(null);

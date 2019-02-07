@@ -18,10 +18,12 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import org.omg.CosNaming.NamingContextPackage.NotFound;
 import osnovnasredstva.DAO.KorisnikDAO;
 import osnovnasredstva.DTO.Korisnik;
 import static osnovnasredstva.administrator.KorisnickiNaloziController.korisnickiNaloziList;
 import osnovnasredstva.prijava.PrijavaController;
+import osnovnasredstva.util.NotFoundException;
 import osnovnasredstva.util.Util;
 
 /**
@@ -122,9 +124,16 @@ public class DodavanjeKorisnickogNalogaController implements Initializable {
                 & lozinka1PasswordField.validate()
                     & lozinka2PasswordField.validate()) {
             if(izmjena) {
+                String salt = KorisnikDAO.generisiSalt();
                 odabraniKorisnik.setKorisnickoIme(korisnickoImeTextField.getText().trim());
-                //odabraniKorisnik.setHashLozinke();
+                odabraniKorisnik.setHashLozinke(KorisnikDAO.hash(lozinka1PasswordField.getText(), salt));
+                odabraniKorisnik.setSalt(salt);
                 odabraniKorisnik.setTip(administratorRadioButton.isSelected()? 0: 1);
+                try {
+                    korisnikDAO.save(PrijavaController.konekcija, odabraniKorisnik);
+                } catch (SQLException | NotFoundException e) {
+                    Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+                }
             }
             else{
 
@@ -136,10 +145,11 @@ public class DodavanjeKorisnickogNalogaController implements Initializable {
                 } catch (SQLException e) {
                     Util.LOGGER.log(Level.SEVERE, e.toString(), e);
                 }
+                korisnickiNaloziList.add(DodavanjeKorisnickogNalogaController.odabraniKorisnik);
+
             }
             //upisivanje u bazu
-            korisnickiNaloziList.add(DodavanjeKorisnickogNalogaController.odabraniKorisnik);
-
+            
 
 
             ((Stage)((Node)event.getSource()).getScene().getWindow()).close();
