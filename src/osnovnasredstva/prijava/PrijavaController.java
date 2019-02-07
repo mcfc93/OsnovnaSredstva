@@ -3,6 +3,8 @@ package osnovnasredstva.prijava;
 import com.jfoenix.controls.JFXCheckBox;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import javafx.application.Platform;
@@ -38,6 +40,7 @@ public class PrijavaController implements Initializable {
     
     public static Korisnik korisnik=null;
     private static final String SER_FILE="logs/korisnik.ser";
+    public static Connection konekcija;
     
     @FXML
     private AnchorPane anchorPane;
@@ -62,6 +65,7 @@ public class PrijavaController implements Initializable {
     
     private double xOffset=0;
     private double yOffset=0;
+    
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -199,6 +203,11 @@ System.out.println("nalog.ser");
                     protected void succeeded(){
                         super.succeeded();
                         progressPane.setVisible(false);
+                        try{
+                            konekcija = Util.getConnection();
+                        } catch(SQLException e){
+                            Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+                        }
                         ((Stage)((Node)event.getSource()).getScene().getWindow()).close();
                         try {
                             Parent root = FXMLLoader.load(getClass().getResource("/osnovnasredstva/administrator/AdministratorView.fxml"));

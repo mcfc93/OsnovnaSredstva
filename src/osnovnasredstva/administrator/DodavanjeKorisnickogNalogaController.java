@@ -5,7 +5,10 @@ import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXTextField;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -15,7 +18,11 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import osnovnasredstva.DAO.KorisnikDAO;
 import osnovnasredstva.DTO.Korisnik;
+import static osnovnasredstva.administrator.KorisnickiNaloziController.korisnickiNaloziList;
+import osnovnasredstva.prijava.PrijavaController;
+import osnovnasredstva.util.Util;
 
 /**
  *
@@ -25,6 +32,7 @@ public class DodavanjeKorisnickogNalogaController implements Initializable {
     
     public static Korisnik odabraniKorisnik;
     public static boolean izmjena=false;
+    private static KorisnikDAO korisnikDAO = new KorisnikDAO();
 
     @FXML
     private AnchorPane menuLine;
@@ -87,6 +95,9 @@ public class DodavanjeKorisnickogNalogaController implements Initializable {
         
 
         nazadButton.setDefaultButton(true);
+        korisnickoImeTextField.getValidators().addAll(Util.requiredFieldValidator(korisnickoImeTextField), Util.lengthValidator(korisnickoImeTextField, 20));
+        lozinka1PasswordField.getValidators().addAll(Util.requiredFieldValidator(lozinka1PasswordField), Util.passwordValidator(lozinka1PasswordField));
+        lozinka2PasswordField.getValidators().addAll(Util.requiredFieldValidator(lozinka2PasswordField), Util.passwordValidator(lozinka1PasswordField), Util.samePasswordValidator(lozinka1PasswordField, lozinka2PasswordField));
         
         if(izmjena) {
             korisnickoImeTextField.setText(odabraniKorisnik.getKorisnickoIme());
@@ -107,15 +118,31 @@ public class DodavanjeKorisnickogNalogaController implements Initializable {
     
     @FXML
     void sacuvaj(ActionEvent event) {
-        if(izmjena) {
-            odabraniKorisnik.setKorisnickoIme(korisnickoImeTextField.getText().trim());
-            //odabraniKorisnik.setHashLozinke();
-            odabraniKorisnik.setTip(administratorRadioButton.isSelected()? 0: 1);
+        if(korisnickoImeTextField.validate()
+                & lozinka1PasswordField.validate()
+                    & lozinka2PasswordField.validate()) {
+            if(izmjena) {
+                odabraniKorisnik.setKorisnickoIme(korisnickoImeTextField.getText().trim());
+                //odabraniKorisnik.setHashLozinke();
+                odabraniKorisnik.setTip(administratorRadioButton.isSelected()? 0: 1);
+            }
+            else{
+
+                String salt = KorisnikDAO.generisiSalt();
+                odabraniKorisnik = new Korisnik(korisnickoImeTextField.getText().trim(), 
+                    KorisnikDAO.hash(lozinka1PasswordField.getText(), salt), salt,(administratorRadioButton.isSelected()? 0: 1));
+                try {
+                    korisnikDAO.create(PrijavaController.konekcija, odabraniKorisnik);
+                } catch (SQLException e) {
+                    Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+                }
+            }
+            //upisivanje u bazu
+            korisnickiNaloziList.add(DodavanjeKorisnickogNalogaController.odabraniKorisnik);
+
+
+
+            ((Stage)((Node)event.getSource()).getScene().getWindow()).close();
         }
-        //upisivanje u bazu
-        
-        
-        
-        ((Stage)((Node)event.getSource()).getScene().getWindow()).close();
     }
 }

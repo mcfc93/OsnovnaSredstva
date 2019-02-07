@@ -3,12 +3,16 @@ package osnovnasredstva.administrator;
 import com.jfoenix.controls.JFXButton;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -29,7 +33,10 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import org.controlsfx.control.MaskerPane;
+import osnovnasredstva.DAO.KorisnikDAO;
 import osnovnasredstva.DTO.Korisnik;
+import osnovnasredstva.prijava.PrijavaController;
 import osnovnasredstva.util.Util;
 
 /**
@@ -37,6 +44,8 @@ import osnovnasredstva.util.Util;
  * @author mcfc93
  */
 public class KorisnickiNaloziController implements Initializable {
+
+    private static KorisnikDAO korisnikDAO = new KorisnikDAO();
 
     @FXML
     private AnchorPane anchorPane;
@@ -68,7 +77,7 @@ public class KorisnickiNaloziController implements Initializable {
     @FXML
     private ImageView clearImageView;
 
-    private ObservableList<Korisnik> korisnickiNaloziList;
+    public static ObservableList<Korisnik> korisnickiNaloziList;
     
     /**
      * Initializes the controller class.
@@ -85,11 +94,31 @@ public class KorisnickiNaloziController implements Initializable {
             }
         });
 
-        korisnickiNaloziList=FXCollections.observableArrayList(
-                new Korisnik("A", "A", "A", 0)
-        );
+        korisnickiNaloziList=FXCollections.observableArrayList();
+        
+        MaskerPane progressPane=Util.getMaskerPane(anchorPane);
+        Task<Void> task = new Task<Void>() {
+            @Override
+            protected Void call() {
+                System.out.println(Thread.currentThread());
+                progressPane.setVisible(true);
+                try {
+                    korisnickiNaloziList.addAll(korisnikDAO.loadAll(PrijavaController.konekcija));
+                } catch (SQLException e) {
+                    Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+                }
+                return null;
+            }
+            @Override
+            protected void succeeded(){
+                super.succeeded();
+                progressPane.setVisible(false);
+            }
+        };
+        new Thread(task).start();
+        
         korisnickiNaloziTableView.setItems(korisnickiNaloziList);
-        korisnickiNaloziTableView.setPlaceholder(new Label("Odaberite prvo zgradu."));
+        korisnickiNaloziTableView.setPlaceholder(new Label("Nema korisničkih naloga."));
         korisnickiNaloziTableView.setFocusTraversable(false);
         
         korisnickoImeColumn.setCellValueFactory(new PropertyValueFactory<>("korisnickoIme"));
@@ -248,5 +277,7 @@ public class KorisnickiNaloziController implements Initializable {
         } catch(IOException e) {
             Util.LOGGER.log(Level.SEVERE, e.toString(), e);
         }
+        //korisnickiNaloziTableView.refresh();
+        
     }
 }
