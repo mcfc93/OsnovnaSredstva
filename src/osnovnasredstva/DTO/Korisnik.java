@@ -57,9 +57,17 @@ public class Korisnik {
           this.salt = saltIn;
     }
 
-    public int getTip() {
-          return this.tip;
+    public String getTip2() {
+          if(tip == 0)
+              return "Administrator";
+          else
+              return "Nadzornik";
     }
+
+    public int getTip() {
+        return tip;
+    }
+    
     public void setTip(int tipIn) {
           this.tip = tipIn;
     }

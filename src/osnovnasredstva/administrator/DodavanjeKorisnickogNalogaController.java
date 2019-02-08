@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -142,17 +143,21 @@ public class DodavanjeKorisnickogNalogaController implements Initializable {
                     KorisnikDAO.hash(lozinka1PasswordField.getText(), salt), salt,(administratorRadioButton.isSelected()? 0: 1));
                 try {
                     korisnikDAO.create(PrijavaController.konekcija, odabraniKorisnik);
+                    korisnickiNaloziList.add(DodavanjeKorisnickogNalogaController.odabraniKorisnik);
+                    ((Stage)((Node)event.getSource()).getScene().getWindow()).close();
+                    Platform.runLater(()->Util.getNotifications("Obavještenje", "Korisnički nalog dodat.", "Information").show());
                 } catch (SQLException e) {
-                    Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+                    Platform.runLater(()->Util.getNotifications("Greška", "Korisnički nalog već postoji.", "Error").show());
+                    //Util.LOGGER.log(Level.SEVERE, e.toString(), e);
                 }
-                korisnickiNaloziList.add(DodavanjeKorisnickogNalogaController.odabraniKorisnik);
+                
 
             }
             //upisivanje u bazu
             
 
 
-            ((Stage)((Node)event.getSource()).getScene().getWindow()).close();
+            //((Stage)((Node)event.getSource()).getScene().getWindow()).close();
         }
     }
 }

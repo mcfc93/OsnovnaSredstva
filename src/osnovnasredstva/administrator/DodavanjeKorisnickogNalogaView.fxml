@@ -9,7 +9,7 @@
 <?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane id="AnchorPane" prefHeight="350.0" prefWidth="450.0" styleClass="rootBorder" stylesheets="@../osnovnasredstva.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="osnovnasredstva.administrator.DodavanjeKorisnickogNalogaController">
+<AnchorPane id="AnchorPane" prefHeight="350.0" prefWidth="450.0" styleClass="rootBorder" stylesheets="@../osnovnasredstva.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="osnovnasredstva.administrator.DodavanjeKorisnickogNalogaController">
    <children>
       <AnchorPane fx:id="menuLine" prefHeight="30.0" prefWidth="600.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -27,6 +27,6 @@
       <JFXRadioButton fx:id="nadzornikRadioButton" layoutX="295.0" layoutY="187.0" selected="true" text="Nadzornik" toggleGroup="$tipNaloga" AnchorPane.leftAnchor="300.0" AnchorPane.topAnchor="185.0" />
       <Label layoutX="275.0" layoutY="116.0" styleClass="naslovLabel" text="Tip:" AnchorPane.leftAnchor="275.0" AnchorPane.topAnchor="115.0" />
       <JFXPasswordField fx:id="lozinka1PasswordField" layoutX="47.0" layoutY="175.0" prefWidth="175.0" promptText="Lozinka" AnchorPane.leftAnchor="45.0" AnchorPane.topAnchor="140.0" />
-      <JFXPasswordField fx:id="lozinka2PasswordField" layoutX="47.0" layoutY="256.0" prefWidth="175.0" promptText="Lozinka" AnchorPane.leftAnchor="45.0" AnchorPane.topAnchor="210.0" />
+      <JFXPasswordField fx:id="lozinka2PasswordField" layoutX="47.0" layoutY="256.0" prefWidth="175.0" promptText="Potvrda lozinke" AnchorPane.leftAnchor="45.0" AnchorPane.topAnchor="210.0" />
    </children>
 </AnchorPane>

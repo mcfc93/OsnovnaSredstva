@@ -42,7 +42,7 @@ import osnovnasredstva.util.Util;
 
 /**
  *
- * @author mcfc93
+ * 
  */
 public class KorisnickiNaloziController implements Initializable {
 
@@ -85,6 +85,7 @@ public class KorisnickiNaloziController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        dodajButton.setTooltip(new Tooltip("Dodaj korisnika"));
         clearImageView.setVisible(false);
 		
         traziTextField.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue)->{
@@ -123,8 +124,7 @@ public class KorisnickiNaloziController implements Initializable {
         korisnickiNaloziTableView.setFocusTraversable(false);
         
         korisnickoImeColumn.setCellValueFactory(new PropertyValueFactory<>("korisnickoIme"));
-        tipColumn.setCellValueFactory(new PropertyValueFactory<>("tip"));
-        
+        tipColumn.setCellValueFactory(new PropertyValueFactory<>("tip2"));      
         prikaziColumn.setVisible(false);
         /*
         prikaziColumn.setCellValueFactory(
@@ -235,7 +235,7 @@ public class KorisnickiNaloziController implements Initializable {
                                         korisnickiNaloziList.remove(item);
                                         //getTableView().getItems().remove(item);
                                         korisnickiNaloziTableView.refresh();
-                                        System.out.println("Obrisano: " + item);
+                                        //System.out.println("Obrisano: " + item);
                                         Util.getNotifications("Obavještenje", "Korisnički nalog obrisan.", "Information").show();
                                     }
                                 } catch (SQLException | NotFoundException e) {
