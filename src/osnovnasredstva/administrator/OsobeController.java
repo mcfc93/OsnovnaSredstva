@@ -3,12 +3,14 @@ package osnovnasredstva.administrator;
 import com.jfoenix.controls.JFXButton;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -29,7 +31,11 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import org.controlsfx.control.MaskerPane;
+import osnovnasredstva.DAO.OsobaDAO;
 import osnovnasredstva.DTO.Osoba;
+import osnovnasredstva.prijava.PrijavaController;
+import osnovnasredstva.util.NotFoundException;
 import osnovnasredstva.util.Util;
 
 /**
@@ -38,6 +44,8 @@ import osnovnasredstva.util.Util;
  */
 public class OsobeController implements Initializable {
 
+    private static OsobaDAO osobaDAO = new OsobaDAO();
+    
     @FXML
     private AnchorPane anchorPane;
     
@@ -80,7 +88,7 @@ public class OsobeController implements Initializable {
     @FXML
     private ImageView clearImageView;
     
-    private ObservableList<Osoba> osobeList;
+    public static ObservableList<Osoba> osobeList;
     
     /**
      * Initializes the controller class.
@@ -97,9 +105,31 @@ public class OsobeController implements Initializable {
             }
         });
 
-        osobeList=FXCollections.observableArrayList(
-                new Osoba("A", "A", "A", "A", "A", "A", "A", "A")
-        );
+        
+        osobeList = FXCollections.observableArrayList();
+        
+        MaskerPane progressPane=Util.getMaskerPane(anchorPane);
+        Task<Void> task = new Task<Void>() {
+            @Override
+            protected Void call() {
+                System.out.println(Thread.currentThread());
+                progressPane.setVisible(true);
+                try {
+                    osobeList.addAll(osobaDAO.loadAll(PrijavaController.konekcija));
+                } catch (SQLException e) {
+                    Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+                }
+                return null;
+            }
+            @Override
+            protected void succeeded(){
+                super.succeeded();
+                progressPane.setVisible(false);
+            }
+        };
+        new Thread(task).start();
+        
+        
         osobeTableView.setItems(osobeList);
         osobeTableView.setPlaceholder(new Label("Nema osoba u tabeli."));
         osobeTableView.setFocusTraversable(false);
@@ -111,6 +141,7 @@ public class OsobeController implements Initializable {
         //izmjeniColumn.setCellValueFactory(new PropertyValueFactory<>("izmjeni"));
         //obrisiColumn.setCellValueFactory(new PropertyValueFactory<>("obrisi"));
         
+        prikaziColumn.setVisible(true);
         
         prikaziColumn.setCellValueFactory(
             param -> new ReadOnlyObjectWrapper<>(param.getValue())
@@ -182,6 +213,9 @@ public class OsobeController implements Initializable {
                             System.out.println(item);
                             
                             try {
+                                DodavanjeOsobeController.odabranaOsoba=item;
+                                DodavanjeOsobeController.izmjena=true;
+                                
                                 Parent root = FXMLLoader.load(getClass().getResource("/osnovnasredstva/administrator/DodavanjeOsobeView.fxml"));
                                 Scene scene = new Scene(root);
                                 Stage stage=new Stage();
@@ -190,6 +224,9 @@ public class OsobeController implements Initializable {
                                 stage.initStyle(StageStyle.UNDECORATED);
                                 stage.initModality(Modality.APPLICATION_MODAL);
                                 stage.showAndWait();
+                                
+                                DodavanjeOsobeController.izmjena=false;
+                                osobeTableView.refresh();
                             } catch(IOException e) {
                                 Util.LOGGER.log(Level.SEVERE, e.toString(), e);
                             }
@@ -223,11 +260,24 @@ public class OsobeController implements Initializable {
                     	//dodavanje u kolonu
                     	setGraphic(button);
                     	button.setOnMouseClicked(event -> {
+                            /*
                             osobeList.remove(item);
                             //getTableView().getItems().remove(item);
                             osobeTableView.refresh();
                             System.out.println("Obrisano: " + item);
 		            Util.getNotifications("Obavještenje", "Osoba obrisana.", "Information").show();
+                            */
+                            try {
+                                    if(osobaDAO.delete(PrijavaController.konekcija, item)){
+                                        osobeList.remove(item);
+                                        //getTableView().getItems().remove(item);
+                                        osobeTableView.refresh();
+                                        System.out.println("Obrisano: " + item);
+                                        Util.getNotifications("Obavještenje", "Korisnički nalog obrisan.", "Information").show();
+                                    }
+                                } catch (SQLException | NotFoundException e) {
+                                    Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+                                }
                         });
                     } else {
                     	setGraphic(null);
