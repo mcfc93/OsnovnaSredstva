@@ -12,12 +12,19 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import osnovnasredstva.DAO.OsobaDAO;
+import osnovnasredstva.DTO.Osoba;
 
 /**
  *
  * @author mcfc93
  */
 public class DodavanjeOsobeController implements Initializable {
+
+    
+    public static Osoba odabranaOsoba;
+    public static boolean izmjena=false;
+    private static OsobaDAO OsobaDAO = new OsobaDAO();
 
     @FXML
     private AnchorPane menuLine;
@@ -85,6 +92,18 @@ public class DodavanjeOsobeController implements Initializable {
         });
         
         nazadButton.setDefaultButton(true);
+        /*ovde trebaju validatori */
+        if(izmjena) {
+            imeTextField.setText(odabranaOsoba.getIme());
+            prezimeTextField.setText(odabranaOsoba.getPrezime());
+            jmbgTextField.setText(odabranaOsoba.getJmbg());
+            titulaTextField.setText(odabranaOsoba.getTitula());
+            zaposlenjeTextField.setText(odabranaOsoba.getZaposlenje());
+            brojTelefonaTextField.setText(odabranaOsoba.getTelefon());
+            emailTextField.setText(odabranaOsoba.getEmail());
+            adresaTextField.setText(odabranaOsoba.getAdresa());
+            
+        }
     }    
     
     @FXML

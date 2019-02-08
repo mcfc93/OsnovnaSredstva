@@ -35,6 +35,7 @@ import org.controlsfx.control.MaskerPane;
 import osnovnasredstva.DAO.OsobaDAO;
 import osnovnasredstva.DTO.Osoba;
 import osnovnasredstva.prijava.PrijavaController;
+import osnovnasredstva.util.NotFoundException;
 import osnovnasredstva.util.Util;
 
 /**
@@ -104,11 +105,6 @@ public class OsobeController implements Initializable {
             }
         });
 
-        /*
-        osobeList=FXCollections.observableArrayList(
-                new Osoba("A", "A", "A", "A", "A", "A", "A", "A")
-        );
-        */
         
         osobeList = FXCollections.observableArrayList();
         
@@ -145,8 +141,8 @@ public class OsobeController implements Initializable {
         //izmjeniColumn.setCellValueFactory(new PropertyValueFactory<>("izmjeni"));
         //obrisiColumn.setCellValueFactory(new PropertyValueFactory<>("obrisi"));
         
-        prikaziColumn.setVisible(false);
-        /*
+        prikaziColumn.setVisible(true);
+        
         prikaziColumn.setCellValueFactory(
             param -> new ReadOnlyObjectWrapper<>(param.getValue())
         );
@@ -191,7 +187,7 @@ public class OsobeController implements Initializable {
             };
             return cell;
         });
-        */
+        
         izmjeniColumn.setCellValueFactory(
             param -> new ReadOnlyObjectWrapper<>(param.getValue())
         );
@@ -217,6 +213,9 @@ public class OsobeController implements Initializable {
                             System.out.println(item);
                             
                             try {
+                                DodavanjeOsobeController.odabranaOsoba=item;
+                                DodavanjeOsobeController.izmjena=true;
+                                
                                 Parent root = FXMLLoader.load(getClass().getResource("/osnovnasredstva/administrator/DodavanjeOsobeView.fxml"));
                                 Scene scene = new Scene(root);
                                 Stage stage=new Stage();
@@ -225,6 +224,9 @@ public class OsobeController implements Initializable {
                                 stage.initStyle(StageStyle.UNDECORATED);
                                 stage.initModality(Modality.APPLICATION_MODAL);
                                 stage.showAndWait();
+                                
+                                DodavanjeOsobeController.izmjena=false;
+                                osobeTableView.refresh();
                             } catch(IOException e) {
                                 Util.LOGGER.log(Level.SEVERE, e.toString(), e);
                             }
@@ -258,11 +260,24 @@ public class OsobeController implements Initializable {
                     	//dodavanje u kolonu
                     	setGraphic(button);
                     	button.setOnMouseClicked(event -> {
+                            /*
                             osobeList.remove(item);
                             //getTableView().getItems().remove(item);
                             osobeTableView.refresh();
                             System.out.println("Obrisano: " + item);
 		            Util.getNotifications("Obavještenje", "Osoba obrisana.", "Information").show();
+                            */
+                            try {
+                                    if(osobaDAO.delete(PrijavaController.konekcija, item)){
+                                        osobeList.remove(item);
+                                        //getTableView().getItems().remove(item);
+                                        osobeTableView.refresh();
+                                        System.out.println("Obrisano: " + item);
+                                        Util.getNotifications("Obavještenje", "Korisnički nalog obrisan.", "Information").show();
+                                    }
+                                } catch (SQLException | NotFoundException e) {
+                                    Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+                                }
                         });
                     } else {
                     	setGraphic(null);
