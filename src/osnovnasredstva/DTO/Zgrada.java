@@ -61,4 +61,9 @@ public class Zgrada {
           this.status = statusIn;
     }
 
+    @Override
+    public String toString() {
+        return naziv;
+    }
+
 }

@@ -23,6 +23,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import osnovnasredstva.prijava.PrijavaController;
 import osnovnasredstva.util.Util;
 
 /**
@@ -75,6 +76,7 @@ public class AdministratorController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        informacijeLabel.setText(PrijavaController.korisnik.getKorisnickoIme());
         //DragAndDrop
         menuLine.setOnMousePressed(event -> {
             if(event.getButton().equals(MouseButton.PRIMARY)) {

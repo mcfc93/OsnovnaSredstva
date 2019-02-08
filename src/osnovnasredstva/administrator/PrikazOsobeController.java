@@ -5,6 +5,10 @@ import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -22,6 +26,34 @@ public class PrikazOsobeController implements Initializable {
     
      private double xOffset=0;
     private double yOffset=0;
+    @FXML
+    private Button closeButton;
+    @FXML
+    private TextField imeTextField;
+    @FXML
+    private TextField prezimeTextField;
+    @FXML
+    private TextField jmbgTextField;
+    @FXML
+    private TableView<?> osnovnaSredTableView;
+    @FXML
+    private TableColumn<?, ?> invBrColumn;
+    @FXML
+    private TableColumn<?, ?> nazivColumn;
+    @FXML
+    private TableColumn<?, ?> opisColumn;
+    @FXML
+    private TableColumn<?, ?> vrijednostColumn;
+    @FXML
+    private TextField emailTextField;
+    @FXML
+    private TextField zaposlenjeTextField;
+    @FXML
+    private TextField telefonTextField;
+    @FXML
+    private TextField adresaTextField;
+    @FXML
+    private TextField titulaTextField;
     /**
      * Initializes the controller class.
      */
