@@ -147,6 +147,9 @@ public class DodavanjeKorisnickogNalogaController implements Initializable {
                     ((Stage)((Node)event.getSource()).getScene().getWindow()).close();
                     Platform.runLater(()->Util.getNotifications("Obavještenje", "Korisnički nalog dodat.", "Information").show());
                 } catch (SQLException e) {
+                    ////////////////////////////////////////////////////////////
+                    
+                    ////////////////////////////////////////////////////////////
                     Platform.runLater(()->Util.getNotifications("Greška", "Korisnički nalog već postoji.", "Error").show());
                     //Util.LOGGER.log(Level.SEVERE, e.toString(), e);
                 }

@@ -43,26 +43,30 @@ public class AdministratorController implements Initializable {
     @FXML
     private Label informacijeLabel;
 
-    @FXML
-    private Button odjavaButton;
     
     @FXML
     private ToggleGroup toggleGroup;
 	
-    @FXML
-    private ToggleButton xButton;
-
-    @FXML
-    private ToggleButton yButton;
-
-    @FXML
-    private ToggleButton zButton;
 
     @FXML
     private ToggleButton wButton;
 
     private double xOffset=0;
     private double yOffset=0;
+    @FXML
+    private ToggleButton osobeButton;
+    @FXML
+    private ToggleButton lokacijeButton;
+    @FXML
+    private ToggleButton osnovnaSredstvaButton;
+    @FXML
+    private ToggleButton korisnickiNaloziButton;
+    @FXML
+    private Button closeButton;
+    @FXML
+    private Button maximizeButton;
+    @FXML
+    private Button minimizeButton;
 
     /**
      * Initializes the controller class.

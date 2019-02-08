@@ -24,6 +24,12 @@ public class KorisnikDAO {
           load(conn, valueObject);
           return valueObject;
     }
+   /* public Korisnik getObject(Connection conn, String ime) throws NotFoundException, SQLException {
+          Korisnik valueObject = createValueObject();
+          valueObject.setId(id);
+          load(conn, valueObject);
+          return valueObject;
+    }*/
 
     public void load(Connection conn, Korisnik valueObject) throws NotFoundException, SQLException {
           String sql = "SELECT * FROM korisnik WHERE status=true AND (id = ? ) "; 
