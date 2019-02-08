@@ -88,7 +88,7 @@ public class OsobeController implements Initializable {
     @FXML
     private ImageView clearImageView;
     
-    private ObservableList<Osoba> osobeList;
+    public static ObservableList<Osoba> osobeList;
     
     /**
      * Initializes the controller class.

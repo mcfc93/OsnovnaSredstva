@@ -3,7 +3,9 @@ package osnovnasredstva.administrator;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -14,6 +16,11 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import osnovnasredstva.DAO.OsobaDAO;
 import osnovnasredstva.DTO.Osoba;
+import osnovnasredstva.prijava.PrijavaController;
+import osnovnasredstva.util.NotFoundException;
+import osnovnasredstva.util.Util;
+import static osnovnasredstva.administrator.OsobeController.osobeList;
+
 
 /**
  *
@@ -24,7 +31,7 @@ public class DodavanjeOsobeController implements Initializable {
     
     public static Osoba odabranaOsoba;
     public static boolean izmjena=false;
-    private static OsobaDAO OsobaDAO = new OsobaDAO();
+    private static OsobaDAO osobaDAO = new OsobaDAO();
 
     @FXML
     private AnchorPane menuLine;
@@ -115,6 +122,33 @@ public class DodavanjeOsobeController implements Initializable {
     
     @FXML
     void sacuvaj(ActionEvent event) {
+        
+        if(izmjena) {
+                odabranaOsoba.setIme(imeTextField.getText());
+                odabranaOsoba.setPrezime(prezimeTextField.getText());
+                odabranaOsoba.setTitula(titulaTextField.getText());
+                odabranaOsoba.setJmbg(jmbgTextField.getText());
+                odabranaOsoba.setZaposlenje(zaposlenjeTextField.getText());
+                odabranaOsoba.setTelefon(brojTelefonaTextField.getText());
+                odabranaOsoba.setEmail(emailTextField.getText());
+                odabranaOsoba.setAdresa(adresaTextField.getText());                
+                try {
+                    osobaDAO.save(PrijavaController.konekcija, odabranaOsoba);
+                } catch (SQLException | NotFoundException e) {
+                    Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+                }
+            }else
+            {
+            odabranaOsoba = new Osoba(imeTextField.getText(), prezimeTextField.getText(), titulaTextField.getText(), jmbgTextField.getText(), zaposlenjeTextField.getText(), brojTelefonaTextField.getText(), emailTextField.getText(), adresaTextField.getText());
+            try {
+                    osobaDAO.create(PrijavaController.konekcija, odabranaOsoba);
+                } catch (SQLException e) {
+                    Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+                }
+            osobeList.add(DodavanjeOsobeController.odabranaOsoba);
+            }
+        
+        
         ((Stage)((Node)event.getSource()).getScene().getWindow()).close();
     }
     
