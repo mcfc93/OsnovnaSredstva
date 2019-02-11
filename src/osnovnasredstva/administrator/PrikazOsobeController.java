@@ -13,19 +13,18 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import osnovnasredstva.DTO.Osoba;
 
-/**
- * FXML Controller class
- *
- * @author milos
- */
 public class PrikazOsobeController implements Initializable {
+    
+    public static Osoba odabranaOsoba;
 
     @FXML
     private AnchorPane menuLine;
     
-     private double xOffset=0;
+    private double xOffset=0;
     private double yOffset=0;
+    
     @FXML
     private Button closeButton;
     @FXML
@@ -85,6 +84,15 @@ public class PrikazOsobeController implements Initializable {
                 stage.setOpacity(1.0);
             }
         });
+        
+        imeTextField.setText(odabranaOsoba.getIme());
+        prezimeTextField.setText(odabranaOsoba.getPrezime());
+        jmbgTextField.setText(odabranaOsoba.getJmbg());
+        adresaTextField.setText(odabranaOsoba.getAdresa());
+        titulaTextField.setText(odabranaOsoba.getTitula());
+        zaposlenjeTextField.setText(odabranaOsoba.getZaposlenje());
+        telefonTextField.setText(odabranaOsoba.getTelefon());
+        emailTextField.setText(odabranaOsoba.getEmail());
     }    
     
     @FXML

@@ -441,7 +441,7 @@
     -fx-background-radius: 1;
 }
 .table-row-cell:selected .text {
-    /*-fx-fill: black;*/
+    -fx-fill: -fx-text-color;
 }
 /*
 .table-cell {
@@ -1052,15 +1052,21 @@
 .opisTextField {
     -fx-text-fill: -fx-hover-color;
     -fx-prompt-text-fill: -fx-primary-color;
-    -fx-highlight-fill: null;
-    -fx-highlight-text-fill: null;
+    /*-fx-highlight-fill: null;*/
+    /*-fx-highlight-text-fill: null;*/
     -fx-border-radius: 20px;
     -fx-border-color: -fx-primary-color;
     -fx-background-radius: 20px;
     -fx-background-color: transparent;
-    -fx-border-width: 1.5px;
+    -fx-border-width: 1.25px;
     -fx-cursor: normal;
     -fx-focus-traversable: false;
+    -fx-pref-width: 175;
+    -fx-pref-height: 25;
+    -fx-min-width: -fx-pref-width;
+    -fx-min-height: -fx-pref-height;
+    -fx-max-width: -fx-pref-width;
+    -fx-max-height: -fx-pref-height;
 }
 
 
@@ -1073,13 +1079,13 @@
 
 /*Change selected cells of autocomplete popup*/
 .jfx-autocomplete-popup .list-cell:filled:selected {
-    -fx-background-color: #64ffe6;
+    /*-fx-background-color: #64ffe6;*/
 }
 /*Change cells of autocomplete popup*/
 .jfx-autocomplete-popup .list-cell {
-    -fx-background-color: #5f68ff;
+    /*-fx-background-color: #5f68ff;*/
 }
 /*Change cells of combobox*/
 .combo-box .list-cell {
-    -fx-background-color: #ff92b8;
+    /*-fx-background-color: #ff92b8;*/
 }

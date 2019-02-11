@@ -28,14 +28,9 @@ import osnovnasredstva.DAO.ProstorijaDAO;
 import osnovnasredstva.DAO.ZgradaDAO;
 import osnovnasredstva.DTO.Prostorija;
 import osnovnasredstva.DTO.Zgrada;
-import static osnovnasredstva.administrator.KorisnickiNaloziController.korisnickiNaloziList;
 import osnovnasredstva.prijava.PrijavaController;
 import osnovnasredstva.util.Util;
 
-/**
- * 
- * @author mcfc93
- */
 public class LokacijeController implements Initializable {
     
     @FXML
@@ -63,10 +58,7 @@ public class LokacijeController implements Initializable {
     private TableColumn<Prostorija, Prostorija> obrisiColumn;
 
     @FXML
-    private JFXButton nazadButton;
-
-    @FXML
-    private JFXButton dodajLokacijuButton;
+    private JFXButton dodajButton;
 
     @FXML
     private TextField traziTextField;
@@ -102,6 +94,13 @@ public class LokacijeController implements Initializable {
                 clearImageView.setVisible(false);
             }
         });
+        
+        if(PrijavaController.korisnik.getTip()==1) {
+            izmjeniColumn.setVisible(false);
+            obrisiColumn.setVisible(false);
+            
+            dodajButton.setVisible(false);
+        }
 
         zgradeList=FXCollections.observableArrayList();
         lokacijeList=FXCollections.observableArrayList();

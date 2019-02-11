@@ -23,13 +23,10 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import osnovnasredstva.DAO.KorisnikDAO;
 import osnovnasredstva.prijava.PrijavaController;
 import osnovnasredstva.util.Util;
 
-/**
- *
- * @author mcfc93
- */
 public class AdministratorController implements Initializable {
     
     @FXML
@@ -110,6 +107,17 @@ public class AdministratorController implements Initializable {
                 oldValue.setSelected(true);
             }
         });
+        
+        if(PrijavaController.korisnik.getTip() == 0) {
+            new Thread() {
+                @Override
+                public void run() {
+                    KorisnikDAO.loadUsernames();
+                }
+            }.start();
+        } else {
+            korisnickiNaloziButton.setVisible(false);
+        }
         
         x(null);
     }    

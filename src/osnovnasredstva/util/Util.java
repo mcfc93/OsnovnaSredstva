@@ -1,7 +1,9 @@
 package osnovnasredstva.util;
 
+import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.validation.IntegerValidator;
 import com.jfoenix.validation.RequiredFieldValidator;
 import com.jfoenix.validation.base.ValidatorBase;
 import java.io.File;
@@ -13,6 +15,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Collection;
+import java.util.Optional;
 import java.util.Properties;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
@@ -22,6 +26,8 @@ import javafx.beans.value.ObservableValue;
 import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
@@ -29,10 +35,6 @@ import javafx.util.Duration;
 import org.controlsfx.control.MaskerPane;
 import org.controlsfx.control.Notifications;
 
-/**
- *
- * @author mcfc93
- */
 public class Util {
     public static Properties PROPERTY = new Properties();
     public static final Logger LOGGER = Logger.getLogger("Logger");
@@ -136,6 +138,28 @@ System.out.println(Util.PROPERTY);
         alert.showAndWait();
     }
     
+    public static boolean showConfirmationAlert() {
+        Alert alert=new Alert(AlertType.CONFIRMATION);
+        alert.setTitle("Brisanje");
+        alert.setHeaderText(null);
+        alert.setContentText("Obriši?");
+        alert.getButtonTypes().clear();
+        alert.getButtonTypes().addAll(ButtonType.YES, ButtonType.NO);
+        Button yesButton=(Button)alert.getDialogPane().lookupButton(ButtonType.YES);
+        yesButton.setText("Da");
+        yesButton.setDefaultButton(false);
+        Button noButton=(Button)alert.getDialogPane().lookupButton(ButtonType.NO);
+        noButton.setText("Ne");
+        noButton.setDefaultButton(true);
+
+        alert.getDialogPane().getStylesheets().add(Util.class.getResource("/osnovnasredstva/osnovnasredstva.css").toExternalForm());
+        alert.getDialogPane().getStyleClass().addAll("alert", "alertDelete");
+
+        Optional<ButtonType> rezultat = alert.showAndWait();
+
+        return rezultat.get() == ButtonType.YES;
+    }
+    
     public static MaskerPane getMaskerPane(Pane pane) {
         MaskerPane progressPane = new MaskerPane();
         progressPane.setText("Molimo sačekajte...");
@@ -168,92 +192,254 @@ System.out.println(Util.PROPERTY);
     }
     
     //VALIDATORI
-	public static ValidatorBase requiredFieldValidator(JFXTextField textField) {
+    public static ValidatorBase requiredFieldValidator(JFXTextField textField) {
     	ValidatorBase requiredFieldValidator = new RequiredFieldValidator();
-	    requiredFieldValidator.setMessage("Obavezan unos");
-	    requiredFieldValidator.setIcon(new ImageView());
-	    textField.focusedProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue)->{
-	        if(!newValue) {
-	        	textField.validate();
-	        }
-	    });
-	    textField.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue)->{
-	        	textField.validate();
-	    });
-	    return requiredFieldValidator;
+        requiredFieldValidator.setMessage("Obavezan unos");
+        requiredFieldValidator.setIcon(new ImageView());
+        textField.focusedProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue)->{
+            if(!newValue) {
+                textField.validate();
+            }
+        });
+        textField.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue)->{
+            textField.validate();
+        });
+        return requiredFieldValidator;
     }
 	
-	public static ValidatorBase requiredFieldValidator(JFXPasswordField passwordField) {
+    public static ValidatorBase requiredFieldValidator(JFXPasswordField passwordField) {
     	ValidatorBase requiredFieldValidator = new RequiredFieldValidator();
-	    requiredFieldValidator.setMessage("Obavezan unos");
-	    requiredFieldValidator.setIcon(new ImageView());
-	    
-	    
-	    passwordField.focusedProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue)->{
-	        if(!newValue) {
-	        	passwordField.validate();
-	        }
-	    });
-	    
-	    
-	    passwordField.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue)->{
-	        //if(textField.getText().trim().isEmpty()) {
-	        	passwordField.validate();
-	        //} else {
-	        //	textField.resetValidation();
-	        //}
-	    });
-	    
-	    
-	    return requiredFieldValidator;
-        }
-        
-        public static ValidatorBase samePasswordValidator(JFXPasswordField passwordField1, JFXPasswordField passwordField2) {
-            ValidatorBase samePasswordValidator = new ValidatorBase("Ne poklapa se") {
-                @Override
-                protected void eval() {
-                        if(!passwordField1.getText().trim().isEmpty()
-                                && !passwordField2.getText().trim().isEmpty()
-                                        && !passwordField1.getText().equals(passwordField2.getText())) {
-                         hasErrors.set(true);
+        requiredFieldValidator.setMessage("Obavezan unos");
+        requiredFieldValidator.setIcon(new ImageView());
+
+
+        passwordField.focusedProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue)->{
+            if(!newValue) {
+                passwordField.validate();
+            }
+        });
+
+        passwordField.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue)->{
+            //if(textField.getText().trim().isEmpty()) {
+                passwordField.validate();
+            //} else {
+            //	textField.resetValidation();
+            //}
+        });
+
+        return requiredFieldValidator;
+    }
+    
+    public static <T> ValidatorBase requiredFieldValidator(JFXComboBox<T> comboBox) {
+    	ValidatorBase requiredFieldValidator = new RequiredFieldValidator();
+        requiredFieldValidator.setMessage("Obavezan unos");
+        requiredFieldValidator.setIcon(new ImageView());
+        comboBox.focusedProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue)->{
+            if(!newValue) {
+                    comboBox.validate();
+            }
+        });
+        comboBox.selectionModelProperty().addListener((observable, oldValue,newValue)->{
+            if(newValue != null) {
+                    comboBox.validate();
+            }
+        });
+        /*
+        comboBox.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue)->{
+                    textField.validate();
+        });
+        */
+        return requiredFieldValidator;
+    }
+    
+    public static ValidatorBase collectionValidator(JFXTextField textField, Collection<?> collection, boolean contains, String message) {
+        ValidatorBase postalCodeValidator = new ValidatorBase(message) {
+            @Override
+            protected void eval() {
+                if(!textField.getText().isEmpty()
+                        && (contains && !collection.contains(textField.getText())
+                            || (!contains && collection.contains(textField.getText())))) {
+                    hasErrors.set(true);
                 } else {
-                         hasErrors.set(false);
+                    hasErrors.set(false);
                 }
-                }
-            };
-            samePasswordValidator.setIcon(new ImageView());
-            return samePasswordValidator;
-        }
-        
-        public static ValidatorBase passwordValidator(JFXPasswordField passwordField) {
-            ValidatorBase passwordValidator = new ValidatorBase("Minimalno 6 karaktera") {
-                @Override
-                protected void eval() {
-                        if(!passwordField.getText().trim().isEmpty()
-                                && passwordField.getText().length() < 6) {
-                         hasErrors.set(true);
+            }
+        };
+        postalCodeValidator.setIcon(new ImageView());
+        return postalCodeValidator;
+    }
+    
+    public static ValidatorBase lengthValidator(JFXTextField textField, int length) {
+        ValidatorBase lengthValidator = new ValidatorBase("Predugačak unos") {
+            @Override
+            protected void eval() {
+                if(!textField.getText().isEmpty()
+                        && textField.getText().length() > length) {
+                    hasErrors.set(true);
                 } else {
-                         hasErrors.set(false);
+                    hasErrors.set(false);
+                }
+            }
+        };
+        lengthValidator.setIcon(new ImageView());
+        return lengthValidator;
+    }
+        
+    public static ValidatorBase samePasswordValidator(JFXPasswordField passwordField1, JFXPasswordField passwordField2) {
+        ValidatorBase samePasswordValidator = new ValidatorBase("Ne poklapa se") {
+            @Override
+            protected void eval() {
+                if(!passwordField1.getText().trim().isEmpty()
+                        && !passwordField2.getText().trim().isEmpty()
+                            && !passwordField1.getText().equals(passwordField2.getText())) {
+                    hasErrors.set(true);
+                } else {
+                    hasErrors.set(false);
+                }
+            }
+        };
+        samePasswordValidator.setIcon(new ImageView());
+        return samePasswordValidator;
+    }
+        
+    public static ValidatorBase passwordValidator(JFXPasswordField passwordField) {
+        ValidatorBase passwordValidator = new ValidatorBase("Minimalno 6 karaktera") {
+            @Override
+            protected void eval() {
+                if(!passwordField.getText().trim().isEmpty()
+                        && passwordField.getText().length() < 6) {
+                    hasErrors.set(true);
+                } else {
+                    hasErrors.set(false);
                 }
             }
         };
         passwordValidator.setIcon(new ImageView());
         return passwordValidator;
     }
-        
-    public static ValidatorBase lengthValidator(JFXTextField textField, int length) {
-        ValidatorBase lengthValidator = new ValidatorBase("Predugačak unos") {
+    
+    public static ValidatorBase integerValidator(JFXTextField textField) {
+        ValidatorBase integerValidator = new IntegerValidator();
+        integerValidator.setMessage("Nije cijeli broj");
+        integerValidator.setIcon(new ImageView());
+        textField.focusedProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue)->{
+            if(!newValue) {
+                textField.validate();
+            }
+        });
+        return integerValidator;
+    }
+	
+    public static ValidatorBase naturalNumberValidator(JFXTextField textField) {
+        ValidatorBase naturalNumberValidator = new ValidatorBase("Nije prirodan broj") {
             @Override
             protected void eval() {
-                    if(!textField.getText().isEmpty()
-                            && textField.getText().length() > length) {
+                if(!textField.getText().isEmpty()
+                        && !textField.getText().matches("[1-9][0-9]*")) {
                     hasErrors.set(true);
-            } else {
-                     hasErrors.set(false);
+                } else {
+                    hasErrors.set(false);
+                }
             }
-        }
-    };
-    lengthValidator.setIcon(new ImageView());
-    return lengthValidator;
+        };
+        naturalNumberValidator.setIcon(new ImageView());
+        return naturalNumberValidator;
+    }
+    
+    public static ValidatorBase jmbgValidator(JFXTextField textField) {
+        ValidatorBase jmbgValidator = new ValidatorBase("Nekorektan unos") {
+            @Override
+            protected void eval() {
+                if(!textField.getText().isEmpty()
+                        && !textField.getText().matches("^[0-9]{13}$")) {
+                    hasErrors.set(true);
+                } else {
+                     hasErrors.set(false);
+                }
+            }
+        };
+        jmbgValidator.setIcon(new ImageView());
+        return jmbgValidator;
+    }
+    
+    public static ValidatorBase emailValidator(JFXTextField textField) {
+        ValidatorBase emailValidator = new ValidatorBase("Nekorektan unos") {
+            @Override
+            protected void eval() {
+                if(!textField.getText().isEmpty()
+                        && !textField.getText().matches("^[a-z0-9]+-?[a-z0-9]+@[a-z0-9]{2,}\\.[a-z]{2,}$")) {
+                    hasErrors.set(true);
+                } else {
+                    hasErrors.set(false);
+                }
+            }
+        };
+        emailValidator.setIcon(new ImageView());
+        return emailValidator;
+    }
+    
+    public static ValidatorBase webValidator(JFXTextField textField) {
+        ValidatorBase webValidator = new ValidatorBase("Nekorektan unos") {
+            @Override
+            protected void eval() {
+                if(!textField.getText().isEmpty()
+                        && !textField.getText().matches("https?:\\/\\/(?:www\\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\\.[^\\s]{2,}|www\\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\\.[^\\s]{2,}|https?:\\/\\/(?:www\\.|(?!www))[a-zA-Z0-9]\\.[^\\s]{2,}|www\\.[a-zA-Z0-9]\\.[^\\s]{2,}")) {
+                    hasErrors.set(true);
+                } else {
+                    hasErrors.set(false);
+                }
+            }
+        };
+        webValidator.setIcon(new ImageView());
+        return webValidator;
+    }
+		
+    public static ValidatorBase phoneValidator(JFXTextField textField) {
+        ValidatorBase phoneValidator = new ValidatorBase("Nekorektan unos") {	
+            @Override
+            protected void eval() {
+                if(!textField.getText().isEmpty()
+                        && !textField.getText().matches("^\\+(?:[0-9] ?){6,14}[0-9]$")) {
+                            //!textField.getText().matches("^((\\+)[0-9]{2})?[0-9]{3}(/)[0-9]{3}(-)[0-9]{3}[0-9]*")) {
+                    hasErrors.set(true);
+                } else {
+                    hasErrors.set(false);
+                }
+            }
+        };
+        phoneValidator.setIcon(new ImageView());
+        return phoneValidator;
+    }
+    
+    public static ValidatorBase nameValidator(JFXTextField textField) {
+        ValidatorBase nameValidator = new ValidatorBase("Format: Xxx[ Xxx]") {
+            @Override
+            protected void eval() {
+                if(!textField.getText().isEmpty()
+                        && !textField.getText().matches("^(\\p{Lu}\\p{Ll}*( \\p{Lu})?\\p{Ll}+)$")) {
+                    hasErrors.set(true);
+                } else {
+                    hasErrors.set(false);
+                }
+            }
+        };
+        nameValidator.setIcon(new ImageView());
+        return nameValidator;
+    }
+    
+    public static ValidatorBase surnameValidator(JFXTextField textField) {
+        ValidatorBase nameValidator = new ValidatorBase("Format: Xxx[-Xxx]") {
+            @Override
+            protected void eval() {
+                if(!textField.getText().isEmpty()
+                        && !textField.getText().matches("^(\\p{Lu}\\p{Ll}*(-\\p{Lu})?\\p{Ll}+)$")) {
+                    hasErrors.set(true);
+                } else {
+                    hasErrors.set(false);
+                }
+            }
+        };
+        nameValidator.setIcon(new ImageView());
+        return nameValidator;
     }
 }

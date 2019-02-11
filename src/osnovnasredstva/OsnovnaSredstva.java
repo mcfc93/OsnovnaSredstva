@@ -8,10 +8,6 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import osnovnasredstva.util.Util;
 
-/**
- *
- * @author mcfc93
- */
 public class OsnovnaSredstva extends Application {    
     @Override
     public void start(Stage stage) throws Exception {

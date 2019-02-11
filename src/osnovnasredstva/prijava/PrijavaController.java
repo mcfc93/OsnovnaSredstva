@@ -32,10 +32,6 @@ import osnovnasredstva.DTO.Korisnik;
 import osnovnasredstva.DAO.KorisnikDAO;
 import osnovnasredstva.util.Util;
 
-/**
- *
- * @author mcfc93
- */
 public class PrijavaController implements Initializable {
     
     public static Korisnik korisnik=null;
@@ -194,7 +190,7 @@ System.out.println("nalog.ser");
                 Task<Void> task = new Task<Void>() {
                     @Override
                     protected Void call() throws Exception {
-                        System.out.println(Thread.currentThread());
+                        //System.out.println(Thread.currentThread());
                         progressPane.setVisible(true);
                         Thread.sleep(1000);
                         return null;

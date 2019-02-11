@@ -1,5 +1,7 @@
 package osnovnasredstva.DTO;
 
+import osnovnasredstva.prijava.PrijavaController;
+
 public class Osoba {
 
     private int id;
@@ -70,7 +72,7 @@ public class Osoba {
     }
 
     public String getJmbg() {
-          return this.jmbg;
+          return PrijavaController.korisnik.getTip()==0? this.jmbg: this.jmbg.substring(0, 7) + "******";
     }
     public void setJmbg(String jmbgIn) {
           this.jmbg = jmbgIn;
@@ -110,7 +112,11 @@ public class Osoba {
     public void setStatus(boolean statusIn) {
           this.status = statusIn;
     }
-
+    /*
+    public String getJmbgValue() {
+          return this.jmbg.substring(0, 7) + "******";
+    }
+    */
     @Override
     public String toString() {
         return "Osoba{" + "id=" + id + ", ime=" + ime + ", prezime=" + prezime + ", titula=" + titula + ", jmbg=" + jmbg + ", zaposlenje=" + zaposlenje + ", telefon=" + telefon + ", email=" + email + ", adresa=" + adresa + ", status=" + status + '}';

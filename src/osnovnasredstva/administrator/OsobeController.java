@@ -38,10 +38,6 @@ import osnovnasredstva.prijava.PrijavaController;
 import osnovnasredstva.util.NotFoundException;
 import osnovnasredstva.util.Util;
 
-/**
- *
- * @author mcfc93
- */
 public class OsobeController implements Initializable {
 
     private static OsobaDAO osobaDAO = new OsobaDAO();
@@ -104,6 +100,12 @@ public class OsobeController implements Initializable {
                 clearImageView.setVisible(false);
             }
         });
+        
+        if(PrijavaController.korisnik.getTip()==1) {
+            izmjeniColumn.setVisible(false);
+            obrisiColumn.setVisible(false);
+            dodajOsobuButton.setVisible(false);
+        }
 
         
         osobeList = FXCollections.observableArrayList();
@@ -135,7 +137,11 @@ public class OsobeController implements Initializable {
         osobeTableView.setFocusTraversable(false);
         imeColumn.setCellValueFactory(new PropertyValueFactory<>("ime"));
         prezimeColumn.setCellValueFactory(new PropertyValueFactory<>("prezime"));
-        jmbgColumn.setCellValueFactory(new PropertyValueFactory<>("jmbg"));
+        //if(PrijavaController.korisnik.getTip()==0) {
+            jmbgColumn.setCellValueFactory(new PropertyValueFactory<>("jmbg"));
+        //} else {
+        //    jmbgColumn.setCellValueFactory(new PropertyValueFactory<>("jmbgValue"));
+        //}
         titulaColumn.setCellValueFactory(new PropertyValueFactory<>("titula"));
         //prikaziColumn.setCellValueFactory(new PropertyValueFactory<>("pregled"));
         //izmjeniColumn.setCellValueFactory(new PropertyValueFactory<>("izmjeni"));
@@ -168,6 +174,8 @@ public class OsobeController implements Initializable {
                             System.out.println(item);
                             
                             try {
+                                PrikazOsobeController.odabranaOsoba=item;
+                                
                                 Parent root = FXMLLoader.load(getClass().getResource("/osnovnasredstva/administrator/PrikazOsobeView.fxml"));
                                 Scene scene = new Scene(root);
                                 Stage stage=new Stage();

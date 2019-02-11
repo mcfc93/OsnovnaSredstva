@@ -57,7 +57,7 @@ public class Korisnik {
           this.salt = saltIn;
     }
 
-    public String getTip2() {
+    public String getTipString() {
           if(tip == 0)
               return "Administrator";
           else
@@ -77,6 +77,30 @@ public class Korisnik {
     }
     public void setStatus(boolean statusIn) {
           this.status = statusIn;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Korisnik other = (Korisnik) obj;
+        if (this.id != other.id) {
+            return false;
+        }
+        return true;
     }
 
     @Override

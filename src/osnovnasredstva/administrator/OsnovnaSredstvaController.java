@@ -26,17 +26,18 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import osnovnasredstva.DTO.OsnovnoSredstvo;
+import osnovnasredstva.prijava.PrijavaController;
 import osnovnasredstva.util.Util;
 
-/**
- * 
- * @author mcfc93
- */
 public class OsnovnaSredstvaController implements Initializable {
+    
+    @FXML
+    private AnchorPane anchorPane;
 
     @FXML
     private TableView<OsnovnoSredstvo> osnovnaSredstvaTableView;
@@ -96,6 +97,13 @@ public class OsnovnaSredstvaController implements Initializable {
                 clearImageView.setVisible(false);
             }
         });
+        
+        if(PrijavaController.korisnik.getTip()==1) {
+            izmjeniColumn.setVisible(false);
+            obrisiColumn.setVisible(false);
+            dodajButton.setVisible(false);
+            dodajVrstuButton.setVisible(false);
+        }
 
         osnovnaSredstvaList=FXCollections.observableArrayList(
                 new OsnovnoSredstvo("A", "A", "A", null, null, 0, 0, 0, 0)

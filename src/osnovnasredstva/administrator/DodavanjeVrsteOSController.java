@@ -12,10 +12,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
-/**
- *
- * @author mcfc93
- */
 public class DodavanjeVrsteOSController implements Initializable {
 
     @FXML

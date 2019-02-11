@@ -139,7 +139,7 @@ public class KorisnikDAO {
           }
     }
 
-    public boolean delete(Connection conn, Korisnik valueObject) 
+    public void delete(Connection conn, Korisnik valueObject) 
           throws NotFoundException, SQLException {
 
           String sql = "UPDATE korisnik SET status=false WHERE (id = ? ) ";
@@ -153,20 +153,20 @@ public class KorisnikDAO {
               if (rowcount == 0) {
                    //System.out.println("Object could not be deleted (PrimaryKey not found)");
                    //*****NOTIFIKACIJA PROZOR UPOZORENJE*****
-                   return false;
-                   //throw new NotFoundException("Object could not be deleted! (PrimaryKey not found)");
+                   //return false;
+                   throw new NotFoundException("Object could not be deleted! (PrimaryKey not found)");
               }
               if (rowcount > 1) {
                    //System.out.println("PrimaryKey Error when updating DB! (Many objects were deleted!)");
                    //*****NOTIFIKACIJA PROZOR UPOZORENJE*****
-                   return false;
-                   //throw new SQLException("PrimaryKey Error when updating DB! (Many objects were deleted!)");
+                   //return false;
+                   throw new SQLException("PrimaryKey Error when updating DB! (Many objects were deleted!)");
               }
           } finally {
               if (stmt != null)
                   stmt.close();
           }
-          return true;
+          //return true;
     }
 
     public int countAll(Connection conn) throws SQLException {
@@ -347,7 +347,7 @@ public class KorisnikDAO {
             //sql="select id,tip from korisnik where korisnicko_ime=? and hash_lozinke=? and status=?;";
             //s=Util.prepareStatement(c, sql, false, korisnickoIme, lozinka, 1);
             c=Util.getConnection();
-            sql="select salt,hash_lozinke,tip from korisnik where korisnicko_ime=? and status=?";
+            sql="select salt,hash_lozinke,tip,id,status from korisnik where korisnicko_ime=? and status=?";
             s=Util.prepareStatement(c, sql, false, korisnickoIme, 1);
             r=s.executeQuery();
             if(r.next()) {
@@ -356,7 +356,7 @@ public class KorisnikDAO {
                 lozinka=hash(lozinka, salt);
                 if(lozinka.equals(r.getString("hash_lozinke"))) {
                     //ucitavanje podataka o korisniku iz baze
-                    korisnik=new Korisnik(korisnickoIme, lozinka, salt, r.getInt("tip"));
+                    korisnik=new Korisnik(r.getInt("id"), korisnickoIme, lozinka, salt, r.getInt("tip"), r.getBoolean("status"));
                     /*
                     if(0 == r.getInt("tip")) {
                         korisnik.zaposleni=new Administrator();
@@ -375,4 +375,28 @@ System.out.println(korisnik);
         return korisnik;
     }
 
+    private static List<String> usernameList = new ArrayList<>();
+	
+    public static List<String> getUsernameList() {
+            return usernameList;
+    }
+
+    public static void loadUsernames() {
+        KorisnikDAO.getUsernameList().clear();
+        Connection c = null;
+        PreparedStatement s = null;
+        ResultSet r = null;
+        try {
+            c = Util.getConnection();
+            s = Util.prepareStatement(c, "select korisnicko_ime from korisnik", false);
+            r = s.executeQuery();
+            while(r.next()) {
+                getUsernameList().add(r.getString(1));
+            }
+        } catch (SQLException e) {
+            Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+        } finally {
+            Util.close(r, s, c);
+        }
+    }
 }

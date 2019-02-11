@@ -21,11 +21,6 @@ import osnovnasredstva.util.NotFoundException;
 import osnovnasredstva.util.Util;
 import static osnovnasredstva.administrator.OsobeController.osobeList;
 
-
-/**
- *
- * @author mcfc93
- */
 public class DodavanjeOsobeController implements Initializable {
 
     
@@ -99,7 +94,16 @@ public class DodavanjeOsobeController implements Initializable {
         });
         
         nazadButton.setDefaultButton(true);
-        /*ovde trebaju validatori */
+        
+        imeTextField.getValidators().addAll(Util.requiredFieldValidator(imeTextField), Util.nameValidator(imeTextField), Util.lengthValidator(imeTextField, 255));
+        prezimeTextField.getValidators().addAll(Util.requiredFieldValidator(prezimeTextField), Util.surnameValidator(prezimeTextField), Util.lengthValidator(prezimeTextField, 255));
+        jmbgTextField.getValidators().addAll(Util.requiredFieldValidator(jmbgTextField), Util.jmbgValidator(jmbgTextField));
+        titulaTextField.getValidators().addAll(Util.requiredFieldValidator(titulaTextField), Util.lengthValidator(titulaTextField, 255));
+        zaposlenjeTextField.getValidators().addAll(Util.requiredFieldValidator(zaposlenjeTextField), Util.lengthValidator(zaposlenjeTextField, 255));
+        brojTelefonaTextField.getValidators().addAll(Util.requiredFieldValidator(brojTelefonaTextField), Util.phoneValidator(brojTelefonaTextField), Util.lengthValidator(brojTelefonaTextField, 16));
+        emailTextField.getValidators().addAll(Util.requiredFieldValidator(emailTextField), Util.emailValidator(emailTextField), Util.lengthValidator(emailTextField, 50));
+        adresaTextField.getValidators().addAll(Util.requiredFieldValidator(adresaTextField), Util.lengthValidator(adresaTextField, 255));
+        
         if(izmjena) {
             imeTextField.setText(odabranaOsoba.getIme());
             prezimeTextField.setText(odabranaOsoba.getPrezime());
@@ -122,8 +126,15 @@ public class DodavanjeOsobeController implements Initializable {
     
     @FXML
     void sacuvaj(ActionEvent event) {
-        
-        if(izmjena) {
+        if(imeTextField.validate()
+            & prezimeTextField.validate()
+                & jmbgTextField.validate()
+                    & adresaTextField.validate()
+                        & titulaTextField.validate()
+                            & zaposlenjeTextField.validate()
+                                & brojTelefonaTextField.validate()
+                                    & emailTextField.validate()) {
+            if(izmjena) {
                 odabranaOsoba.setIme(imeTextField.getText());
                 odabranaOsoba.setPrezime(prezimeTextField.getText());
                 odabranaOsoba.setTitula(titulaTextField.getText());
@@ -137,19 +148,19 @@ public class DodavanjeOsobeController implements Initializable {
                 } catch (SQLException | NotFoundException e) {
                     Util.LOGGER.log(Level.SEVERE, e.toString(), e);
                 }
-            }else
-            {
-            odabranaOsoba = new Osoba(imeTextField.getText(), prezimeTextField.getText(), titulaTextField.getText(), jmbgTextField.getText(), zaposlenjeTextField.getText(), brojTelefonaTextField.getText(), emailTextField.getText(), adresaTextField.getText());
-            try {
+            } else {
+                odabranaOsoba = new Osoba(imeTextField.getText(), prezimeTextField.getText(), titulaTextField.getText(), jmbgTextField.getText(), zaposlenjeTextField.getText(), brojTelefonaTextField.getText(), emailTextField.getText(), adresaTextField.getText());
+                try {
                     osobaDAO.create(PrijavaController.konekcija, odabranaOsoba);
                 } catch (SQLException e) {
                     Util.LOGGER.log(Level.SEVERE, e.toString(), e);
                 }
-            osobeList.add(DodavanjeOsobeController.odabranaOsoba);
+                osobeList.add(DodavanjeOsobeController.odabranaOsoba);
             }
-        
-        
-        ((Stage)((Node)event.getSource()).getScene().getWindow()).close();
+
+
+            ((Stage)((Node)event.getSource()).getScene().getWindow()).close();
+        }
     }
     
 }

@@ -6,8 +6,6 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
-import java.util.logging.Logger;
-import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -40,10 +38,6 @@ import osnovnasredstva.prijava.PrijavaController;
 import osnovnasredstva.util.NotFoundException;
 import osnovnasredstva.util.Util;
 
-/**
- *
- * 
- */
 public class KorisnickiNaloziController implements Initializable {
 
     private static KorisnikDAO korisnikDAO = new KorisnikDAO();
@@ -124,7 +118,7 @@ public class KorisnickiNaloziController implements Initializable {
         korisnickiNaloziTableView.setFocusTraversable(false);
         
         korisnickoImeColumn.setCellValueFactory(new PropertyValueFactory<>("korisnickoIme"));
-        tipColumn.setCellValueFactory(new PropertyValueFactory<>("tip2"));      
+        tipColumn.setCellValueFactory(new PropertyValueFactory<>("tipString"));
         prikaziColumn.setVisible(false);
         /*
         prikaziColumn.setCellValueFactory(
@@ -230,17 +224,19 @@ public class KorisnickiNaloziController implements Initializable {
                     	//dodavanje u kolonu
                     	setGraphic(button);
                     	button.setOnMouseClicked(event -> {
+                            if(Util.showConfirmationAlert()) {
                                 try {
-                                    if(korisnikDAO.delete(PrijavaController.konekcija, item)){
-                                        korisnickiNaloziList.remove(item);
-                                        //getTableView().getItems().remove(item);
-                                        korisnickiNaloziTableView.refresh();
-                                        //System.out.println("Obrisano: " + item);
-                                        Util.getNotifications("Obavještenje", "Korisnički nalog obrisan.", "Information").show();
-                                    }
+                                    korisnikDAO.delete(PrijavaController.konekcija, item);
+                                    korisnickiNaloziList.remove(item);
+                                    //getTableView().getItems().remove(item);
+                                    korisnickiNaloziTableView.refresh();
+                                    //System.out.println("Obrisano: " + item);
+                                    Util.getNotifications("Obavještenje", "Korisnički nalog obrisan.", "Information").show();
                                 } catch (SQLException | NotFoundException e) {
+                                    Util.showBugAlert();
                                     Util.LOGGER.log(Level.SEVERE, e.toString(), e);
                                 }
+                            }
                             
                         });
                     } else {
