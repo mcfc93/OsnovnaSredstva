@@ -54,6 +54,9 @@ public class AdministratorController implements Initializable {
     private ToggleButton wButton;
     
     BoundingBox savedBounds;
+    
+    boolean draggable=true;
+    boolean maximized=false;
 
     private double xOffset=0;
     private double yOffset=0;
@@ -83,7 +86,7 @@ public class AdministratorController implements Initializable {
         informacijeLabel.setText(PrijavaController.korisnik.getKorisnickoIme());
         //DragAndDrop
         menuLine.setOnMousePressed(event -> {
-            if(event.getButton().equals(MouseButton.PRIMARY)) {
+            if(draggable && event.getButton().equals(MouseButton.PRIMARY)) {
                 Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());
                 xOffset = stage.getX() - event.getScreenX();
                 yOffset = stage.getY() - event.getScreenY();
@@ -91,7 +94,7 @@ public class AdministratorController implements Initializable {
         });
 
         menuLine.setOnMouseDragged(event -> {
-            if(event.getButton().equals(MouseButton.PRIMARY)) {
+            if(draggable && event.getButton().equals(MouseButton.PRIMARY)) {
                 Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());
                 if(!stage.isMaximized()) {
                     stage.setX(event.getScreenX() + xOffset);
@@ -102,7 +105,7 @@ public class AdministratorController implements Initializable {
         });
 
         menuLine.setOnMouseReleased(event -> {
-            if(event.getButton().equals(MouseButton.PRIMARY)) {
+            if(draggable && event.getButton().equals(MouseButton.PRIMARY)) {
                 Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());
                 stage.setOpacity(1.0);
             }
@@ -142,12 +145,12 @@ public class AdministratorController implements Initializable {
             ((Stage)((Node)event.getSource()).getScene().getWindow()).setIconified(true);
         }
     }
-
+    
     @FXML
     void maximize(MouseEvent event) {
         if(event.getButton().equals(MouseButton.PRIMARY)) {
             Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());
-            if(!stage.isMaximized()) {
+            if(!maximized/*stage.isMaximized()*/) {
                 savedBounds = new BoundingBox(stage.getX(), stage.getY(), stage.getWidth(), stage.getHeight());
                 // Get current screen of the stage      
                 ObservableList<Screen> screens = Screen.getScreensForRectangle(new Rectangle2D(stage.getX(), stage.getY(), stage.getWidth(), stage.getHeight()));
@@ -157,13 +160,17 @@ public class AdministratorController implements Initializable {
                 stage.setY(bounds.getMinY());
                 stage.setWidth(bounds.getWidth());
                 stage.setHeight(bounds.getHeight());
-                stage.setMaximized(true);
+                //stage.setMaximized(true);
+                maximized=true;
+                draggable=false;
             } else {
                 stage.setX(savedBounds.getMinX());
                 stage.setY(savedBounds.getMinY());
                 stage.setWidth(savedBounds.getWidth());
                 stage.setHeight(savedBounds.getHeight());
-                stage.setMaximized(false);
+                //stage.setMaximized(false);
+                maximized=false;
+                draggable=true;
             }
         }
     }
