@@ -5,10 +5,12 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -21,6 +23,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import osnovnasredstva.DAO.KorisnikDAO;
@@ -141,6 +144,14 @@ public class AdministratorController implements Initializable {
         if(event.getButton().equals(MouseButton.PRIMARY)) {
             Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());
             if(!stage.isMaximized()) {
+                // Get current screen of the stage      
+                ObservableList<Screen> screens = Screen.getScreensForRectangle(new Rectangle2D(stage.getX(), stage.getY(), stage.getWidth(), stage.getHeight()));
+                // Change stage properties
+                Rectangle2D bounds = screens.get(0).getVisualBounds();
+                stage.setX(bounds.getMinX());
+                stage.setY(bounds.getMinY());
+                stage.setWidth(bounds.getWidth());
+                stage.setHeight(bounds.getHeight());
                 stage.setMaximized(true);
             } else {
                 stage.setMaximized(false);
