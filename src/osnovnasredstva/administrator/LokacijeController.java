@@ -15,6 +15,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -24,6 +26,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.util.Callback;
 import osnovnasredstva.DAO.ProstorijaDAO;
 import osnovnasredstva.DAO.ZgradaDAO;
 import osnovnasredstva.DTO.Prostorija;
@@ -110,6 +113,26 @@ public class LokacijeController implements Initializable {
         } catch (SQLException ex) {
             Logger.getLogger(LokacijeController.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        //zgradaComboBox.getItems().add(0, null);
+        //zgradaComboBox.getSelectionModel().selectFirst();
+        
+        zgradaComboBox.setCellFactory(param -> {
+            ListCell<Zgrada> cell = new ListCell<Zgrada>() {
+                @Override
+                protected void updateItem(Zgrada item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (item == null || empty) {
+                        //setText("Svi");
+                        setGraphic(null);
+                    } else {
+                        setText(item.getNaziv()+ " (" +item.getSifra() + ")");
+                    }
+                }
+            };
+            return cell;
+        });
+        
         zgradaComboBox.getItems().addAll(zgradeList);
         zgradaComboBox.setOnAction(e -> {try {
             lokacijeTableView.getItems().clear();
