@@ -10,6 +10,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.BoundingBox;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -51,9 +52,12 @@ public class AdministratorController implements Initializable {
 
     @FXML
     private ToggleButton wButton;
+    
+    BoundingBox savedBounds;
 
     private double xOffset=0;
     private double yOffset=0;
+    
     @FXML
     private ToggleButton osobeButton;
     @FXML
@@ -144,6 +148,7 @@ public class AdministratorController implements Initializable {
         if(event.getButton().equals(MouseButton.PRIMARY)) {
             Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());
             if(!stage.isMaximized()) {
+                savedBounds = new BoundingBox(stage.getX(), stage.getY(), stage.getWidth(), stage.getHeight());
                 // Get current screen of the stage      
                 ObservableList<Screen> screens = Screen.getScreensForRectangle(new Rectangle2D(stage.getX(), stage.getY(), stage.getWidth(), stage.getHeight()));
                 // Change stage properties
@@ -154,6 +159,10 @@ public class AdministratorController implements Initializable {
                 stage.setHeight(bounds.getHeight());
                 stage.setMaximized(true);
             } else {
+                stage.setX(savedBounds.getMinX());
+                stage.setY(savedBounds.getMinY());
+                stage.setWidth(savedBounds.getWidth());
+                stage.setHeight(savedBounds.getHeight());
                 stage.setMaximized(false);
             }
         }
