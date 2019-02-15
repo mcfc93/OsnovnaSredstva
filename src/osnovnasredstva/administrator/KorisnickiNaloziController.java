@@ -113,6 +113,10 @@ public class KorisnickiNaloziController implements Initializable {
         };
         new Thread(task).start();
         
+        if(PrijavaController.korisnik.getTip() != PrijavaController.korisnik.getPrivilegijaTip()) {
+            PrijavaController.korisnik.setPrivilegijaTip(PrijavaController.korisnik.getTip());
+        }
+        
         korisnickiNaloziTableView.setItems(korisnickiNaloziList);
         korisnickiNaloziTableView.setPlaceholder(new Label("Nema korisničkih naloga."));
         korisnickiNaloziTableView.setFocusTraversable(false);

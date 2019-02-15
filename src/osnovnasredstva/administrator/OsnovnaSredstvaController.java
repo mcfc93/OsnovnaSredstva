@@ -2,14 +2,19 @@ package osnovnasredstva.administrator;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
+import com.jfoenix.controls.JFXToggleButton;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -18,6 +23,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -30,12 +36,19 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import org.controlsfx.control.MaskerPane;
+import osnovnasredstva.DAO.OsnovnoSredstvoDAO;
+import osnovnasredstva.DAO.VrstaOSDAO;
 import osnovnasredstva.DTO.OsnovnoSredstvo;
+import osnovnasredstva.DTO.VrstaOS;
+import osnovnasredstva.DTO.Zgrada;
 import osnovnasredstva.prijava.PrijavaController;
 import osnovnasredstva.util.Util;
 
 public class OsnovnaSredstvaController implements Initializable {
     
+    private static OsnovnoSredstvoDAO osDAO = new OsnovnoSredstvoDAO();
+    private static VrstaOSDAO vrOsnDAO = new VrstaOSDAO();
     @FXML
     private AnchorPane anchorPane;
 
@@ -76,12 +89,16 @@ public class OsnovnaSredstvaController implements Initializable {
     private JFXButton pdfButton;
 
     @FXML
-    private JFXComboBox<?> vrstaComboBox;
+    private JFXComboBox<VrstaOS> vrstaComboBox;
 
     @FXML
     private JFXButton dodajVrstuButton;
     
     private ObservableList<OsnovnoSredstvo> osnovnaSredstvaList;
+    public static ObservableList<VrstaOS> vrstaOsnovnogSredstvaList;
+    
+    @FXML
+    private JFXToggleButton postaniNadzornikToggleButton;
     
     /**
      * Initializes the controller class.
@@ -103,18 +120,103 @@ public class OsnovnaSredstvaController implements Initializable {
             obrisiColumn.setVisible(false);
             dodajButton.setVisible(false);
             dodajVrstuButton.setVisible(false);
+            postaniNadzornikToggleButton.setVisible(false);
+        } else {
+            if(PrijavaController.korisnik.getTip() != PrijavaController.korisnik.getPrivilegijaTip()) {
+                PrijavaController.korisnik.setPrivilegijaTip(PrijavaController.korisnik.getTip());
+            }
         }
+        
+        vrstaOsnovnogSredstvaList = FXCollections.observableArrayList();
+        osnovnaSredstvaList = FXCollections.observableArrayList();
+        
+        MaskerPane progressPane=Util.getMaskerPane(anchorPane);
+        Task<Void> task = new Task<Void>() {
+            @Override
+            protected Void call() {
+                progressPane.setVisible(true);
+                try {
+                    vrstaOsnovnogSredstvaList.addAll(vrOsnDAO.loadAll(PrijavaController.konekcija));
+                    osnovnaSredstvaList.addAll(osDAO.loadAll(PrijavaController.konekcija)); 
+                } catch (SQLException e) {
+                    Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+                }
+                return null;
+            }
 
-        osnovnaSredstvaList=FXCollections.observableArrayList(
-                new OsnovnoSredstvo("A", "A", "A", null, null, 0, 0, 0, 0)
-        );
+            @Override
+            protected void succeeded(){
+                super.succeeded();
+                progressPane.setVisible(false);
+                Platform.runLater(() -> {
+                    vrstaOsnovnogSredstvaList.add(0, new VrstaOS());
+                    vrstaComboBox.getItems().addAll(vrstaOsnovnogSredstvaList);
+                    vrstaComboBox.getSelectionModel().selectFirst();
+                });
+            }
+        };
+        new Thread(task).start();
+        
+        vrstaComboBox.setCellFactory(param -> {
+            ListCell<VrstaOS> cell = new ListCell<VrstaOS>() {
+                @Override
+                protected void updateItem(VrstaOS item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (item == null || empty) {
+                        //setText("Svi");
+                        setGraphic(null);
+                    } else {
+                        if(item.getNaziv()!=null) {
+                            setText(item.getNaziv());
+                        } else {
+                            setText("Svi");
+                        }
+                    }
+                }
+            };
+            return cell;
+        });
+        
+        vrstaComboBox.valueProperty().addListener((observable, oldValue, newValue) -> {
+            osnovnaSredstvaList.clear();
+            MaskerPane progressPaneZgrade=Util.getMaskerPane(anchorPane);
+            Task<Void> taskZgrade = new Task<Void>() {
+                @Override
+                protected Void call() {
+                    progressPaneZgrade.setVisible(true);
+                    try {
+                        if(vrstaComboBox.getValue().getNaziv() != null)
+                            osnovnaSredstvaList.addAll(osDAO.loadAll2(PrijavaController.konekcija,vrstaComboBox.getValue().getId()));
+                        else
+                            osnovnaSredstvaList.addAll(osDAO.loadAll(PrijavaController.konekcija));
+                    } catch (SQLException e) {
+                        Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+                    }
+                    return null;
+                }
+
+                @Override
+                protected void succeeded(){
+                    super.succeeded();
+                    progressPaneZgrade.setVisible(false);
+                }
+            };
+            new Thread(taskZgrade).start();
+
+            osnovnaSredstvaTableView.setItems(osnovnaSredstvaList);           
+            if(osnovnaSredstvaList.isEmpty())
+                osnovnaSredstvaTableView.setPlaceholder(new Label("Nema osnovnih sredstava za odabranu vrstu."));
+        });
+
+        
+        osnovnaSredstvaList=FXCollections.observableArrayList();
         osnovnaSredstvaTableView.setItems(osnovnaSredstvaList);
-        osnovnaSredstvaTableView.setPlaceholder(new Label("Odaberite prvo zgradu."));
+        osnovnaSredstvaTableView.setPlaceholder(new Label("Odaberite prvo vrstu."));
         osnovnaSredstvaTableView.setFocusTraversable(false);
         
-        invertarniBrojColumn.setCellValueFactory(new PropertyValueFactory<>("ime"));
-        nazivColumn.setCellValueFactory(new PropertyValueFactory<>("prezime"));
-        vrstaColumn.setCellValueFactory(new PropertyValueFactory<>("jmbg"));
+        invertarniBrojColumn.setCellValueFactory(new PropertyValueFactory<>("inventarniBroj"));
+        nazivColumn.setCellValueFactory(new PropertyValueFactory<>("naziv"));
+        vrstaColumn.setCellValueFactory(new PropertyValueFactory<>("idVrsteString"));
         
         prikaziColumn.setCellValueFactory(
             param -> new ReadOnlyObjectWrapper<>(param.getValue())
@@ -243,6 +345,16 @@ public class OsnovnaSredstvaController implements Initializable {
         obrisiColumn.setMaxWidth(35);
         obrisiColumn.setResizable(false);
         obrisiColumn.setSortable(false);
+        
+        postaniNadzornikToggleButton.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            if(newValue) {
+                PrijavaController.korisnik.setPrivilegijaTip(1);
+            } else {
+                PrijavaController.korisnik.setPrivilegijaTip(0);
+            }
+            postaviPrivilegije();
+            osnovnaSredstvaTableView.refresh();
+        });
     }    
     
     @FXML
@@ -282,4 +394,17 @@ public class OsnovnaSredstvaController implements Initializable {
         }
     }
     
+    private void postaviPrivilegije() {
+        if(PrijavaController.korisnik.getPrivilegijaTip()==1) {
+            izmjeniColumn.setVisible(false);
+            obrisiColumn.setVisible(false);
+            dodajButton.setVisible(false);
+            dodajVrstuButton.setVisible(false);
+        } else {
+            izmjeniColumn.setVisible(true);
+            obrisiColumn.setVisible(true);
+            dodajButton.setVisible(true);
+            dodajVrstuButton.setVisible(true);
+        }
+    }
 }

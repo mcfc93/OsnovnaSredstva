@@ -42,5 +42,10 @@ public class VrstaOS {
     public void setOpis(String opisIn) {
           this.opis = opisIn;
     }
+
+    @Override
+    public String toString() {
+        return naziv!=null? naziv: "Svi";
+    }
     
 }

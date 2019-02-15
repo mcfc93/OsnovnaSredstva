@@ -2,6 +2,7 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXToggleButton?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -11,7 +12,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane id="AnchorPane" fx:id="anchorPane" prefHeight="465.0" prefWidth="600.0" stylesheets="@../osnovnasredstva.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="osnovnasredstva.administrator.LokacijeController">
+<AnchorPane id="AnchorPane" fx:id="anchorPane" prefHeight="465.0" prefWidth="600.0" stylesheets="@../osnovnasredstva.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="osnovnasredstva.administrator.LokacijeController">
    <children>
       <TableView fx:id="lokacijeTableView" layoutX="14.0" layoutY="135.0" prefHeight="316.0" prefWidth="574.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="130.0">
         <columns>
@@ -48,5 +49,6 @@
             <Tooltip maxWidth="125.0" text="Kreiraj PDF?" wrapText="true" />
          </tooltip></JFXButton>
       <JFXComboBox fx:id="zgradaComboBox" layoutX="30.0" layoutY="87.0" prefHeight="25.0" prefWidth="125.0" promptText="Zgrada" AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="90.0" />
+      <JFXToggleButton fx:id="postaniNadzornikToggleButton" layoutX="214.0" layoutY="66.0" styleClass="nadzornikToggleButton" text="Postani nadzornik" />
    </children>
 </AnchorPane>

@@ -63,7 +63,13 @@ public class Zgrada {
 
     @Override
     public String toString() {
-        return naziv;
+        /*
+        if(this.getNaziv()!=null) {
+            return naziv;
+        }
+        return "Svi";
+        */
+        return getNaziv()!=null? getNaziv(): "Svi";
     }
 
 }

@@ -1,9 +1,35 @@
 package osnovnasredstva.administrator;
 
+import com.itextpdf.text.Anchor;
+import com.itextpdf.text.BadElementException;
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Chapter;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.List;
+import com.itextpdf.text.ListItem;
+import com.itextpdf.text.PageSize;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.Section;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXToggleButton;
+import java.awt.Desktop;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -33,6 +59,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.controlsfx.control.MaskerPane;
 import osnovnasredstva.DAO.OsobaDAO;
+import osnovnasredstva.DTO.Korisnik;
 import osnovnasredstva.DTO.Osoba;
 import osnovnasredstva.prijava.PrijavaController;
 import osnovnasredstva.util.NotFoundException;
@@ -41,6 +68,8 @@ import osnovnasredstva.util.Util;
 public class OsobeController implements Initializable {
 
     private static OsobaDAO osobaDAO = new OsobaDAO();
+    
+    public static int tip;
     
     @FXML
     private AnchorPane anchorPane;
@@ -69,8 +98,6 @@ public class OsobeController implements Initializable {
     @FXML
     private TableColumn<Osoba, Osoba> obrisiColumn;
 
-    @FXML
-    private JFXButton nazadButton;
 
     @FXML
     private JFXButton pdfButton;
@@ -83,6 +110,9 @@ public class OsobeController implements Initializable {
 
     @FXML
     private ImageView clearImageView;
+    
+    @FXML
+    private JFXToggleButton postaniNadzornikToggleButton;
     
     public static ObservableList<Osoba> osobeList;
     
@@ -100,11 +130,16 @@ public class OsobeController implements Initializable {
                 clearImageView.setVisible(false);
             }
         });
-        
+
         if(PrijavaController.korisnik.getTip()==1) {
             izmjeniColumn.setVisible(false);
             obrisiColumn.setVisible(false);
             dodajOsobuButton.setVisible(false);
+            postaniNadzornikToggleButton.setVisible(false);
+        } else {
+            if(PrijavaController.korisnik.getTip() != PrijavaController.korisnik.getPrivilegijaTip()) {
+                PrijavaController.korisnik.setPrivilegijaTip(PrijavaController.korisnik.getTip());
+            }
         }
 
         
@@ -310,6 +345,16 @@ public class OsobeController implements Initializable {
         obrisiColumn.setMaxWidth(35);
         obrisiColumn.setResizable(false);
         obrisiColumn.setSortable(false);
+        
+        postaniNadzornikToggleButton.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            if(newValue) {
+                PrijavaController.korisnik.setPrivilegijaTip(1);
+            } else {
+                PrijavaController.korisnik.setPrivilegijaTip(0);
+            }
+            postaviPrivilegije();
+            osobeTableView.refresh();
+        });
     }
     
     @FXML
@@ -332,4 +377,118 @@ public class OsobeController implements Initializable {
             Util.LOGGER.log(Level.SEVERE, e.toString(), e);
         }
     }
+    
+    private void postaviPrivilegije() {
+        if(PrijavaController.korisnik.getPrivilegijaTip()==1) {
+            izmjeniColumn.setVisible(false);
+            obrisiColumn.setVisible(false);
+            dodajOsobuButton.setVisible(false);
+        } else {
+            izmjeniColumn.setVisible(true);
+            obrisiColumn.setVisible(true);
+            dodajOsobuButton.setVisible(true);
+        }
+    }
+    
+    ///////////////Create PDF//////////////////////////////////
+    ///////////////////////////////////////////////////////////
+    
+    @FXML
+    private void pdf(ActionEvent event) {
+            Font catFont = new Font(Font.FontFamily.TIMES_ROMAN, 18,
+            Font.BOLD);
+            Font redFont = new Font(Font.FontFamily.TIMES_ROMAN, 12,
+            Font.NORMAL, BaseColor.RED);
+            Font subFont = new Font(Font.FontFamily.TIMES_ROMAN, 16,
+            Font.BOLD);
+            Font smallBold = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD);
+        try {
+            
+            
+            Document document = new Document(PageSize.A4.rotate());
+            String naziv = "PDF/OsobeIzvjestaj_" + new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(new Date()) + ".pdf";
+            PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(naziv));
+            document.open();
+             document.add(new Paragraph(" "));
+            // Lets write a big header
+            document.add(new Paragraph("Izvještaj svih osoba", catFont));
+
+            //addEmptyLine(preface, 1);
+             document.add(new Paragraph(" "));
+            // Will create: Report generated by: _name, _date
+            document.add(new Paragraph(
+                    "Izvještaj kreirao: " + PrijavaController.korisnik.getKorisnickoIme(),
+                    smallBold));
+            document.add(new Paragraph(
+                    "Datum kreiranja: " + new SimpleDateFormat("dd/MM/yyyy, HH:mm:ss").format(new Date()), 
+                    smallBold));
+            
+            document.add(new Paragraph(" "));
+            //addEmptyLine(preface, 1);
+            document.add(new Paragraph(
+                    "Tabela svih osoba",
+                    smallBold));
+
+             document.add(new Paragraph(" "));
+
+             
+            PdfPTable table = new PdfPTable(8);
+            table.setWidthPercentage(100);
+            PdfPCell cell = new PdfPCell(new Phrase("Ime"));
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            table.addCell(cell);
+
+            cell = new PdfPCell(new Phrase("Prezime"));
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            table.addCell(cell);
+
+            cell = new PdfPCell(new Phrase("JMBG"));
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            table.addCell(cell);
+            
+            cell = new PdfPCell(new Phrase("Adresa"));
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            table.addCell(cell);
+            
+            cell = new PdfPCell(new Phrase("Titula"));
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            table.addCell(cell);
+            
+            cell = new PdfPCell(new Phrase("Zaposlenje"));
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            table.addCell(cell);
+            
+            cell = new PdfPCell(new Phrase("Broj telefona"));
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            table.addCell(cell);
+            
+            cell = new PdfPCell(new Phrase("E-mail"));
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+            table.addCell(cell);
+            
+            table.setHeaderRows(1);
+            table.getDefaultCell().setHorizontalAlignment(Element.ALIGN_CENTER);
+            for(Osoba os : osobeList){
+            table.addCell(os.getIme());
+            table.addCell(os.getPrezime());
+            table.addCell(os.getJmbg());
+            table.addCell(os.getAdresa());
+            table.addCell(os.getTitula());
+            table.addCell(os.getZaposlenje());
+            table.addCell(os.getTelefon());
+            table.addCell(os.getEmail());     
+            }
+            
+            //document.add(preface);
+            document.add(table);
+            document.close();
+            Util.getNotifications("Obavještenje", "Izvještaj kreiran.", "Information").show();
+            Desktop desktop = Desktop.getDesktop();
+            desktop.open(new File(naziv));
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+     
 }

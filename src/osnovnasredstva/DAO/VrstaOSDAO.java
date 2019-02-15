@@ -37,7 +37,7 @@ public class VrstaOSDAO {
     }
 
     public List loadAll(Connection conn) throws SQLException {
-          String sql = "SELECT * FROM vrsta_os WHERE status=true ORDER BY id ASC ";
+          String sql = "SELECT * FROM vrsta_os ORDER BY id ASC ";
           List searchResults = listQuery(conn, conn.prepareStatement(sql));
 
           return searchResults;

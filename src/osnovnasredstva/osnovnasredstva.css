@@ -30,8 +30,8 @@
     -fx-background-color: -fx-hover-color;
     -fx-background-radius: 0px;
     -fx-prompt-text-fill: -fx-text-color;
-    -fx-text-fill: -fx-primary-color;
-    -fx-font-weight: normal;
+    -fx-text-fill: -fx-text-color;
+    -fx-font-weight: bold;
 }
 
 #lozinkaTextField {
@@ -47,8 +47,8 @@
     -fx-background-color: -fx-hover-color;
     -fx-background-radius: 0px;
     -fx-prompt-text-fill: -fx-text-color;
-    -fx-text-fill: -fx-primary-color;
-    -fx-font-weight: normal;
+    -fx-text-fill: -fx-text-color;
+    -fx-font-weight: bold;
 }
 
 #prijavaButton {
@@ -1088,4 +1088,51 @@
 /*Change cells of combobox*/
 .combo-box .list-cell {
     /*-fx-background-color: #ff92b8;*/
+}
+
+
+
+
+
+
+.nadzornikToggleButton {
+    -fx-background-color: transparent !important;
+    -fx-text-fill: -fx-primary-color !important;
+    -fx-font-weight: bold !important;
+    -fx-border: none !important;
+    -fx-border-radius: 0px !important;
+    -fx-background-radius: 0px !important;
+    
+    -jfx-toggle-color: -fx-secondary-color;
+    -jfx-untoggle-color: -fx-primary-color;
+    -jfx-toggle-line-color: #9e9e9e;
+    -jfx-untoggle-line-color: #bdbdbd;
+    -jfx-size: 10.0;
+    -jfx-disable-visual-focus: false;
+}
+
+.nadzornikToggleButton:hover {
+    -fx-background-color: transparent !important;
+    -fx-text-fill: -fx-primary-color !important;
+    -fx-font-weight: bold !important;
+    -fx-border: none !important;
+    -fx-border-radius: 0px !important;
+    -fx-background-radius: 0px !important;
+    
+    -fx-background-color: transparent !important;
+    -fx-border-color: transparent !important;
+    -fx-border-width: 0px 0px 0px 0px !important
+}
+
+.nadzornikToggleButton:selected {
+    -fx-background-color: transparent !important;
+    -fx-text-fill: -fx-primary-color !important;
+    -fx-font-weight: bold !important;
+    -fx-border: none !important;
+    -fx-border-radius: 0px !important;
+    -fx-background-radius: 0px !important;
+    
+    -fx-background-color: transparent !important;
+    -fx-border-color: transparent !important;
+    -fx-border-width: 0px 0px 0px 0px !important
 }

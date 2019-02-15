@@ -7,6 +7,7 @@ public class Korisnik {
     private String hashLozinke;
     private String salt;
     private int tip;
+    private int privilegijaTip;
     private boolean status;
 
     public Korisnik () {
@@ -17,6 +18,7 @@ public class Korisnik {
         this.hashLozinke = hashLozinke;
         this.salt = salt;
         this.tip = tip;
+        this.privilegijaTip = tip;
         this.status=true;
     }
 
@@ -26,6 +28,7 @@ public class Korisnik {
         this.hashLozinke = hashLozinke;
         this.salt = salt;
         this.tip = tip;
+        this.privilegijaTip = tip;
         this.status = status;
     }
 
@@ -77,6 +80,14 @@ public class Korisnik {
     }
     public void setStatus(boolean statusIn) {
           this.status = statusIn;
+    }
+    
+    public int getPrivilegijaTip() {
+        return privilegijaTip;
+    }
+
+    public void setPrivilegijaTip(int privilegijaTip) {
+        this.privilegijaTip = privilegijaTip;
     }
 
     @Override

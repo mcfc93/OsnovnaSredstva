@@ -86,6 +86,8 @@ public class DodavanjeOsnovnogSredstvaController implements Initializable {
         });
         
         nazadButton.setDefaultButton(true);
+        
+        
     }    
     
     @FXML
