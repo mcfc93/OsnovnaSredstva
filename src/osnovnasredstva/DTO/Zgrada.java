@@ -60,16 +60,10 @@ public class Zgrada {
     public void setStatus(boolean statusIn) {
           this.status = statusIn;
     }
-
+    /*
     @Override
     public String toString() {
-        /*
-        if(this.getNaziv()!=null) {
-            return naziv;
-        }
-        return "Svi";
-        */
         return getNaziv()!=null? getNaziv(): "Svi";
     }
-
+    */
 }

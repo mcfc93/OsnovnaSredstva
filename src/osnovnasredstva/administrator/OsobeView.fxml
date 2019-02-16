@@ -10,7 +10,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane id="AnchorPane" fx:id="anchorPane" prefHeight="465.0" prefWidth="600.0" stylesheets="@../osnovnasredstva.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="osnovnasredstva.administrator.OsobeController">
+<AnchorPane id="AnchorPane" fx:id="anchorPane" prefHeight="465.0" prefWidth="600.0" stylesheets="@../osnovnasredstva.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="osnovnasredstva.administrator.OsobeController">
    <children>
       <TableView fx:id="osobeTableView" layoutX="20.0" layoutY="72.0" prefHeight="330.0" prefWidth="570.0" AnchorPane.bottomAnchor="18.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="72.0">
         <columns>
@@ -34,7 +34,7 @@
          <tooltip>
             <Tooltip maxWidth="125.0" text="Dodaj osobu?" wrapText="true" />
          </tooltip></JFXButton>
-      <TextField fx:id="traziTextField" layoutX="434.0" layoutY="93.0" maxWidth="150.0" minWidth="100.0" prefHeight="25.0" prefWidth="150.0" promptText="Traži" styleClass="searchTextField" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="30.0">
+      <TextField fx:id="traziTextField" layoutX="434.0" layoutY="93.0" maxWidth="150.0" minWidth="100.0" prefHeight="25.0" prefWidth="150.0" promptText="Traži" styleClass="searchTextField" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="40.0">
          <opaqueInsets>
             <Insets />
          </opaqueInsets>
@@ -42,7 +42,7 @@
             <Insets left="30.0" right="20.0" />
          </padding>
       </TextField>
-      <ImageView fx:id="clearImageView" fitHeight="20.0" fitWidth="15.0" layoutX="562.0" layoutY="98.0" onMouseClicked="#clear" pickOnBounds="true" preserveRatio="true" styleClass="clearImageView" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="35.0" />
-      <JFXToggleButton fx:id="postaniNadzornikToggleButton" layoutX="222.0" layoutY="14.0" styleClass="nadzornikToggleButton" text="Postani nadzornik" />
+      <ImageView fx:id="clearImageView" fitHeight="20.0" fitWidth="15.0" layoutX="562.0" layoutY="98.0" onMouseClicked="#clear" pickOnBounds="true" preserveRatio="true" styleClass="clearImageView" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="45.0" />
+      <JFXToggleButton fx:id="postaniNadzornikToggleButton" layoutX="185.0" layoutY="33.0" styleClass="nadzornikToggleButton" text="Pogled nadzornika" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
    </children>
 </AnchorPane>

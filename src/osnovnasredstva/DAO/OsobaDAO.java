@@ -137,7 +137,7 @@ public class OsobaDAO {
           }
     }
 
-    public boolean delete(Connection conn, Osoba valueObject) 
+    public void delete(Connection conn, Osoba valueObject) 
           throws NotFoundException, SQLException {
 
           String sql = "UPDATE osoba SET status=false WHERE (id = ? ) ";
@@ -162,7 +162,6 @@ public class OsobaDAO {
               if (stmt != null)
                   stmt.close();
           }
-          return true;
     }
 
     public int countAll(Connection conn) throws SQLException {

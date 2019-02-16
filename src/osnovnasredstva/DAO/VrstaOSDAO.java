@@ -3,8 +3,10 @@ package osnovnasredstva.DAO;
 
 import java.sql.*;
 import java.util.*;
+import java.util.logging.Level;
 import osnovnasredstva.DTO.VrstaOS;
 import osnovnasredstva.util.NotFoundException;
+import osnovnasredstva.util.Util;
 
 
 public class VrstaOSDAO {
@@ -263,5 +265,28 @@ public class VrstaOSDAO {
           return (List)searchResults;
     }
 
+    private static List<VrstaOS> vrsteOSList = new ArrayList<>();
+	
+    public static List<VrstaOS> getVrsteOSList() {
+            return vrsteOSList;
+    }
 
+    public static void loadVrsteOS() {
+        VrstaOSDAO.getVrsteOSList().clear();
+        Connection c = null;
+        PreparedStatement s = null;
+        ResultSet r = null;
+        try {
+            c = Util.getConnection();
+            s = Util.prepareStatement(c,"SELECT * FROM vrsta_os ORDER BY id ASC", false);
+            r = s.executeQuery();
+            while(r.next()) {
+                getVrsteOSList().add(new VrstaOS(r.getInt("id"),r.getString("naziv"), r.getString("opis")));
+            }
+        } catch (SQLException e) {
+            Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+        } finally {
+            Util.close(r, s, c);
+        }
+    }
 }

@@ -254,7 +254,7 @@
  * TextField / PasswordField
  * 
  * * * * * * */
-.text-field, .password-field, .combo-box {
+.text-field, .password-field, .text-area, .combo-box {
     -fx-text-fill: -fx-primary-color;
     -fx-prompt-text-fill: -fx-hover-color;
     -fx-highlight-fill: -fx-primary-color;
@@ -265,7 +265,7 @@
  * JFXTextField / JFXPasswordField
  * 
  * * * * * * */
-.jfx-text-field, .jfx-password-field, .jfx-combo-box{
+.jfx-text-field, .jfx-password-field, .jfx-text-area, .jfx-combo-box{
     -fx-text-fill: -fx-primary-color;
     -jfx-focus-color: -fx-hover-color;
     -jfx-unfocus-color: -fx-primary-color;
@@ -273,20 +273,20 @@
     -jfx-disable-animation: false;
 }
 
-.jfx-text-field:error, .jfx-password-field:error, .jfx-combo-box:error {
+.jfx-text-field:error, .jfx-password-field:error, .jfx-text-area:error, .jfx-combo-box:error {
     -jfx-focus-color: red;
     -jfx-unfocus-color: red;
     -fx-highlight-fill: red;
 }
 
-.jfx-text-field .error-label, .jfx-password-field .error-label, .jfx-combo-box .error-label {
+.jfx-text-field .error-label, .jfx-password-field .error-label, .jfx-text-area .error-label, .jfx-combo-box .error-label {
     -fx-text-fill: red;
     -fx-font-size: 7pt;
     -fx-pref-height: 20;
     -fx-alignment: top-left;
 }
 
-.jfx-text-field .error-icon, .jfx-password-field .error-icon, .jfx-combo-box .error-icon {
+.jfx-text-field .error-icon, .jfx-password-field .error-icon, .jfx-text-area .error-icon, .jfx-combo-box .error-icon {
     /*-fx-fill: red;*/
     -fx-image: url("/osnovnasredstva/img/warning-24.png");
 }
@@ -1095,7 +1095,7 @@
 
 
 
-.nadzornikToggleButton {
+.jfx-toggle-button {
     -fx-background-color: transparent !important;
     -fx-text-fill: -fx-primary-color !important;
     -fx-font-weight: bold !important;
@@ -1103,15 +1103,22 @@
     -fx-border-radius: 0px !important;
     -fx-background-radius: 0px !important;
     
-    -jfx-toggle-color: -fx-secondary-color;
+    -jfx-toggle-color: -fx-primary-color;
     -jfx-untoggle-color: -fx-primary-color;
-    -jfx-toggle-line-color: #9e9e9e;
-    -jfx-untoggle-line-color: #bdbdbd;
+    -jfx-toggle-line-color: #1fdbf8;
+    -jfx-untoggle-line-color: #b0bec5;
     -jfx-size: 10.0;
     -jfx-disable-visual-focus: false;
+    
+    -fx-pref-width: 180;
+    -fx-pref-height: 25;
+    -fx-min-width: -fx-pref-width;
+    -fx-min-height: -fx-pref-height;
+    -fx-max-width: -fx-pref-width;
+    -fx-max-height: -fx-pref-height;
 }
 
-.nadzornikToggleButton:hover {
+.jfx-toggle-button:hover {
     -fx-background-color: transparent !important;
     -fx-text-fill: -fx-primary-color !important;
     -fx-font-weight: bold !important;
@@ -1124,7 +1131,7 @@
     -fx-border-width: 0px 0px 0px 0px !important
 }
 
-.nadzornikToggleButton:selected {
+.jfx-toggle-button:selected {
     -fx-background-color: transparent !important;
     -fx-text-fill: -fx-primary-color !important;
     -fx-font-weight: bold !important;
@@ -1135,4 +1142,10 @@
     -fx-background-color: transparent !important;
     -fx-border-color: transparent !important;
     -fx-border-width: 0px 0px 0px 0px !important
+}
+
+
+.jfx-text-area .content {
+    -fx-background-color: -fx-back-color;
+    -fx-border-color: -fx-primary-color -fx-primary-color transparent -fx-primary-color;
 }

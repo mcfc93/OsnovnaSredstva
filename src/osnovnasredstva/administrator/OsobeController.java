@@ -1,19 +1,12 @@
 package osnovnasredstva.administrator;
 
-import com.itextpdf.text.Anchor;
-import com.itextpdf.text.BadElementException;
 import com.itextpdf.text.BaseColor;
-import com.itextpdf.text.Chapter;
 import com.itextpdf.text.Document;
-import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
-import com.itextpdf.text.List;
-import com.itextpdf.text.ListItem;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
-import com.itextpdf.text.Section;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
@@ -25,10 +18,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -59,7 +49,6 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.controlsfx.control.MaskerPane;
 import osnovnasredstva.DAO.OsobaDAO;
-import osnovnasredstva.DTO.Korisnik;
 import osnovnasredstva.DTO.Osoba;
 import osnovnasredstva.prijava.PrijavaController;
 import osnovnasredstva.util.NotFoundException;
@@ -116,9 +105,6 @@ public class OsobeController implements Initializable {
     
     public static ObservableList<Osoba> osobeList;
     
-    /**
-     * Initializes the controller class.
-     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         clearImageView.setVisible(false);
@@ -149,7 +135,6 @@ public class OsobeController implements Initializable {
         Task<Void> task = new Task<Void>() {
             @Override
             protected Void call() {
-                System.out.println(Thread.currentThread());
                 progressPane.setVisible(true);
                 try {
                     osobeList.addAll(osobaDAO.loadAll(PrijavaController.konekcija));
@@ -213,6 +198,7 @@ public class OsobeController implements Initializable {
                                 
                                 Parent root = FXMLLoader.load(getClass().getResource("/osnovnasredstva/administrator/PrikazOsobeView.fxml"));
                                 Scene scene = new Scene(root);
+                                scene.getStylesheets().add(getClass().getResource("/osnovnasredstva/osnovnasredstva.css").toExternalForm());
                                 Stage stage=new Stage();
                                 stage.setScene(scene);
                                 stage.setResizable(false);
@@ -303,24 +289,19 @@ public class OsobeController implements Initializable {
                     	//dodavanje u kolonu
                     	setGraphic(button);
                     	button.setOnMouseClicked(event -> {
-                            /*
-                            osobeList.remove(item);
-                            //getTableView().getItems().remove(item);
-                            osobeTableView.refresh();
-                            System.out.println("Obrisano: " + item);
-		            Util.getNotifications("Obavještenje", "Osoba obrisana.", "Information").show();
-                            */
-                            try {
-                                    if(osobaDAO.delete(PrijavaController.konekcija, item)){
-                                        osobeList.remove(item);
-                                        //getTableView().getItems().remove(item);
-                                        osobeTableView.refresh();
-                                        System.out.println("Obrisano: " + item);
-                                        Util.getNotifications("Obavještenje", "Korisnički nalog obrisan.", "Information").show();
-                                    }
+                            if(Util.showConfirmationAlert()) {
+                                try {
+                                    osobaDAO.delete(PrijavaController.konekcija, item);
+                                    osobeList.remove(item);
+                                    //getTableView().getItems().remove(item);
+                                    osobeTableView.refresh();
+                                    System.out.println("Obrisano: " + item);
+                                    Util.getNotifications("Obavještenje", "Osoba obrisana.", "Information").show();
                                 } catch (SQLException | NotFoundException e) {
+                                    Util.showBugAlert();
                                     Util.LOGGER.log(Level.SEVERE, e.toString(), e);
                                 }
+                            }
                         });
                     } else {
                     	setGraphic(null);
@@ -469,14 +450,14 @@ public class OsobeController implements Initializable {
             table.setHeaderRows(1);
             table.getDefaultCell().setHorizontalAlignment(Element.ALIGN_CENTER);
             for(Osoba os : osobeList){
-            table.addCell(os.getIme());
-            table.addCell(os.getPrezime());
-            table.addCell(os.getJmbg());
-            table.addCell(os.getAdresa());
-            table.addCell(os.getTitula());
-            table.addCell(os.getZaposlenje());
-            table.addCell(os.getTelefon());
-            table.addCell(os.getEmail());     
+                table.addCell(os.getIme());
+                table.addCell(os.getPrezime());
+                table.addCell(os.getJmbg());
+                table.addCell(os.getAdresa());
+                table.addCell(os.getTitula());
+                table.addCell(os.getZaposlenje());
+                table.addCell(os.getTelefon());
+                table.addCell(os.getEmail());     
             }
             
             //document.add(preface);
@@ -487,7 +468,7 @@ public class OsobeController implements Initializable {
             desktop.open(new File(naziv));
             
         } catch (Exception e) {
-            e.printStackTrace();
+            Util.LOGGER.log(Level.SEVERE, e.toString(), e);
         }
     }
      

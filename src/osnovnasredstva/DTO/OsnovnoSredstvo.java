@@ -4,7 +4,7 @@ import java.sql.*;
 import java.math.*;
 import java.time.LocalDate;
 import java.time.Period;
-import osnovnasredstva.administrator.OsnovnaSredstvaController;
+import osnovnasredstva.DAO.VrstaOSDAO;
 
 public class OsnovnoSredstvo {
 
@@ -128,15 +128,15 @@ public class OsnovnoSredstvo {
     }
     
     public String getIdVrsteString() {
-        for(VrstaOS vrsta: OsnovnaSredstvaController.vrstaOsnovnogSredstvaList) {
-            if(vrsta.getId()==this.getIdVrste())
+        for(VrstaOS vrsta: VrstaOSDAO.getVrsteOSList()) {
+            if(vrsta.getId() == this.getIdVrste())
                 return vrsta.getNaziv();
         }
-        return "";
+        return "NEPOZNATO";
     }
 
     public BigDecimal getVrijednost(){
         int godine=Period.between(datumNabavke.toLocalDateTime().toLocalDate(), LocalDate.now()).getYears();
         return nabavnaVrijednost.subtract(nabavnaVrijednost.multiply(new BigDecimal((double)godine/stopaAmortizacije))).setScale(2, BigDecimal.ROUND_HALF_EVEN);
-}
+    }
 }

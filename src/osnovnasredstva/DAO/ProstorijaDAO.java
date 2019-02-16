@@ -47,7 +47,7 @@ public class ProstorijaDAO {
         PreparedStatement stmt = null;
         
         stmt=conn.prepareStatement(sql);
-        ArrayList searchResults = new ArrayList();
+        List searchResults = new ArrayList();
         ResultSet result = null;
 
           try {
@@ -74,7 +74,7 @@ public class ProstorijaDAO {
                   stmt.close();
           }
 
-          return (List)searchResults;
+          return searchResults;
     }
 
     public synchronized void create(Connection conn, Prostorija valueObject) throws SQLException {

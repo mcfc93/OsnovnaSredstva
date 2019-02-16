@@ -8,7 +8,6 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
@@ -36,19 +35,20 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.util.StringConverter;
 import org.controlsfx.control.MaskerPane;
 import osnovnasredstva.DAO.OsnovnoSredstvoDAO;
 import osnovnasredstva.DAO.VrstaOSDAO;
 import osnovnasredstva.DTO.OsnovnoSredstvo;
 import osnovnasredstva.DTO.VrstaOS;
-import osnovnasredstva.DTO.Zgrada;
 import osnovnasredstva.prijava.PrijavaController;
+import osnovnasredstva.util.NotFoundException;
 import osnovnasredstva.util.Util;
 
 public class OsnovnaSredstvaController implements Initializable {
     
-    private static OsnovnoSredstvoDAO osDAO = new OsnovnoSredstvoDAO();
-    private static VrstaOSDAO vrOsnDAO = new VrstaOSDAO();
+    private static OsnovnoSredstvoDAO osnovnoSredstvoDAO = new OsnovnoSredstvoDAO();
+    private static VrstaOSDAO vrstaOSDAO = new VrstaOSDAO();
     @FXML
     private AnchorPane anchorPane;
 
@@ -74,9 +74,6 @@ public class OsnovnaSredstvaController implements Initializable {
     private TableColumn<OsnovnoSredstvo, OsnovnoSredstvo> obrisiColumn;
 
     @FXML
-    private JFXButton nazadButton;
-
-    @FXML
     private JFXButton dodajButton;
 
     @FXML
@@ -100,9 +97,6 @@ public class OsnovnaSredstvaController implements Initializable {
     @FXML
     private JFXToggleButton postaniNadzornikToggleButton;
     
-    /**
-     * Initializes the controller class.
-     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         clearImageView.setVisible(false);
@@ -129,15 +123,15 @@ public class OsnovnaSredstvaController implements Initializable {
         
         vrstaOsnovnogSredstvaList = FXCollections.observableArrayList();
         osnovnaSredstvaList = FXCollections.observableArrayList();
-        
+        /*
         MaskerPane progressPane=Util.getMaskerPane(anchorPane);
         Task<Void> task = new Task<Void>() {
             @Override
             protected Void call() {
                 progressPane.setVisible(true);
                 try {
-                    vrstaOsnovnogSredstvaList.addAll(vrOsnDAO.loadAll(PrijavaController.konekcija));
-                    osnovnaSredstvaList.addAll(osDAO.loadAll(PrijavaController.konekcija)); 
+                    vrstaOsnovnogSredstvaList.addAll(vrstaOSDAO.loadAll(PrijavaController.konekcija));
+                    //osnovnaSredstvaList.addAll(osnovnoSredstvoDAO.loadAll(PrijavaController.konekcija)); 
                 } catch (SQLException e) {
                     Util.LOGGER.log(Level.SEVERE, e.toString(), e);
                 }
@@ -156,7 +150,9 @@ public class OsnovnaSredstvaController implements Initializable {
             }
         };
         new Thread(task).start();
-        
+        */
+        vrstaComboBox.setVisibleRowCount(5);
+
         vrstaComboBox.setCellFactory(param -> {
             ListCell<VrstaOS> cell = new ListCell<VrstaOS>() {
                 @Override
@@ -169,7 +165,7 @@ public class OsnovnaSredstvaController implements Initializable {
                         if(item.getNaziv()!=null) {
                             setText(item.getNaziv());
                         } else {
-                            setText("Svi");
+                            setText("Sve");
                         }
                     }
                 }
@@ -177,18 +173,32 @@ public class OsnovnaSredstvaController implements Initializable {
             return cell;
         });
         
+        vrstaComboBox.setConverter(new StringConverter<VrstaOS>() {
+            //ispis u ComboBox selected item value
+            @Override
+            public String toString(VrstaOS object) {
+                return object.getNaziv()!=null? object.getNaziv(): "Sve";
+            }
+            //Editable ComboBox pretraga
+            @Override
+            public VrstaOS fromString(String string) {
+                return vrstaComboBox.getItems().stream().filter(z -> z.getNaziv().equals(string)).findFirst().orElse(null);
+            }
+        });
+        
         vrstaComboBox.valueProperty().addListener((observable, oldValue, newValue) -> {
             osnovnaSredstvaList.clear();
-            MaskerPane progressPaneZgrade=Util.getMaskerPane(anchorPane);
-            Task<Void> taskZgrade = new Task<Void>() {
+            MaskerPane progressPane=Util.getMaskerPane(anchorPane);
+            new Thread(new Task<Void>() {
                 @Override
                 protected Void call() {
-                    progressPaneZgrade.setVisible(true);
+                    progressPane.setVisible(true);
                     try {
+                        osnovnaSredstvaList.clear();
                         if(vrstaComboBox.getValue().getNaziv() != null)
-                            osnovnaSredstvaList.addAll(osDAO.loadAll2(PrijavaController.konekcija,vrstaComboBox.getValue().getId()));
+                            osnovnaSredstvaList.addAll(osnovnoSredstvoDAO.loadAll2(PrijavaController.konekcija,vrstaComboBox.getValue().getId()));
                         else
-                            osnovnaSredstvaList.addAll(osDAO.loadAll(PrijavaController.konekcija));
+                            osnovnaSredstvaList.addAll(osnovnoSredstvoDAO.loadAll(PrijavaController.konekcija));
                     } catch (SQLException e) {
                         Util.LOGGER.log(Level.SEVERE, e.toString(), e);
                     }
@@ -198,15 +208,22 @@ public class OsnovnaSredstvaController implements Initializable {
                 @Override
                 protected void succeeded(){
                     super.succeeded();
-                    progressPaneZgrade.setVisible(false);
+                    progressPane.setVisible(false);
+                    Platform.runLater(() -> {
+                        osnovnaSredstvaTableView.refresh();
+                    });
                 }
-            };
-            new Thread(taskZgrade).start();
+            }).start();
 
             osnovnaSredstvaTableView.setItems(osnovnaSredstvaList);           
             if(osnovnaSredstvaList.isEmpty())
                 osnovnaSredstvaTableView.setPlaceholder(new Label("Nema osnovnih sredstava za odabranu vrstu."));
         });
+        
+        vrstaOsnovnogSredstvaList.addAll(VrstaOSDAO.getVrsteOSList());
+        vrstaOsnovnogSredstvaList.add(0, new VrstaOS());
+        vrstaComboBox.getItems().addAll(vrstaOsnovnogSredstvaList);
+        vrstaComboBox.getSelectionModel().selectFirst();
 
         
         osnovnaSredstvaList=FXCollections.observableArrayList();
@@ -275,6 +292,9 @@ public class OsnovnaSredstvaController implements Initializable {
                             System.out.println(item);
                             
                             try {
+                                DodavanjeOsnovnogSredstvaController.odabranoOS=item;
+                                DodavanjeOsnovnogSredstvaController.izmjena=true;
+                                
                                 Parent root = FXMLLoader.load(getClass().getResource("/osnovnasredstva/administrator/DodavanjeOsnovnogSredstvaView.fxml"));
                                 Scene scene = new Scene(root);
                                 Stage stage=new Stage();
@@ -283,6 +303,9 @@ public class OsnovnaSredstvaController implements Initializable {
                                 stage.initStyle(StageStyle.UNDECORATED);
                                 stage.initModality(Modality.APPLICATION_MODAL);
                                 stage.showAndWait();
+                                
+                                DodavanjeOsnovnogSredstvaController.izmjena=true;
+                                osnovnaSredstvaTableView.refresh();
                             } catch(IOException e) {
                                 Util.LOGGER.log(Level.SEVERE, e.toString(), e);
                             }
@@ -316,11 +339,19 @@ public class OsnovnaSredstvaController implements Initializable {
                     	//dodavanje u kolonu
                     	setGraphic(button);
                     	button.setOnMouseClicked(event -> {
-                            osnovnaSredstvaList.remove(item);
-                            //getTableView().getItems().remove(item);
-                            osnovnaSredstvaTableView.refresh();
-                            System.out.println("Obrisano: " + item);
-		            Util.getNotifications("Obavještenje", "Osnovno sredstvo obrisano.", "Information").show();
+                            if(Util.showConfirmationAlert()) {
+                                try {
+                                    osnovnoSredstvoDAO.delete(PrijavaController.konekcija, item);
+                                    osnovnaSredstvaList.remove(item);
+                                    //getTableView().getItems().remove(item);
+                                    osnovnaSredstvaTableView.refresh();
+                                    System.out.println("Obrisano: " + item);
+                                    Util.getNotifications("Obavještenje", "Osnovno sredstvo obrisano.", "Information").show();
+                                } catch (SQLException | NotFoundException e) {
+                                    Util.showBugAlert();
+                                    Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+                                }
+                            }
                         });
                     } else {
                     	setGraphic(null);
@@ -389,6 +420,12 @@ public class OsnovnaSredstvaController implements Initializable {
             stage.initStyle(StageStyle.UNDECORATED);
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.showAndWait();
+            
+            if(DodavanjeVrsteOSController.vrstaOS != null) {
+                VrstaOSDAO.getVrsteOSList().add(DodavanjeVrsteOSController.vrstaOS);
+                vrstaOsnovnogSredstvaList.add(DodavanjeVrsteOSController.vrstaOS);
+                vrstaComboBox.getItems().add(DodavanjeVrsteOSController.vrstaOS);
+            }
         } catch(IOException e) {
             Util.LOGGER.log(Level.SEVERE, e.toString(), e);
         }

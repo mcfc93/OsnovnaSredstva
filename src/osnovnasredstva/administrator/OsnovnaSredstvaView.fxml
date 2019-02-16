@@ -12,7 +12,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane id="AnchorPane" fx:id="anchorPane" prefHeight="465.0" prefWidth="600.0" stylesheets="@../osnovnasredstva.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="osnovnasredstva.administrator.OsnovnaSredstvaController">
+<AnchorPane id="AnchorPane" fx:id="anchorPane" prefHeight="465.0" prefWidth="600.0" stylesheets="@../osnovnasredstva.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="osnovnasredstva.administrator.OsnovnaSredstvaController">
    <children>
       <TableView fx:id="osnovnaSredstvaTableView" layoutX="24.0" layoutY="145.0" prefHeight="316.0" prefWidth="574.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="130.0">
          <columns>
@@ -27,7 +27,6 @@
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
          </columnResizePolicy>
       </TableView>
-      <JFXButton fx:id="backButton" layoutX="285.0" layoutY="35.0" prefHeight="30.0" prefWidth="30.0" text=" " />
       <JFXButton fx:id="dodajButton" layoutX="90.0" layoutY="28.0" onAction="#dodaj" prefHeight="30.0" prefWidth="30.0" text=" " AnchorPane.leftAnchor="90.0" AnchorPane.topAnchor="30.0">
          <tooltip>
             <Tooltip maxWidth="125.0" text="Dodaj osnovno sredstvo?" wrapText="true" />
@@ -54,6 +53,6 @@
          <tooltip>
             <Tooltip maxWidth="125.0" text="Dodaj vrstu osnovnog sredstva?" wrapText="true" />
          </tooltip></JFXButton>
-      <JFXToggleButton fx:id="postaniNadzornikToggleButton" layoutX="243.0" layoutY="81.0" styleClass="nadzornikToggleButton" text="Postani nadzornik" />
+      <JFXToggleButton fx:id="postaniNadzornikToggleButton" layoutX="243.0" layoutY="81.0" styleClass="nadzornikToggleButton" text="Pogled nadzornika" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
    </children>
 </AnchorPane>

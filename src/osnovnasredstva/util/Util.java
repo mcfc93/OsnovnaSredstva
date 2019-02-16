@@ -1,7 +1,9 @@
 package osnovnasredstva.util;
 
 import com.jfoenix.controls.JFXComboBox;
+import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXPasswordField;
+import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.validation.IntegerValidator;
 import com.jfoenix.validation.RequiredFieldValidator;
@@ -28,6 +30,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.TextInputControl;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
@@ -47,6 +50,10 @@ public class Util {
         //postavljanje Logger-a
         try {
             File f=new File("logs");
+            if(!f.exists()) {
+                    f.mkdirs();
+            }
+            f=new File("PDF");
             if(!f.exists()) {
                     f.mkdirs();
             }
@@ -252,6 +259,33 @@ System.out.println(Util.PROPERTY);
         return requiredFieldValidator;
     }
     
+    public static ValidatorBase requiredFieldValidator(JFXTextArea textArea) {
+    	ValidatorBase requiredFieldValidator = new RequiredFieldValidator();
+        requiredFieldValidator.setMessage("Obavezan unos");
+        requiredFieldValidator.setIcon(new ImageView());
+        textArea.focusedProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue)->{
+            if(!newValue) {
+                textArea.validate();
+            }
+        });
+        textArea.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue)->{
+            textArea.validate();
+        });
+        return requiredFieldValidator;
+    }
+    
+    public static ValidatorBase requiredFieldValidator(JFXDatePicker datePicker) {
+        ValidatorBase requiredFieldValidator = new RequiredFieldValidator();
+        requiredFieldValidator.setMessage("Obavezan unos");
+        requiredFieldValidator.setIcon(new ImageView());
+        datePicker.focusedProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue)->{
+            if(!newValue) {
+                datePicker.validate();
+            }
+        });
+        return requiredFieldValidator;
+    }
+    
     public static ValidatorBase collectionValidator(JFXTextField textField, Collection<?> collection, boolean contains, String message) {
         ValidatorBase postalCodeValidator = new ValidatorBase(message) {
             @Override
@@ -269,7 +303,7 @@ System.out.println(Util.PROPERTY);
         return postalCodeValidator;
     }
     
-    public static ValidatorBase lengthValidator(JFXTextField textField, int length) {
+    public static ValidatorBase lengthValidator(TextInputControl textField, int length) {
         ValidatorBase lengthValidator = new ValidatorBase("Predugačak unos") {
             @Override
             protected void eval() {
@@ -331,11 +365,27 @@ System.out.println(Util.PROPERTY);
     }
 	
     public static ValidatorBase naturalNumberValidator(JFXTextField textField) {
-        ValidatorBase naturalNumberValidator = new ValidatorBase("Nije prirodan broj") {
+        ValidatorBase naturalNumberValidator = new ValidatorBase("Nije pozitivan broj") {
             @Override
             protected void eval() {
                 if(!textField.getText().isEmpty()
                         && !textField.getText().matches("[1-9][0-9]*")) {
+                    hasErrors.set(true);
+                } else {
+                    hasErrors.set(false);
+                }
+            }
+        };
+        naturalNumberValidator.setIcon(new ImageView());
+        return naturalNumberValidator;
+    }
+    
+    public static ValidatorBase naturalDoubleValidator(JFXTextField textField) {
+        ValidatorBase naturalNumberValidator = new ValidatorBase("Nije pozitivan broj") {
+            @Override
+            protected void eval() {
+                if(!textField.getText().isEmpty()
+                        && !textField.getText().matches("((^[1-9][0-9]*([\\.,][0-9]+)?)|(^0[\\.,][1-9][0-9]*))")) {
                     hasErrors.set(true);
                 } else {
                     hasErrors.set(false);

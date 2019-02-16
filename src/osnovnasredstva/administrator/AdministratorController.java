@@ -28,6 +28,7 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import osnovnasredstva.DAO.KorisnikDAO;
+import osnovnasredstva.DAO.VrstaOSDAO;
 import osnovnasredstva.prijava.PrijavaController;
 import osnovnasredstva.util.Util;
 
@@ -123,6 +124,7 @@ public class AdministratorController implements Initializable {
                 @Override
                 public void run() {
                     KorisnikDAO.loadUsernames();
+                    VrstaOSDAO.loadVrsteOS();
                 }
             }.start();
         } else {

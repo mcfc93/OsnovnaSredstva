@@ -7,7 +7,6 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
@@ -19,7 +18,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -29,7 +27,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.util.Callback;
+import javafx.util.StringConverter;
 import org.controlsfx.control.MaskerPane;
 import osnovnasredstva.DAO.ProstorijaDAO;
 import osnovnasredstva.DAO.ZgradaDAO;
@@ -119,14 +117,86 @@ public class LokacijeController implements Initializable {
         zgradeList=FXCollections.observableArrayList();
         lokacijeList=FXCollections.observableArrayList();
         
+        zgradaComboBox.setVisibleRowCount(5);
+
+        //zgradeList.add(0, null);
+        
+        zgradaComboBox.setCellFactory(param -> {
+            ListCell<Zgrada> cell = new ListCell<Zgrada>() {
+                @Override
+                protected void updateItem(Zgrada item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (item == null || empty) {
+                        //setText("Svi");
+                        setGraphic(null);
+                    } else {
+                        if(item.getNaziv()!=null) {
+                            setText(item.getNaziv()+ " (" +item.getSifra() + ")");
+                        } else {
+                            setText("Sve");
+                        }
+                    }
+                }
+            };
+            return cell;
+        });
+        
+        zgradaComboBox.setConverter(new StringConverter<Zgrada>() {
+            //ispis u ComboBox selected item value
+            @Override
+            public String toString(Zgrada object) {
+                return object.getNaziv()!=null? object.getNaziv(): "Sve";
+            }
+            //Editable ComboBox pretraga
+            @Override
+            public Zgrada fromString(String string) {
+                return zgradaComboBox.getItems().stream().filter(z -> z.getNaziv().equals(string)).findFirst().orElse(null);
+            }
+        });
+        
         MaskerPane progressPane=Util.getMaskerPane(anchorPane);
-        Task<Void> task = new Task<Void>() {
+
+        zgradaComboBox.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if(newValue != null) {
+                new Thread(new Task<Void>() {
+                    @Override
+                    protected Void call() {
+                        progressPane.setVisible(true);
+                        try {
+                            lokacijeList.clear();
+                            if(zgradaComboBox.getValue().getNaziv() != null)
+                                lokacijeList.addAll(prostorijaDAO.loadAll2(PrijavaController.konekcija,zgradaComboBox.getValue().getId()));
+                            else
+                                lokacijeList.addAll(prostorijaDAO.loadAll(PrijavaController.konekcija));
+                            } catch (SQLException e) {
+                            Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+                        }
+                        return null;
+                    }
+                    
+                    @Override
+                    protected void succeeded(){
+                        super.succeeded();
+                        progressPane.setVisible(false);
+                        Platform.runLater(() -> {
+                            lokacijeTableView.refresh();
+                        });
+                    }
+                }).start();
+
+                lokacijeTableView.setItems(lokacijeList);           
+                if(lokacijeList.isEmpty())
+                    lokacijeTableView.setPlaceholder(new Label("Nema prostorija u odabranoj zgradi."));
+            }
+        });
+        
+        new Thread(new Task<Void>() {
             @Override
             protected Void call() {
                 progressPane.setVisible(true);
                 try {
                     zgradeList.addAll(zgradaDAO.loadAll(PrijavaController.konekcija));
-                    lokacijeList.addAll(prostorijaDAO.loadAll(PrijavaController.konekcija));
+                    //lokacijeList.addAll(prostorijaDAO.loadAll(PrijavaController.konekcija));
                 } catch (SQLException e) {
                     Util.LOGGER.log(Level.SEVERE, e.toString(), e);
                 }
@@ -143,65 +213,7 @@ public class LokacijeController implements Initializable {
                     zgradaComboBox.getSelectionModel().selectFirst();
                 });
             }
-        };
-        new Thread(task).start();
-
-        //zgradeList.add(0, null);
-        
-        
-        zgradaComboBox.setCellFactory(param -> {
-            ListCell<Zgrada> cell = new ListCell<Zgrada>() {
-                @Override
-                protected void updateItem(Zgrada item, boolean empty) {
-                    super.updateItem(item, empty);
-                    if (item == null || empty) {
-                        //setText("Svi");
-                        setGraphic(null);
-                    } else {
-                        if(item.getNaziv()!=null) {
-                            setText(item.getNaziv()+ " (" +item.getSifra() + ")");
-                        } else {
-                            setText("Svi");
-                        }
-                    }
-                }
-            };
-            return cell;
-        });
-        
-        
-        zgradaComboBox.valueProperty().addListener((observable, oldValue, newValue) -> {
-            
-                //lokacijeTableView.getItems().clear();
-                lokacijeList.clear();
-                MaskerPane progressPaneZgrade=Util.getMaskerPane(anchorPane);
-                Task<Void> taskZgrade = new Task<Void>() {
-                    @Override
-                    protected Void call() {
-                        progressPaneZgrade.setVisible(true);
-                        try {
-                            if(zgradaComboBox.getValue().getNaziv() != null)
-                                lokacijeList.addAll(prostorijaDAO.loadAll2(PrijavaController.konekcija,zgradaComboBox.getValue().getId()));
-                            else
-                                lokacijeList.addAll(prostorijaDAO.loadAll(PrijavaController.konekcija));
-                            } catch (SQLException e) {
-                            Util.LOGGER.log(Level.SEVERE, e.toString(), e);
-                        }
-                        return null;
-                    }
-                    
-                    @Override
-                    protected void succeeded(){
-                        super.succeeded();
-                        progressPaneZgrade.setVisible(false);
-                    }
-                };
-                new Thread(taskZgrade).start();
-
-                lokacijeTableView.setItems(lokacijeList);           
-                if(lokacijeList.isEmpty())
-                    lokacijeTableView.setPlaceholder(new Label("Nema prostorija u odabranoj zgradi."));
-        });
+        }).start();
         
         
         lokacijeTableView.setItems(lokacijeList);

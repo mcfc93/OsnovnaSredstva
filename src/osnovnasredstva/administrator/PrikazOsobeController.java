@@ -1,7 +1,6 @@
 package osnovnasredstva.administrator;
 
 import com.itextpdf.text.BaseColor;
-import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
@@ -11,7 +10,6 @@ import com.itextpdf.text.Phrase;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
-import com.itextpdf.text.pdf.draw.VerticalPositionMark;
 import com.jfoenix.controls.JFXButton;
 import java.awt.Desktop;
 import java.io.File;
@@ -20,10 +18,8 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Observable;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -43,14 +39,13 @@ import javafx.stage.Stage;
 import osnovnasredstva.DAO.OsnovnoSredstvoDAO;
 import osnovnasredstva.DTO.OsnovnoSredstvo;
 import osnovnasredstva.DTO.Osoba;
-import static osnovnasredstva.administrator.OsobeController.osobeList;
 import osnovnasredstva.prijava.PrijavaController;
 import osnovnasredstva.util.Util;
 
 public class PrikazOsobeController implements Initializable {
     
     public static Osoba odabranaOsoba;
-    private static OsnovnoSredstvoDAO osnSredDAO = new OsnovnoSredstvoDAO();
+    private static OsnovnoSredstvoDAO osnovnoSredstvoDAO = new OsnovnoSredstvoDAO();
     
     @FXML
     private AnchorPane menuLine;
@@ -136,7 +131,7 @@ public class PrikazOsobeController implements Initializable {
         
         listOsnovnoSredstvo = FXCollections.observableArrayList();
         try {
-            listOsnovnoSredstvo.addAll(osnSredDAO.loadAll3(PrijavaController.konekcija, odabranaOsoba.getId()));
+            listOsnovnoSredstvo.addAll(osnovnoSredstvoDAO.loadAll3(PrijavaController.konekcija, odabranaOsoba.getId()));
         } catch (SQLException e) {
             Util.LOGGER.log(Level.SEVERE, e.toString(), e);
         }
@@ -156,7 +151,7 @@ public class PrikazOsobeController implements Initializable {
         }
     }
 
-     ///////////////Create PDF//////////////////////////////////
+    ///////////////Create PDF//////////////////////////////////
     ///////////////////////////////////////////////////////////
     
     @FXML
@@ -259,7 +254,7 @@ public class PrikazOsobeController implements Initializable {
             desktop.open(new File(naziv));
             
         } catch (Exception e) {
-            e.printStackTrace();
+            Util.LOGGER.log(Level.SEVERE, e.toString(), e);
         }
     }
 }
