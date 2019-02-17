@@ -93,10 +93,9 @@ public class KorisnickiNaloziController implements Initializable {
         korisnickiNaloziList=FXCollections.observableArrayList();
         
         MaskerPane progressPane=Util.getMaskerPane(anchorPane);
-        Task<Void> task = new Task<Void>() {
+        new Thread(new Task<Void>() {
             @Override
             protected Void call() {
-                System.out.println(Thread.currentThread());
                 progressPane.setVisible(true);
                 try {
                     korisnickiNaloziList.addAll(korisnikDAO.loadAll(PrijavaController.konekcija));
@@ -110,8 +109,7 @@ public class KorisnickiNaloziController implements Initializable {
                 super.succeeded();
                 progressPane.setVisible(false);
             }
-        };
-        new Thread(task).start();
+        }).start();
         
         if(PrijavaController.korisnik.getTip() != PrijavaController.korisnik.getPrivilegijaTip()) {
             PrijavaController.korisnik.setPrivilegijaTip(PrijavaController.korisnik.getTip());

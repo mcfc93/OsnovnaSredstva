@@ -255,6 +255,7 @@
  * 
  * * * * * * */
 .text-field, .password-field, .text-area, .combo-box {
+    -fx-font-size: 12px;
     -fx-text-fill: -fx-primary-color;
     -fx-prompt-text-fill: -fx-hover-color;
     -fx-highlight-fill: -fx-primary-color;
@@ -1052,6 +1053,7 @@
 .opisTextField {
     -fx-text-fill: -fx-hover-color;
     -fx-prompt-text-fill: -fx-primary-color;
+    -fx-font-size: 11px;
     /*-fx-highlight-fill: null;*/
     /*-fx-highlight-text-fill: null;*/
     -fx-border-radius: 20px;

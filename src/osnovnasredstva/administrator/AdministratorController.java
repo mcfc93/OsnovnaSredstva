@@ -119,15 +119,19 @@ public class AdministratorController implements Initializable {
             }
         });
         
-        if(PrijavaController.korisnik.getTip() == 0) {
-            new Thread() {
-                @Override
-                public void run() {
+        
+        new Thread() {
+            @Override
+            public void run() {
+                if(PrijavaController.korisnik.getTip() == 0) {
                     KorisnikDAO.loadUsernames();
-                    VrstaOSDAO.loadVrsteOS();
                 }
-            }.start();
-        } else {
+                VrstaOSDAO.loadVrsteOS();
+            }
+        }.start();
+        
+        
+        if(PrijavaController.korisnik.getTip() == 1) {
             korisnickiNaloziButton.setVisible(false);
         }
         
