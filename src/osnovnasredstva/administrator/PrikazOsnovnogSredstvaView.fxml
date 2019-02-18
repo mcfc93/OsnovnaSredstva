@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" styleClass="rootBorder" stylesheets="@../osnovnasredstva.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="osnovnasredstva.administrator.PrikazOsnovnogSredstvaController">
+   <children>
+      <AnchorPane fx:id="menuLine" prefHeight="30.0" prefWidth="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Button fx:id="closeButton" layoutX="572.0" layoutY="3.0" mnemonicParsing="false" onMouseClicked="#close" styleClass="closeButton" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
+         </children>
+      </AnchorPane>
+      <JFXButton fx:id="pdfButton" layoutX="285.0" layoutY="185.0" onAction="#pdf" text=" " />
+      <Label layoutX="24.0" layoutY="54.0" styleClass="naslovLabel" text="Osnovni podaci:" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="45.0" />
+   </children>
+</AnchorPane>

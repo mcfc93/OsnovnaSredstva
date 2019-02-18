@@ -2,8 +2,10 @@ package osnovnasredstva.DAO;
 
 import java.sql.*;
 import java.util.*;
+import java.util.logging.Level;
 import osnovnasredstva.DTO.Prostorija;
 import osnovnasredstva.util.NotFoundException;
+import osnovnasredstva.util.Util;
 
 
 public class ProstorijaDAO {
@@ -325,5 +327,28 @@ public class ProstorijaDAO {
           return (List)searchResults;
     }
 
+    private static List<Prostorija> prostorijeList = new ArrayList<>();
+	
+    public static List<Prostorija> getProstorijeList() {
+            return prostorijeList;
+    }
 
+    public static void loadProstorije() {
+        ProstorijaDAO.getProstorijeList().clear();
+        Connection c = null;
+        PreparedStatement s = null;
+        ResultSet r = null;
+        try {
+            c = Util.getConnection();
+            s = Util.prepareStatement(c,"SELECT * FROM prostorija join zgrada on (id_zgrade=zgrada.id) WHERE (prostorija.status=true and zgrada.status=true) ORDER BY prostorija.id ASC", false);
+            r = s.executeQuery();
+            while(r.next()) {
+                ProstorijaDAO.getProstorijeList().add(new Prostorija(r.getInt("id"), r.getString("sifra"), r.getString("naziv"), r.getString("opis"), r.getBoolean("status"), r.getInt("id_zgrade")));
+            }
+        } catch (SQLException e) {
+            Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+        } finally {
+            Util.close(r, s, c);
+        }
+    }
 }

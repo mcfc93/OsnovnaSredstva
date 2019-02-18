@@ -49,6 +49,6 @@
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
          </columnResizePolicy>
       </TableView>
-      <JFXButton fx:id="pdfButton" layoutX="573.0" layoutY="227.0" onAction="#pdf" />
+      <JFXButton fx:id="pdfButton" layoutX="573.0" layoutY="227.0" onAction="#pdf" text=" " />
    </children>
 </AnchorPane>

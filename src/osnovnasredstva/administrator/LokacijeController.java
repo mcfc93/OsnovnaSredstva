@@ -3,6 +3,7 @@ package osnovnasredstva.administrator;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXToggleButton;
+import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
@@ -13,8 +14,12 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
@@ -27,6 +32,9 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.StringConverter;
 import org.controlsfx.control.MaskerPane;
 import osnovnasredstva.DAO.ProstorijaDAO;
@@ -34,6 +42,7 @@ import osnovnasredstva.DAO.ZgradaDAO;
 import osnovnasredstva.DTO.Prostorija;
 import osnovnasredstva.DTO.Zgrada;
 import osnovnasredstva.prijava.PrijavaController;
+import osnovnasredstva.util.NotFoundException;
 import osnovnasredstva.util.Util;
 
 public class LokacijeController implements Initializable {
@@ -63,7 +72,10 @@ public class LokacijeController implements Initializable {
     private TableColumn<Prostorija, Prostorija> obrisiColumn;
 
     @FXML
-    private JFXButton dodajButton;
+    private JFXButton dodajProstorijuButton;
+    
+    @FXML
+    private JFXButton dodajZgraduButton;
 
     @FXML
     private TextField traziTextField;
@@ -77,7 +89,7 @@ public class LokacijeController implements Initializable {
     @FXML
     private JFXComboBox<Zgrada> zgradaComboBox;
     
-    private ObservableList<Prostorija> lokacijeList;
+    public static ObservableList<Prostorija> lokacijeList;
     
     private ObservableList<Zgrada> zgradeList;
     
@@ -106,7 +118,8 @@ public class LokacijeController implements Initializable {
         if(PrijavaController.korisnik.getTip()==1) {
             izmjeniColumn.setVisible(false);
             obrisiColumn.setVisible(false);
-            dodajButton.setVisible(false);
+            dodajProstorijuButton.setVisible(false);
+            dodajZgraduButton.setVisible(false);
             postaniNadzornikToggleButton.setVisible(false);
         } else {
             if(PrijavaController.korisnik.getTip() != PrijavaController.korisnik.getPrivilegijaTip()) {
@@ -245,8 +258,21 @@ public class LokacijeController implements Initializable {
                     	//dodavanje u kolonu
                     	setGraphic(button);
                     	button.setOnMouseClicked(event -> {
-                            //Zgrada o=getTableView().getItems().get(getIndex());
-                            System.out.println(item);
+                            try {
+                                PrikazProstorijeController.odabranaProstorija=item;
+                                
+                                Parent root = FXMLLoader.load(getClass().getResource("/osnovnasredstva/administrator/PrikazProstorijeView.fxml"));
+                                Scene scene = new Scene(root);
+                                scene.getStylesheets().add(getClass().getResource("/osnovnasredstva/osnovnasredstva.css").toExternalForm());
+                                Stage stage=new Stage();
+                                stage.setScene(scene);
+                                stage.setResizable(false);
+                                stage.initStyle(StageStyle.UNDECORATED);
+                                stage.initModality(Modality.APPLICATION_MODAL);
+                                stage.showAndWait();
+                            } catch(IOException e) {
+                                Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+                            }
                         });
                     } else {
                     	setGraphic(null);
@@ -277,8 +303,24 @@ public class LokacijeController implements Initializable {
                     	//dodavanje u kolonu
                     	setGraphic(button);
                     	button.setOnMouseClicked(event -> {
-                            //Zgrada o=getTableView().getItems().get(getIndex());
-                            System.out.println(item);
+                            try {
+                                DodavanjeProstorijeController.odabranaProstorija=item;
+                                DodavanjeProstorijeController.izmjena=true;
+                                
+                                Parent root = FXMLLoader.load(getClass().getResource("/osnovnasredstva/administrator/DodavanjeProstorijeView.fxml"));
+                                Scene scene = new Scene(root);
+                                Stage stage=new Stage();
+                                stage.setScene(scene);
+                                stage.setResizable(false);
+                                stage.initStyle(StageStyle.UNDECORATED);
+                                stage.initModality(Modality.APPLICATION_MODAL);
+                                stage.showAndWait();
+                                
+                                DodavanjeProstorijeController.izmjena=false;
+                                lokacijeTableView.refresh();
+                            } catch(IOException e) {
+                                Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+                            }
                         });
                     } else {
                     	setGraphic(null);
@@ -309,11 +351,20 @@ public class LokacijeController implements Initializable {
                     	//dodavanje u kolonu
                     	setGraphic(button);
                     	button.setOnMouseClicked(event -> {
-                            lokacijeList.remove(item);
-                            //getTableView().getItems().remove(item);
-                            lokacijeTableView.refresh();
-                            System.out.println("Obrisano: " + item);
-		            Util.getNotifications("Obavještenje", "Lokacija obrisana.", "Information").show();
+                            if(Util.showConfirmationAlert()) {
+                                try {
+                                    prostorijaDAO.delete(PrijavaController.konekcija, item);
+                                    lokacijeList.remove(item);
+                                    ProstorijaDAO.getProstorijeList().remove(item);
+                                    //getTableView().getItems().remove(item);
+                                    lokacijeTableView.refresh();
+                                    System.out.println("Obrisano: " + item);
+                                    Util.getNotifications("Obavještenje", "Lokacija obrisana.", "Information").show();
+                                } catch (SQLException | NotFoundException e) {
+                                    Util.showBugAlert();
+                                    Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+                                }
+                            }
                         });
                     } else {
                     	setGraphic(null);
@@ -359,11 +410,53 @@ public class LokacijeController implements Initializable {
         if(PrijavaController.korisnik.getPrivilegijaTip()==1) {
             izmjeniColumn.setVisible(false);
             obrisiColumn.setVisible(false);
-            dodajButton.setVisible(false);
+            dodajProstorijuButton.setVisible(false);
+            dodajZgraduButton.setVisible(false);
         } else {
             izmjeniColumn.setVisible(true);
             obrisiColumn.setVisible(true);
-            dodajButton.setVisible(true);
+            dodajProstorijuButton.setVisible(true);
+            dodajZgraduButton.setVisible(true);
         }
     }
+
+    @FXML
+    private void dodajProstoriju(ActionEvent event) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/osnovnasredstva/administrator/DodavanjeProstorijeView.fxml"));
+            Scene scene = new Scene(root);
+            Stage stage=new Stage();
+            stage.setScene(scene);
+            stage.setResizable(false);
+            stage.initStyle(StageStyle.UNDECORATED);
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.showAndWait();
+        } catch(IOException e) {
+            Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+        }
+    }
+
+    @FXML
+    private void dodajZgradu(ActionEvent event) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/osnovnasredstva/administrator/DodavanjeZgradeView.fxml"));
+            Scene scene = new Scene(root);
+            Stage stage=new Stage();
+            stage.setScene(scene);
+            stage.setResizable(false);
+            stage.initStyle(StageStyle.UNDECORATED);
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.showAndWait();
+            
+            if(DodavanjeZgradeController.zgrada != null) {
+                ZgradaDAO.getZgradeList().add(DodavanjeZgradeController.zgrada);
+                zgradeList.add(DodavanjeZgradeController.zgrada);
+                zgradaComboBox.getItems().add(DodavanjeZgradeController.zgrada);
+            }
+        } catch(IOException e) {
+            Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+        }
+    }
+    
+    
 }

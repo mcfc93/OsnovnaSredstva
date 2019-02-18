@@ -17,34 +17,40 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import osnovnasredstva.DAO.VrstaOSDAO;
-import osnovnasredstva.DTO.VrstaOS;
+import osnovnasredstva.DAO.ZgradaDAO;
+import osnovnasredstva.DTO.Zgrada;
 import osnovnasredstva.prijava.PrijavaController;
 import osnovnasredstva.util.Util;
 
-public class DodavanjeVrsteOSController implements Initializable {
+public class DodavanjeZgradeController implements Initializable {
+    
+    private static ZgradaDAO zgradaDAO = new ZgradaDAO();
+    
+    public static Zgrada zgrada=null;
 
-    private static VrstaOSDAO vrstaOSDAO = new VrstaOSDAO();
-    
-    public static VrstaOS vrstaOS=null;
-    
     @FXML
     private AnchorPane menuLine;
 
     @FXML
+    private Button closeButton;
+
+    @FXML
     private JFXButton sacuvajButton;
-    
+
     @FXML
     private JFXButton nazadButton;
+
+    @FXML
+    private JFXTextField nazivTextField;
+
+    @FXML
+    private JFXTextArea opisTextArea;
+
+    @FXML
+    private JFXTextField sifraTextField;
     
     private double xOffset=0;
     private double yOffset=0;
-    @FXML
-    private Button closeButton;
-    @FXML
-    private JFXTextField nazivTextField;
-    @FXML
-    private JFXTextArea opisTextArea;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -78,10 +84,11 @@ public class DodavanjeVrsteOSController implements Initializable {
         sacuvajButton.setDefaultButton(true);
         
         nazivTextField.getValidators().addAll(Util.requiredFieldValidator(nazivTextField), Util.lengthValidator(nazivTextField, 255));
+        sifraTextField.getValidators().addAll(Util.requiredFieldValidator(sifraTextField), Util.lengthValidator(sifraTextField, 255));
         opisTextArea.getValidators().addAll(Util.requiredFieldValidator(opisTextArea), Util.lengthValidator(opisTextArea, 1024));
         
-        vrstaOS=null;
-    }    
+        zgrada=null;
+    }
     
     @FXML
     void close(MouseEvent event) {
@@ -89,19 +96,30 @@ public class DodavanjeVrsteOSController implements Initializable {
             ((Stage)((Node)event.getSource()).getScene().getWindow()).close();
         }
     }
-    
+
     @FXML
     void sacuvaj(ActionEvent event) {
-        if(nazivTextField.validate() & opisTextArea.validate()){
+        if(sifraTextField.validate() 
+            & nazivTextField.validate()
+                & opisTextArea.validate()){
             try {
-                vrstaOS=new VrstaOS(nazivTextField.getText().trim(), opisTextArea.getText().trim());
-                vrstaOSDAO.create(PrijavaController.konekcija, vrstaOS);
-                Platform.runLater(() -> Util.getNotifications("Obavještenje", "Vrsta osnovnog sredstva dodana.", "Information").show());
+                zgrada=new Zgrada(sifraTextField.getText(), nazivTextField.getText(), opisTextArea.getText().trim());
+                zgradaDAO.create(PrijavaController.konekcija, zgrada);
+                Platform.runLater(() -> Util.getNotifications("Obavještenje", "Zgrada dodana.", "Information").show());
             }catch (SQLException e) {
                 Util.LOGGER.log(Level.SEVERE, e.toString(), e);
                 Util.showBugAlert();
             }
+            /*
+            new Thread() {
+                @Override
+                public void run() {
+                    ZgradaDAO.loadZgrade();
+                }
+            }.start();
+            */
             ((Stage)((Node)event.getSource()).getScene().getWindow()).close();
         }
     }
+    
 }

@@ -14,23 +14,6 @@
 
 <AnchorPane id="AnchorPane" fx:id="anchorPane" prefHeight="465.0" prefWidth="600.0" stylesheets="@../osnovnasredstva.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="osnovnasredstva.administrator.LokacijeController">
    <children>
-      <TableView fx:id="lokacijeTableView" layoutX="14.0" layoutY="135.0" prefHeight="316.0" prefWidth="574.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="130.0">
-        <columns>
-          <TableColumn fx:id="sifraColumn" prefWidth="75.0" text="Šifra" />
-          <TableColumn fx:id="nazivColumn" prefWidth="75.0" text="Naziv" />
-            <TableColumn fx:id="opisColumn" prefWidth="75.0" text="Opis" />
-            <TableColumn fx:id="prikaziColumn" prefWidth="75.0" text="PRIKAZI" />
-            <TableColumn fx:id="izmjeniColumn" prefWidth="75.0" text="IZMJENI" />
-            <TableColumn fx:id="obrisiColumn" prefWidth="75.0" text="OBRISI" />
-        </columns>
-         <columnResizePolicy>
-            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-         </columnResizePolicy>
-      </TableView>
-      <JFXButton fx:id="dodajButton" layoutX="110.0" layoutY="48.0" prefHeight="30.0" prefWidth="30.0" text=" " AnchorPane.leftAnchor="90.0" AnchorPane.topAnchor="30.0">
-         <tooltip>
-            <Tooltip maxWidth="125.0" text="Dodaj lokaciju?" wrapText="true" />
-         </tooltip></JFXButton>
       <TextField fx:id="traziTextField" layoutX="435.0" layoutY="78.0" maxWidth="150.0" minWidth="100.0" prefHeight="25.0" prefWidth="150.0" promptText="Traži" styleClass="searchTextField" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="90.0">
          <opaqueInsets>
             <Insets />
@@ -48,7 +31,29 @@
          <tooltip>
             <Tooltip maxWidth="125.0" text="Kreiraj PDF?" wrapText="true" />
          </tooltip></JFXButton>
+      <JFXButton id="dodajButton" fx:id="dodajProstorijuButton" layoutX="110.0" layoutY="48.0" onAction="#dodajProstoriju" prefHeight="30.0" prefWidth="30.0" text=" " AnchorPane.leftAnchor="90.0" AnchorPane.topAnchor="30.0">
+         <tooltip>
+            <Tooltip maxWidth="125.0" text="Dodaj prostoriju?" wrapText="true" />
+         </tooltip></JFXButton>
       <JFXComboBox fx:id="zgradaComboBox" layoutX="30.0" layoutY="87.0" prefHeight="25.0" prefWidth="125.0" promptText="Zgrada" AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="90.0" />
+      <JFXButton id="dodajButton" fx:id="dodajZgraduButton" layoutX="178.0" layoutY="95.0" onAction="#dodajZgradu" prefHeight="30.0" prefWidth="30.0" text=" " AnchorPane.leftAnchor="180.0" AnchorPane.topAnchor="90.0">
+         <tooltip>
+            <Tooltip maxWidth="125.0" text="Dodaj zgradu?" wrapText="true" />
+         </tooltip>
+      </JFXButton>
       <JFXToggleButton fx:id="postaniNadzornikToggleButton" layoutX="214.0" layoutY="66.0" styleClass="nadzornikToggleButton" text="Pogled nadzornika" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
+      <TableView fx:id="lokacijeTableView" layoutX="14.0" layoutY="135.0" prefHeight="316.0" prefWidth="574.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="130.0">
+        <columns>
+          <TableColumn fx:id="sifraColumn" prefWidth="75.0" text="Šifra" />
+          <TableColumn fx:id="nazivColumn" prefWidth="75.0" text="Naziv" />
+            <TableColumn fx:id="opisColumn" prefWidth="75.0" text="Opis" />
+            <TableColumn fx:id="prikaziColumn" prefWidth="75.0" text="PRIKAZI" />
+            <TableColumn fx:id="izmjeniColumn" prefWidth="75.0" text="IZMJENI" />
+            <TableColumn fx:id="obrisiColumn" prefWidth="75.0" text="OBRISI" />
+        </columns>
+         <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+         </columnResizePolicy>
+      </TableView>
    </children>
 </AnchorPane>

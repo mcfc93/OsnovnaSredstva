@@ -1,13 +1,8 @@
 package osnovnasredstva.administrator;
 
 import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXTextArea;
-import com.jfoenix.controls.JFXTextField;
 import java.net.URL;
-import java.sql.SQLException;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -17,35 +12,24 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import osnovnasredstva.DAO.VrstaOSDAO;
-import osnovnasredstva.DTO.VrstaOS;
-import osnovnasredstva.prijava.PrijavaController;
-import osnovnasredstva.util.Util;
+import osnovnasredstva.DTO.Prostorija;
 
-public class DodavanjeVrsteOSController implements Initializable {
-
-    private static VrstaOSDAO vrstaOSDAO = new VrstaOSDAO();
+public class PrikazProstorijeController implements Initializable {
     
-    public static VrstaOS vrstaOS=null;
+    public static Prostorija odabranaProstorija=null;
     
     @FXML
     private AnchorPane menuLine;
 
     @FXML
-    private JFXButton sacuvajButton;
-    
+    private Button closeButton;
+
     @FXML
-    private JFXButton nazadButton;
+    private JFXButton pdfButton;
     
     private double xOffset=0;
     private double yOffset=0;
-    @FXML
-    private Button closeButton;
-    @FXML
-    private JFXTextField nazivTextField;
-    @FXML
-    private JFXTextArea opisTextArea;
-
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         //DragAndDrop
@@ -75,33 +59,19 @@ public class DodavanjeVrsteOSController implements Initializable {
             }
         });
         
-        sacuvajButton.setDefaultButton(true);
         
-        nazivTextField.getValidators().addAll(Util.requiredFieldValidator(nazivTextField), Util.lengthValidator(nazivTextField, 255));
-        opisTextArea.getValidators().addAll(Util.requiredFieldValidator(opisTextArea), Util.lengthValidator(opisTextArea, 1024));
-        
-        vrstaOS=null;
-    }    
-    
+    }
+
     @FXML
     void close(MouseEvent event) {
         if(event.getButton().equals(MouseButton.PRIMARY)) {
             ((Stage)((Node)event.getSource()).getScene().getWindow()).close();
         }
     }
-    
+
     @FXML
-    void sacuvaj(ActionEvent event) {
-        if(nazivTextField.validate() & opisTextArea.validate()){
-            try {
-                vrstaOS=new VrstaOS(nazivTextField.getText().trim(), opisTextArea.getText().trim());
-                vrstaOSDAO.create(PrijavaController.konekcija, vrstaOS);
-                Platform.runLater(() -> Util.getNotifications("Obavještenje", "Vrsta osnovnog sredstva dodana.", "Information").show());
-            }catch (SQLException e) {
-                Util.LOGGER.log(Level.SEVERE, e.toString(), e);
-                Util.showBugAlert();
-            }
-            ((Stage)((Node)event.getSource()).getScene().getWindow()).close();
-        }
-    }
+    void pdf(ActionEvent event) {
+        
+    }    
+    
 }

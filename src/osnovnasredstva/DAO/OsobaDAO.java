@@ -2,8 +2,10 @@ package osnovnasredstva.DAO;
 
 import java.sql.*;
 import java.util.*;
+import java.util.logging.Level;
 import osnovnasredstva.DTO.Osoba;
 import osnovnasredstva.util.NotFoundException;
+import osnovnasredstva.util.Util;
 
 public class OsobaDAO {
 
@@ -327,6 +329,29 @@ public class OsobaDAO {
           return (List)searchResults;
     }
 
+    private static List<Osoba> osobeList = new ArrayList<>();
+	
+    public static List<Osoba> getOsobeList() {
+            return osobeList;
+    }
 
+    public static void loadOsobe() {
+        OsobaDAO.getOsobeList().clear();
+        Connection c = null;
+        PreparedStatement s = null;
+        ResultSet r = null;
+        try {
+            c = Util.getConnection();
+            s = Util.prepareStatement(c,"SELECT * FROM osoba WHERE status=true ORDER BY id ASC", false);
+            r = s.executeQuery();
+            while(r.next()) {
+                OsobaDAO.getOsobeList().add(new Osoba(r.getInt("id"), r.getString("ime"), r.getString("prezime"), r.getString("titula"), r.getString("jmbg"), r.getString("zaposlenje"), r.getString("telefon"), r.getString("email"), r.getString("adresa"), r.getBoolean("status")));
+            }
+        } catch (SQLException e) {
+            Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+        } finally {
+            Util.close(r, s, c);
+        }
+    }
 }
 

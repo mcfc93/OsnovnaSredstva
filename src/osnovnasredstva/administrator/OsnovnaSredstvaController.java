@@ -91,7 +91,7 @@ public class OsnovnaSredstvaController implements Initializable {
     @FXML
     private JFXButton dodajVrstuButton;
     
-    private ObservableList<OsnovnoSredstvo> osnovnaSredstvaList;
+    public static ObservableList<OsnovnoSredstvo> osnovnaSredstvaList;
     public static ObservableList<VrstaOS> vrstaOsnovnogSredstvaList;
     
     @FXML
@@ -182,7 +182,7 @@ public class OsnovnaSredstvaController implements Initializable {
             //Editable ComboBox pretraga
             @Override
             public VrstaOS fromString(String string) {
-                return vrstaComboBox.getItems().stream().filter(z -> z.getNaziv().equals(string)).findFirst().orElse(null);
+                return vrstaComboBox.getItems().stream().filter(v -> v.getNaziv().equals(string)).findFirst().orElse(null);
             }
         });
         
@@ -194,7 +194,7 @@ public class OsnovnaSredstvaController implements Initializable {
                 protected Void call() {
                     progressPane.setVisible(true);
                     try {
-                        osnovnaSredstvaList.clear();
+                        //osnovnaSredstvaList.clear();
                         if(vrstaComboBox.getValue().getNaziv() != null)
                             osnovnaSredstvaList.addAll(osnovnoSredstvoDAO.loadAll2(PrijavaController.konekcija,vrstaComboBox.getValue().getId()));
                         else
@@ -215,9 +215,9 @@ public class OsnovnaSredstvaController implements Initializable {
                 }
             }).start();
 
-            osnovnaSredstvaTableView.setItems(osnovnaSredstvaList);           
-            if(osnovnaSredstvaList.isEmpty())
-                osnovnaSredstvaTableView.setPlaceholder(new Label("Nema osnovnih sredstava za odabranu vrstu."));
+            //osnovnaSredstvaTableView.setItems(osnovnaSredstvaList);
+            //if(osnovnaSredstvaList.isEmpty())
+            //    osnovnaSredstvaTableView.setPlaceholder(new Label("Nema osnovnih sredstava za odabranu vrstu."));
         });
         
         vrstaOsnovnogSredstvaList.addAll(VrstaOSDAO.getVrsteOSList());
@@ -226,9 +226,9 @@ public class OsnovnaSredstvaController implements Initializable {
         vrstaComboBox.getSelectionModel().selectFirst();
 
         
-        osnovnaSredstvaList=FXCollections.observableArrayList();
+        //osnovnaSredstvaList=FXCollections.observableArrayList();
         osnovnaSredstvaTableView.setItems(osnovnaSredstvaList);
-        osnovnaSredstvaTableView.setPlaceholder(new Label("Odaberite prvo vrstu."));
+        osnovnaSredstvaTableView.setPlaceholder(new Label("Nema osnovnih sredstava za odabranu vrstu."));
         osnovnaSredstvaTableView.setFocusTraversable(false);
         
         invertarniBrojColumn.setCellValueFactory(new PropertyValueFactory<>("inventarniBroj"));
@@ -256,8 +256,21 @@ public class OsnovnaSredstvaController implements Initializable {
                     	//dodavanje u kolonu
                     	setGraphic(button);
                     	button.setOnMouseClicked(event -> {
-                            //OsnovnoSredstvo o=getTableView().getItems().get(getIndex());
-                            System.out.println(item);
+                            try {
+                                PrikazOsnovnogSredstvaController.odabranoOS=item;
+                                
+                                Parent root = FXMLLoader.load(getClass().getResource("/osnovnasredstva/administrator/PrikazOsnovnogSredstvaView.fxml"));
+                                Scene scene = new Scene(root);
+                                scene.getStylesheets().add(getClass().getResource("/osnovnasredstva/osnovnasredstva.css").toExternalForm());
+                                Stage stage=new Stage();
+                                stage.setScene(scene);
+                                stage.setResizable(false);
+                                stage.initStyle(StageStyle.UNDECORATED);
+                                stage.initModality(Modality.APPLICATION_MODAL);
+                                stage.showAndWait();
+                            } catch(IOException e) {
+                                Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+                            }
                         });
                     } else {
                     	setGraphic(null);
@@ -304,7 +317,7 @@ public class OsnovnaSredstvaController implements Initializable {
                                 stage.initModality(Modality.APPLICATION_MODAL);
                                 stage.showAndWait();
                                 
-                                DodavanjeOsnovnogSredstvaController.izmjena=true;
+                                DodavanjeOsnovnogSredstvaController.izmjena=false;
                                 osnovnaSredstvaTableView.refresh();
                             } catch(IOException e) {
                                 Util.LOGGER.log(Level.SEVERE, e.toString(), e);

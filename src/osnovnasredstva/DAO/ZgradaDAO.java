@@ -3,8 +3,10 @@ package osnovnasredstva.DAO;
 
 import java.sql.*;
 import java.util.*;
+import java.util.logging.Level;
 import osnovnasredstva.DTO.Zgrada;
 import osnovnasredstva.util.NotFoundException;
+import osnovnasredstva.util.Util;
 
 
 public class ZgradaDAO {
@@ -284,5 +286,28 @@ public class ZgradaDAO {
           return (List)searchResults;
     }
 
+    private static List<Zgrada> zgradeList = new ArrayList<>();
+	
+    public static List<Zgrada> getZgradeList() {
+            return zgradeList;
+    }
 
+    public static void loadZgrade() {
+        ZgradaDAO.getZgradeList().clear();
+        Connection c = null;
+        PreparedStatement s = null;
+        ResultSet r = null;
+        try {
+            c = Util.getConnection();
+            s = Util.prepareStatement(c,"SELECT * FROM zgrada WHERE status=true ORDER BY id ASC", false);
+            r = s.executeQuery();
+            while(r.next()) {
+                ZgradaDAO.getZgradeList().add(new Zgrada(r.getInt("id"), r.getString("sifra"), r.getString("naziv"), r.getString("opis"), r.getBoolean("status")));
+            }
+        } catch (SQLException e) {
+            Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+        } finally {
+            Util.close(r, s, c);
+        }
+    }
 }

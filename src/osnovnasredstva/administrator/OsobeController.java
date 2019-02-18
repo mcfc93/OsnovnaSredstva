@@ -295,6 +295,7 @@ public class OsobeController implements Initializable {
                                 try {
                                     osobaDAO.delete(PrijavaController.konekcija, item);
                                     osobeList.remove(item);
+                                    OsobaDAO.getOsobeList().remove(item);
                                     //getTableView().getItems().remove(item);
                                     osobeTableView.refresh();
                                     System.out.println("Obrisano: " + item);

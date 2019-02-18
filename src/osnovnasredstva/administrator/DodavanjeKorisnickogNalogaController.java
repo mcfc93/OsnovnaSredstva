@@ -150,7 +150,7 @@ public class DodavanjeKorisnickogNalogaController implements Initializable {
                     Platform.runLater(() -> Util.getNotifications("Obavještenje", "Korisnički nalog izmjenjen.", "Information").show());
                     if(PrijavaController.korisnik.equals(odabraniKorisnik)) {
                         PrijavaController.korisnik=odabraniKorisnik;
-                        System.out.println(PrijavaController.korisnik);
+                        //System.out.println(PrijavaController.korisnik);
                     }
                 } catch (SQLException | NotFoundException e) {
                     Util.showBugAlert();

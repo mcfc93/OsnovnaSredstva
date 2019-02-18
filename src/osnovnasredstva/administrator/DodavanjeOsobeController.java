@@ -157,7 +157,13 @@ public class DodavanjeOsobeController implements Initializable {
                 }
                 osobeList.add(DodavanjeOsobeController.odabranaOsoba);
             }
-
+            
+            new Thread() {
+                @Override
+                public void run() {
+                    OsobaDAO.loadOsobe();
+                }
+            }.start();
 
             ((Stage)((Node)event.getSource()).getScene().getWindow()).close();
         }

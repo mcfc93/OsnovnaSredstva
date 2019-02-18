@@ -121,5 +121,31 @@ public class Osoba {
     public String toString() {
         return "Osoba{" + "id=" + id + ", ime=" + ime + ", prezime=" + prezime + ", titula=" + titula + ", jmbg=" + jmbg + ", zaposlenje=" + zaposlenje + ", telefon=" + telefon + ", email=" + email + ", adresa=" + adresa + ", status=" + status + '}';
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 89 * hash + this.id;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Osoba other = (Osoba) obj;
+        if (this.id != other.id) {
+            return false;
+        }
+        return true;
+    }
+    
     
 }
