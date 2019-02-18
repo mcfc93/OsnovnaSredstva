@@ -23,6 +23,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
@@ -234,11 +235,15 @@ public class PrikazOsobeController implements Initializable {
             protected void succeeded(){
                 super.succeeded();
                 progressPane.setVisible(false);
-                Util.getNotifications("Obavještenje", "Izvještaj kreiran.", "Information").show();
-                try {
-                    Desktop.getDesktop().open(new File(naziv));
-                } catch (IOException e) {
-                    Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+                Platform.runLater(() -> Util.getNotifications("Obavještenje", "Izvještaj kreiran.", "Information").show());
+                if(Desktop.isDesktopSupported()) {
+                    new Thread(() -> {
+                        try {
+                            Desktop.getDesktop().open(new File(naziv));
+                        } catch (IOException e) {
+                            Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+                        }
+                    }).start();
                 }
             }
         }).start();

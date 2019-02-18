@@ -443,11 +443,15 @@ public class OsobeController implements Initializable {
             protected void succeeded(){
                 super.succeeded();
                 progressPane.setVisible(false);
-                Util.getNotifications("Obavještenje", "Izvještaj kreiran.", "Information").show();
-            try {
-                    Desktop.getDesktop().open(new File(naziv));
-                } catch (IOException e) {
-                    Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+                Platform.runLater(() -> Util.getNotifications("Obavještenje", "Izvještaj kreiran.", "Information").show());
+                if(Desktop.isDesktopSupported()) {
+                    new Thread(() -> {
+                        try {
+                            Desktop.getDesktop().open(new File(naziv));
+                        } catch (IOException e) {
+                            Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+                        }
+                    }).start();
                 }
             }
         }).start();
