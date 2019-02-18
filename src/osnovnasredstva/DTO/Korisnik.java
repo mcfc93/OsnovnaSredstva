@@ -1,6 +1,8 @@
 package osnovnasredstva.DTO;
 
-public class Korisnik {
+import java.io.Serializable;
+
+public class Korisnik implements Serializable {
 
     private int id;
     private String korisnickoIme;

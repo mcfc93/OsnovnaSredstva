@@ -24,9 +24,9 @@
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
          </columnResizePolicy>
       </TableView>
-      <JFXButton fx:id="dodajButton" layoutX="32.0" layoutY="39.0" onAction="#dodaj" prefHeight="30.0" prefWidth="30.0" text=" " AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="30.0">
+      <JFXButton id="dodajOsobuButton" fx:id="dodajButton" layoutX="32.0" layoutY="39.0" onAction="#dodaj" prefHeight="30.0" prefWidth="30.0" text=" " AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="30.0">
          <tooltip>
-            <Tooltip maxWidth="125.0" text="Dodaj nalog?" wrapText="true" />
+            <Tooltip maxWidth="125.0" text="Dodaj korisnički nalog?" wrapText="true" />
          </tooltip></JFXButton>
       <TextField fx:id="traziTextField" layoutX="430.0" layoutY="41.0" maxWidth="150.0" minWidth="100.0" prefHeight="25.0" prefWidth="150.0" promptText="Traži" styleClass="searchTextField" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="30.0">
          <opaqueInsets>

@@ -1,5 +1,9 @@
 package osnovnasredstva.DAO;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -324,20 +328,19 @@ public class KorisnikDAO {
                 sb.append(String.format("%02x", b));
             }
             lozinka=sb.toString();
-            System.out.println(lozinka);
+            System.out.println("hash=" + lozinka);
         } catch(NoSuchAlgorithmException e) {
             Util.LOGGER.log(Level.SEVERE, e.toString(), e);
         }
         return lozinka;
     }
     
-    public static Korisnik prijava(String korisnickoIme, String lozinka) throws SQLException {
+    public static final String SER_FILE="logs/korisnik.ser";
+    
+    public static Korisnik prijava(String korisnickoIme, String lozinka, boolean zapamtiMe) throws SQLException {
         Korisnik korisnik=null;
-        //trazenje hash vrijednosti lozinke
-        //String salt=generisiSalt();
-        //lozinka=hash(lozinka, salt);
-        //System.out.println(lozinka);
         String salt=null;
+        String hash=null;
         
         String sql="";
         Connection c = null;
@@ -351,12 +354,12 @@ public class KorisnikDAO {
             s=Util.prepareStatement(c, sql, false, korisnickoIme, 1);
             r=s.executeQuery();
             if(r.next()) {
-                System.out.println(r.getString(1) + "#" + r.getString(2));
+                System.out.println("salt=" + r.getString(1) + "\nhash=" + r.getString(2));
                 salt=r.getString("salt");
-                lozinka=hash(lozinka, salt);
-                if(lozinka.equals(r.getString("hash_lozinke"))) {
+                hash=hash(lozinka, salt);
+                if(hash.equals(r.getString("hash_lozinke"))) {
                     //ucitavanje podataka o korisniku iz baze
-                    korisnik=new Korisnik(r.getInt("id"), korisnickoIme, lozinka, salt, r.getInt("tip"), r.getBoolean("status"));
+                    korisnik=new Korisnik(r.getInt("id"), korisnickoIme, hash, salt, r.getInt("tip"), r.getBoolean("status"));
                     /*
                     if(0 == r.getInt("tip")) {
                         korisnik.zaposleni=new Administrator();
@@ -366,6 +369,33 @@ public class KorisnikDAO {
                         korisnik.zaposleni.selectZaposleni(korisnik.getKorisnickoIme());
                     }
                     */
+                    //Serijalizacija ako je cekirano Remember me
+                    if(zapamtiMe) {
+                        try (ObjectOutputStream oos = 
+                                new ObjectOutputStream(
+                                    new FileOutputStream(SER_FILE)
+                                )
+                            )
+                        {
+                            /*****************************
+                             * 
+                             * LOZINKA BASE64
+                             * 
+                             *****************************/
+                            korisnik.setHashLozinke(Base64.getEncoder().encodeToString(lozinka.getBytes()));
+
+                            oos.writeObject(korisnik);
+                        } catch(IOException e) {
+                            Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+                        }
+                    } else {
+                        File f=new File(SER_FILE);
+                        if(f.exists()) {
+                            f.delete();
+                        }
+                    }
+                    korisnik.setHashLozinke(hash);
+                    lozinka="";
 System.out.println(korisnik);
                 }
             }

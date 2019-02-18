@@ -246,14 +246,9 @@ public class OsnovnaSredstvaController implements Initializable {
                 protected void updateItem(OsnovnoSredstvo item, boolean empty) {
                     super.updateItem(item, empty);
                     if (!empty) {
-                        //System.out.println(item);
-                        //postavljanje CSS
                     	button.getStyleClass().addAll("buttonTable", "buttonTableShow");
-                    	//postavljanje opisa
                     	button.setTooltip(new Tooltip("Prikaži?"));
                     	button.getTooltip().setAutoHide(false);
-                    	//button.getTooltip().setShowDelay(Duration.seconds(0.5));
-                    	//dodavanje u kolonu
                     	setGraphic(button);
                     	button.setOnMouseClicked(event -> {
                             try {
@@ -291,19 +286,11 @@ public class OsnovnaSredstvaController implements Initializable {
                 protected void updateItem(OsnovnoSredstvo item, boolean empty) {
                     super.updateItem(item, empty);
                     if (!empty) {
-                        //System.out.println(item);
-                        //postavljanje CSS
                     	button.getStyleClass().addAll("buttonTable", "buttonTableEdit");
-                    	//postavljanje opisa
                     	button.setTooltip(new Tooltip("Izmjeni?"));
                     	button.getTooltip().setAutoHide(false);
-                    	//button.getTooltip().setShowDelay(Duration.seconds(0.5));  //since JDK9
-                    	//dodavanje u kolonu
                     	setGraphic(button);
                     	button.setOnMouseClicked(event -> {
-                            //OsnovnoSredstvo o=getTableView().getItems().get(getIndex());
-                            System.out.println(item);
-                            
                             try {
                                 DodavanjeOsnovnogSredstvaController.odabranoOS=item;
                                 DodavanjeOsnovnogSredstvaController.izmjena=true;
@@ -342,14 +329,9 @@ public class OsnovnaSredstvaController implements Initializable {
                 protected void updateItem(OsnovnoSredstvo item, boolean empty) {
                     super.updateItem(item, empty);
                     if (!empty) {
-                        //System.out.println(item);
-                        //postavljanje CSS
                     	button.getStyleClass().addAll("buttonTable", "buttonTableDelete");
-                    	//postavljanje opisa
                     	button.setTooltip(new Tooltip("Obriši?"));
                     	button.getTooltip().setAutoHide(false);
-                    	//button.getTooltip().setShowDelay(Duration.seconds(0.5));
-                    	//dodavanje u kolonu
                     	setGraphic(button);
                     	button.setOnMouseClicked(event -> {
                             if(Util.showConfirmationAlert()) {

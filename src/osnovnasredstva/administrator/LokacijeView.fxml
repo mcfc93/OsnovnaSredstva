@@ -36,7 +36,7 @@
             <Tooltip maxWidth="125.0" text="Dodaj prostoriju?" wrapText="true" />
          </tooltip></JFXButton>
       <JFXComboBox fx:id="zgradaComboBox" layoutX="30.0" layoutY="87.0" prefHeight="25.0" prefWidth="125.0" promptText="Zgrada" AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="90.0" />
-      <JFXButton id="dodajButton" fx:id="dodajZgraduButton" layoutX="178.0" layoutY="95.0" onAction="#dodajZgradu" prefHeight="30.0" prefWidth="30.0" text=" " AnchorPane.leftAnchor="180.0" AnchorPane.topAnchor="90.0">
+      <JFXButton id="dodajButton" fx:id="dodajZgraduButton" layoutX="178.0" layoutY="95.0" onAction="#dodajZgradu" prefHeight="30.0" prefWidth="30.0" text=" " AnchorPane.leftAnchor="185.0" AnchorPane.topAnchor="90.0">
          <tooltip>
             <Tooltip maxWidth="125.0" text="Dodaj zgradu?" wrapText="true" />
          </tooltip>

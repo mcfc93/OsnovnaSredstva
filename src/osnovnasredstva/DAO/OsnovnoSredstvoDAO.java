@@ -4,7 +4,6 @@ package osnovnasredstva.DAO;
 import java.sql.*;
 import java.util.*;
 import osnovnasredstva.DTO.OsnovnoSredstvo;
-import osnovnasredstva.DTO.Prostorija;
 import osnovnasredstva.util.NotFoundException;
 
 

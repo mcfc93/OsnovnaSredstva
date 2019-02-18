@@ -6,6 +6,7 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
+import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -79,7 +80,6 @@ public class KorisnickiNaloziController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        dodajButton.setTooltip(new Tooltip("Dodaj korisnika"));
         clearImageView.setVisible(false);
 		
         traziTextField.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue)->{
@@ -108,6 +108,9 @@ public class KorisnickiNaloziController implements Initializable {
             protected void succeeded(){
                 super.succeeded();
                 progressPane.setVisible(false);
+                Platform.runLater(() -> {
+                    korisnickiNaloziTableView.refresh();
+                });
             }
         }).start();
         
@@ -134,18 +137,12 @@ public class KorisnickiNaloziController implements Initializable {
                 protected void updateItem(Korisnik item, boolean empty) {
                     super.updateItem(item, empty);
                     if (!empty) {
-                        //System.out.println(item);
-                        //postavljanje CSS
-                    	button.getStyleClass().addAll("buttonTable", "buttonTableShow");
-                    	//postavljanje opisa
+                        button.getStyleClass().addAll("buttonTable", "buttonTableShow");
                     	button.setTooltip(new Tooltip("Prikaži?"));
                     	button.getTooltip().setAutoHide(false);
-                    	//button.getTooltip().setShowDelay(Duration.seconds(0.5));
-                    	//dodavanje u kolonu
                     	setGraphic(button);
                     	button.setOnMouseClicked(event -> {
-                            //Korisnik o=getTableView().getItems().get(getIndex());
-                            System.out.println(item);
+                            //
                         });
                     } else {
                     	setGraphic(null);
@@ -166,18 +163,11 @@ public class KorisnickiNaloziController implements Initializable {
                 protected void updateItem(Korisnik item, boolean empty) {
                     super.updateItem(item, empty);
                     if (!empty) {
-                        //System.out.println(item);
-                        //postavljanje CSS
-                    	button.getStyleClass().addAll("buttonTable", "buttonTableEdit");
-                    	//postavljanje opisa
+                        button.getStyleClass().addAll("buttonTable", "buttonTableEdit");
                     	button.setTooltip(new Tooltip("Izmjeni?"));
                     	button.getTooltip().setAutoHide(false);
-                    	//button.getTooltip().setShowDelay(Duration.seconds(0.5));  //since JDK9
-                    	//dodavanje u kolonu
                     	setGraphic(button);
                     	button.setOnMouseClicked(event -> {
-                            //Korisnik o=getTableView().getItems().get(getIndex());
-                            System.out.println(item);
                             try {
                                 DodavanjeKorisnickogNalogaController.odabraniKorisnik=item;
                                 DodavanjeKorisnickogNalogaController.izmjena=true;
@@ -216,14 +206,9 @@ public class KorisnickiNaloziController implements Initializable {
                 protected void updateItem(Korisnik item, boolean empty) {
                     super.updateItem(item, empty);
                     if (!empty) {
-                        //System.out.println(item);
-                        //postavljanje CSS
-                    	button.getStyleClass().addAll("buttonTable", "buttonTableDelete");
-                    	//postavljanje opisa
+                        button.getStyleClass().addAll("buttonTable", "buttonTableDelete");
                     	button.setTooltip(new Tooltip("Obriši?"));
                     	button.getTooltip().setAutoHide(false);
-                    	//button.getTooltip().setShowDelay(Duration.seconds(0.5));
-                    	//dodavanje u kolonu
                     	setGraphic(button);
                     	button.setOnMouseClicked(event -> {
                             if(Util.showConfirmationAlert()) {
@@ -232,7 +217,7 @@ public class KorisnickiNaloziController implements Initializable {
                                     korisnickiNaloziList.remove(item);
                                     //getTableView().getItems().remove(item);
                                     korisnickiNaloziTableView.refresh();
-                                    //System.out.println("Obrisano: " + item);
+                                    System.out.println("Obrisano: " + item);
                                     Util.getNotifications("Obavještenje", "Korisnički nalog obrisan.", "Information").show();
                                 } catch (SQLException | NotFoundException e) {
                                     Util.showBugAlert();
@@ -285,7 +270,5 @@ public class KorisnickiNaloziController implements Initializable {
         } catch(IOException e) {
             Util.LOGGER.log(Level.SEVERE, e.toString(), e);
         }
-        //korisnickiNaloziTableView.refresh();
-        
     }
 }

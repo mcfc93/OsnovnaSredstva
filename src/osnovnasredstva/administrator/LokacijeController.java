@@ -248,14 +248,9 @@ public class LokacijeController implements Initializable {
                 protected void updateItem(Prostorija item, boolean empty) {
                     super.updateItem(item, empty);
                     if (!empty) {
-                        //System.out.println(item);
-                        //postavljanje CSS
-                    	button.getStyleClass().addAll("buttonTable", "buttonTableShow");
-                    	//postavljanje opisa
+                        button.getStyleClass().addAll("buttonTable", "buttonTableShow");
                     	button.setTooltip(new Tooltip("Prikaži?"));
                     	button.getTooltip().setAutoHide(false);
-                    	//button.getTooltip().setShowDelay(Duration.seconds(0.5));
-                    	//dodavanje u kolonu
                     	setGraphic(button);
                     	button.setOnMouseClicked(event -> {
                             try {
@@ -293,14 +288,9 @@ public class LokacijeController implements Initializable {
                 protected void updateItem(Prostorija item, boolean empty) {
                     super.updateItem(item, empty);
                     if (!empty) {
-                        //System.out.println(item);
-                        //postavljanje CSS
-                    	button.getStyleClass().addAll("buttonTable", "buttonTableEdit");
-                    	//postavljanje opisa
+                        button.getStyleClass().addAll("buttonTable", "buttonTableEdit");
                     	button.setTooltip(new Tooltip("Izmjeni?"));
                     	button.getTooltip().setAutoHide(false);
-                    	//button.getTooltip().setShowDelay(Duration.seconds(0.5));  //since JDK9
-                    	//dodavanje u kolonu
                     	setGraphic(button);
                     	button.setOnMouseClicked(event -> {
                             try {
@@ -341,14 +331,9 @@ public class LokacijeController implements Initializable {
                 protected void updateItem(Prostorija item, boolean empty) {
                     super.updateItem(item, empty);
                     if (!empty) {
-                        //System.out.println(item);
-                        //postavljanje CSS
-                    	button.getStyleClass().addAll("buttonTable", "buttonTableDelete");
-                    	//postavljanje opisa
+                        button.getStyleClass().addAll("buttonTable", "buttonTableDelete");
                     	button.setTooltip(new Tooltip("Obriši?"));
                     	button.getTooltip().setAutoHide(false);
-                    	//button.getTooltip().setShowDelay(Duration.seconds(0.5));
-                    	//dodavanje u kolonu
                     	setGraphic(button);
                     	button.setOnMouseClicked(event -> {
                             if(Util.showConfirmationAlert()) {

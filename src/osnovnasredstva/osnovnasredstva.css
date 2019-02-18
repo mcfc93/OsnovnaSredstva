@@ -998,7 +998,7 @@
 }
 
 #dodajButton {
-    -fx-background-image: url('img/dodaj.png');
+    -fx-background-image: url('img/add.png');
     -fx-background-position: center;
     -fx-background-repeat: no-repeat;
     -fx-background-size: 25,25;

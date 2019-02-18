@@ -24,6 +24,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
+import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -149,6 +150,9 @@ public class OsobeController implements Initializable {
             protected void succeeded(){
                 super.succeeded();
                 progressPane.setVisible(false);
+                Platform.runLater(() -> {
+                    osobeTableView.refresh();
+                });
             }
         };
         new Thread(task).start();
@@ -182,19 +186,11 @@ public class OsobeController implements Initializable {
                 protected void updateItem(Osoba item, boolean empty) {
                     super.updateItem(item, empty);
                     if (!empty) {
-                        //System.out.println(item);
-                        //postavljanje CSS
                     	button.getStyleClass().addAll("buttonTable", "buttonTableShow");
-                    	//postavljanje opisa
                     	button.setTooltip(new Tooltip("Prikaži?"));
                     	button.getTooltip().setAutoHide(false);
-                    	//button.getTooltip().setShowDelay(Duration.seconds(0.5));
-                    	//dodavanje u kolonu
                     	setGraphic(button);
                     	button.setOnMouseClicked(event -> {
-                            //Osoba o=getTableView().getItems().get(getIndex());
-                            System.out.println(item);
-                            
                             try {
                                 PrikazOsobeController.odabranaOsoba=item;
                                 
@@ -230,19 +226,11 @@ public class OsobeController implements Initializable {
                 protected void updateItem(Osoba item, boolean empty) {
                     super.updateItem(item, empty);
                     if (!empty) {
-                        //System.out.println(item);
-                        //postavljanje CSS
                     	button.getStyleClass().addAll("buttonTable", "buttonTableEdit");
-                    	//postavljanje opisa
                     	button.setTooltip(new Tooltip("Izmjeni?"));
                     	button.getTooltip().setAutoHide(false);
-                    	//button.getTooltip().setShowDelay(Duration.seconds(0.5));  //since JDK9
-                    	//dodavanje u kolonu
                     	setGraphic(button);
                     	button.setOnMouseClicked(event -> {
-                            //Osoba o=getTableView().getItems().get(getIndex());
-                            System.out.println(item);
-                            
                             try {
                                 DodavanjeOsobeController.odabranaOsoba=item;
                                 DodavanjeOsobeController.izmjena=true;
@@ -281,14 +269,9 @@ public class OsobeController implements Initializable {
                 protected void updateItem(Osoba item, boolean empty) {
                     super.updateItem(item, empty);
                     if (!empty) {
-                        //System.out.println(item);
-                        //postavljanje CSS
                     	button.getStyleClass().addAll("buttonTable", "buttonTableDelete");
-                    	//postavljanje opisa
                     	button.setTooltip(new Tooltip("Obriši?"));
                     	button.getTooltip().setAutoHide(false);
-                    	//button.getTooltip().setShowDelay(Duration.seconds(0.5));
-                    	//dodavanje u kolonu
                     	setGraphic(button);
                     	button.setOnMouseClicked(event -> {
                             if(Util.showConfirmationAlert()) {
