@@ -136,6 +136,32 @@ public class LokacijeController implements Initializable {
         sortedList = new SortedList<>(filteredList);
         sortedList.comparatorProperty().bind(lokacijeTableView.comparatorProperty());
         
+        MaskerPane progressPane=Util.getMaskerPane(anchorPane);
+        new Thread(new Task<Void>() {
+            @Override
+            protected Void call() {
+                progressPane.setVisible(true);
+                try {
+                    zgradeList.addAll(zgradaDAO.loadAll(PrijavaController.konekcija));
+                    lokacijeList.addAll(prostorijaDAO.loadAll(PrijavaController.konekcija));
+                } catch (SQLException e) {
+                    Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+                }
+                return null;
+            }
+
+            @Override
+            protected void succeeded(){
+                super.succeeded();
+                progressPane.setVisible(false);
+                Platform.runLater(() -> {
+                    zgradeList.add(0, new Zgrada());
+                    zgradaComboBox.getItems().addAll(zgradeList);
+                    zgradaComboBox.getSelectionModel().selectFirst();
+                });
+            }
+        }).start();
+        
         zgradaComboBox.setVisibleRowCount(5);
 
         //zgradeList.add(0, null);
@@ -173,23 +199,25 @@ public class LokacijeController implements Initializable {
             }
         });
         
-        MaskerPane progressPane=Util.getMaskerPane(anchorPane);
-
         zgradaComboBox.valueProperty().addListener((observable, oldValue, newValue) -> {
             if(newValue != null) {
                 new Thread(new Task<Void>() {
                     @Override
                     protected Void call() {
                         progressPane.setVisible(true);
+                        filteredList.setPredicate(prostorija -> zgradaComboBox.getValue().getNaziv() != null? prostorija.getIdZgrade() == zgradaComboBox.getValue().getId(): true);
+                        /*
                         try {
                             lokacijeList.clear();
                             if(zgradaComboBox.getValue().getNaziv() != null)
-                                lokacijeList.addAll(prostorijaDAO.loadAll2(PrijavaController.konekcija,zgradaComboBox.getValue().getId()));
+                                filteredList.setPredicate(prostorija -> prostorija.getIdZgrade() == zgradaComboBox.getValue().getId());
+                                //lokacijeList.addAll(prostorijaDAO.loadAll2(PrijavaController.konekcija,zgradaComboBox.getValue().getId()));
                             else
                                 lokacijeList.addAll(prostorijaDAO.loadAll(PrijavaController.konekcija));
                         } catch (SQLException e) {
                             Util.LOGGER.log(Level.SEVERE, e.toString(), e);
                         }
+                        */
                         return null;
                     }
                     
@@ -203,37 +231,8 @@ public class LokacijeController implements Initializable {
                     }
                 }).start();
 
-                //lokacijeTableView.setItems(lokacijeList);           
-                //if(lokacijeList.isEmpty())
-                //    lokacijeTableView.setPlaceholder(new Label("Nema prostorija u odabranoj zgradi."));
             }
         });
-        
-        new Thread(new Task<Void>() {
-            @Override
-            protected Void call() {
-                progressPane.setVisible(true);
-                try {
-                    zgradeList.addAll(zgradaDAO.loadAll(PrijavaController.konekcija));
-                    //lokacijeList.addAll(prostorijaDAO.loadAll(PrijavaController.konekcija));
-                } catch (SQLException e) {
-                    Util.LOGGER.log(Level.SEVERE, e.toString(), e);
-                }
-                return null;
-            }
-
-            @Override
-            protected void succeeded(){
-                super.succeeded();
-                progressPane.setVisible(false);
-                Platform.runLater(() -> {
-                    zgradeList.add(0, new Zgrada());
-                    zgradaComboBox.getItems().addAll(zgradeList);
-                    zgradaComboBox.getSelectionModel().selectFirst();
-                });
-            }
-        }).start();
-        
         
         lokacijeTableView.setItems(sortedList);
         lokacijeTableView.setPlaceholder(new Label("Nema prostorija u odabranoj zgradi."));

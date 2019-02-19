@@ -132,15 +132,15 @@ public class OsnovnaSredstvaController implements Initializable {
         filteredList = new FilteredList(osnovnaSredstvaList);
         sortedList = new SortedList<>(filteredList);
         sortedList.comparatorProperty().bind(osnovnaSredstvaTableView.comparatorProperty());
-        /*
+        
         MaskerPane progressPane=Util.getMaskerPane(anchorPane);
-        Task<Void> task = new Task<Void>() {
+        new Thread(new Task<Void>() {
             @Override
             protected Void call() {
                 progressPane.setVisible(true);
                 try {
-                    vrstaOsnovnogSredstvaList.addAll(vrstaOSDAO.loadAll(PrijavaController.konekcija));
-                    //osnovnaSredstvaList.addAll(osnovnoSredstvoDAO.loadAll(PrijavaController.konekcija)); 
+                    //vrstaOsnovnogSredstvaList.addAll(vrstaOSDAO.loadAll(PrijavaController.konekcija));
+                    osnovnaSredstvaList.addAll(osnovnoSredstvoDAO.loadAll(PrijavaController.konekcija)); 
                 } catch (SQLException e) {
                     Util.LOGGER.log(Level.SEVERE, e.toString(), e);
                 }
@@ -152,14 +152,14 @@ public class OsnovnaSredstvaController implements Initializable {
                 super.succeeded();
                 progressPane.setVisible(false);
                 Platform.runLater(() -> {
+                    vrstaOsnovnogSredstvaList.addAll(VrstaOSDAO.getVrsteOSList());
                     vrstaOsnovnogSredstvaList.add(0, new VrstaOS());
                     vrstaComboBox.getItems().addAll(vrstaOsnovnogSredstvaList);
                     vrstaComboBox.getSelectionModel().selectFirst();
                 });
             }
-        };
-        new Thread(task).start();
-        */
+        }).start();
+        
         vrstaComboBox.setVisibleRowCount(5);
 
         vrstaComboBox.setCellFactory(param -> {
@@ -196,44 +196,43 @@ public class OsnovnaSredstvaController implements Initializable {
         });
         
         vrstaComboBox.valueProperty().addListener((observable, oldValue, newValue) -> {
-            osnovnaSredstvaList.clear();
-            MaskerPane progressPane=Util.getMaskerPane(anchorPane);
-            new Thread(new Task<Void>() {
-                @Override
-                protected Void call() {
-                    progressPane.setVisible(true);
-                    try {
-                        //osnovnaSredstvaList.clear();
-                        if(vrstaComboBox.getValue().getNaziv() != null)
-                            osnovnaSredstvaList.addAll(osnovnoSredstvoDAO.loadAll2(PrijavaController.konekcija,vrstaComboBox.getValue().getId()));
-                        else
-                            osnovnaSredstvaList.addAll(osnovnoSredstvoDAO.loadAll(PrijavaController.konekcija));
-                    } catch (SQLException e) {
-                        Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+            if(newValue != null) {
+                new Thread(new Task<Void>() {
+                    @Override
+                    protected Void call() {
+                        progressPane.setVisible(true);
+                        filteredList.setPredicate(osnovnoSredstvo -> vrstaComboBox.getValue().getNaziv() != null? osnovnoSredstvo.getIdVrste()== vrstaComboBox.getValue().getId(): true);
+                        /*
+                        try {
+                            osnovnaSredstvaList.clear();
+                            if(vrstaComboBox.getValue().getNaziv() != null)
+                                osnovnaSredstvaList.addAll(osnovnoSredstvoDAO.loadAll2(PrijavaController.konekcija,vrstaComboBox.getValue().getId()));
+                            else
+                                osnovnaSredstvaList.addAll(osnovnoSredstvoDAO.loadAll(PrijavaController.konekcija));
+                        } catch (SQLException e) {
+                            Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+                        }
+                        */
+                        return null;
                     }
-                    return null;
-                }
 
-                @Override
-                protected void succeeded(){
-                    super.succeeded();
-                    progressPane.setVisible(false);
-                    Platform.runLater(() -> {
-                        osnovnaSredstvaTableView.refresh();
-                    });
-                }
-            }).start();
-
-            //osnovnaSredstvaTableView.setItems(osnovnaSredstvaList);
-            //if(osnovnaSredstvaList.isEmpty())
-            //    osnovnaSredstvaTableView.setPlaceholder(new Label("Nema osnovnih sredstava za odabranu vrstu."));
+                    @Override
+                    protected void succeeded(){
+                        super.succeeded();
+                        progressPane.setVisible(false);
+                        Platform.runLater(() -> {
+                            osnovnaSredstvaTableView.refresh();
+                        });
+                    }
+                }).start();
+            }
         });
-        
+        /*
         vrstaOsnovnogSredstvaList.addAll(VrstaOSDAO.getVrsteOSList());
         vrstaOsnovnogSredstvaList.add(0, new VrstaOS());
         vrstaComboBox.getItems().addAll(vrstaOsnovnogSredstvaList);
         vrstaComboBox.getSelectionModel().selectFirst();
-
+        */
         
         //osnovnaSredstvaList=FXCollections.observableArrayList();
         osnovnaSredstvaTableView.setItems(sortedList);

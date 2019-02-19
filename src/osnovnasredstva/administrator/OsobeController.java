@@ -114,7 +114,7 @@ public class OsobeController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         clearImageView.setVisible(false);
-		
+        
         traziTextField.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue)->{
             filteredList.setPredicate(osoba -> osoba.getIme().toLowerCase().contains(newValue.toLowerCase()) || osoba.getPrezime().toLowerCase().contains(newValue.toLowerCase()));
             if(!newValue.isEmpty()) {
@@ -141,7 +141,7 @@ public class OsobeController implements Initializable {
         sortedList.comparatorProperty().bind(osobeTableView.comparatorProperty());
 
         MaskerPane progressPane=Util.getMaskerPane(anchorPane);
-        Task<Void> task = new Task<Void>() {
+        new Thread(new Task<Void>() {
             @Override
             protected Void call() {
                 progressPane.setVisible(true);
@@ -160,8 +160,7 @@ public class OsobeController implements Initializable {
                     osobeTableView.refresh();
                 });
             }
-        };
-        new Thread(task).start();
+        }).start();
         
         
         osobeTableView.setItems(sortedList);
