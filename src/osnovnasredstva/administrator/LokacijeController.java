@@ -13,6 +13,8 @@ import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -89,9 +91,6 @@ public class LokacijeController implements Initializable {
     @FXML
     private JFXComboBox<Zgrada> zgradaComboBox;
     
-    public static ObservableList<Prostorija> lokacijeList;
-    
-    private ObservableList<Zgrada> zgradeList;
     
     private static ZgradaDAO zgradaDAO = new ZgradaDAO();
     
@@ -100,14 +99,18 @@ public class LokacijeController implements Initializable {
     @FXML
     private JFXToggleButton postaniNadzornikToggleButton;
     
-    /**
-     * Initializes the controller class.
-     */
+    private static ObservableList<Zgrada> zgradeList;
+    
+    public static ObservableList<Prostorija> lokacijeList;
+    private static FilteredList<Prostorija> filteredList;
+    SortedList<Prostorija> sortedList;
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         clearImageView.setVisible(false);
 		
         traziTextField.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue)->{
+            filteredList.setPredicate(prostorija -> prostorija.getNaziv().toLowerCase().contains(newValue.toLowerCase()));
             if(!newValue.isEmpty()) {
                 clearImageView.setVisible(true);
             } else {
@@ -127,8 +130,11 @@ public class LokacijeController implements Initializable {
             }
         }
 
-        zgradeList=FXCollections.observableArrayList();
-        lokacijeList=FXCollections.observableArrayList();
+        zgradeList = FXCollections.observableArrayList();
+        lokacijeList = FXCollections.observableArrayList();
+        filteredList = new FilteredList(lokacijeList);
+        sortedList = new SortedList<>(filteredList);
+        sortedList.comparatorProperty().bind(lokacijeTableView.comparatorProperty());
         
         zgradaComboBox.setVisibleRowCount(5);
 
@@ -181,7 +187,7 @@ public class LokacijeController implements Initializable {
                                 lokacijeList.addAll(prostorijaDAO.loadAll2(PrijavaController.konekcija,zgradaComboBox.getValue().getId()));
                             else
                                 lokacijeList.addAll(prostorijaDAO.loadAll(PrijavaController.konekcija));
-                            } catch (SQLException e) {
+                        } catch (SQLException e) {
                             Util.LOGGER.log(Level.SEVERE, e.toString(), e);
                         }
                         return null;
@@ -197,9 +203,9 @@ public class LokacijeController implements Initializable {
                     }
                 }).start();
 
-                lokacijeTableView.setItems(lokacijeList);           
-                if(lokacijeList.isEmpty())
-                    lokacijeTableView.setPlaceholder(new Label("Nema prostorija u odabranoj zgradi."));
+                //lokacijeTableView.setItems(lokacijeList);           
+                //if(lokacijeList.isEmpty())
+                //    lokacijeTableView.setPlaceholder(new Label("Nema prostorija u odabranoj zgradi."));
             }
         });
         
@@ -229,8 +235,8 @@ public class LokacijeController implements Initializable {
         }).start();
         
         
-        lokacijeTableView.setItems(lokacijeList);
-        lokacijeTableView.setPlaceholder(new Label("Odaberite prvo zgradu."));
+        lokacijeTableView.setItems(sortedList);
+        lokacijeTableView.setPlaceholder(new Label("Nema prostorija u odabranoj zgradi."));
         lokacijeTableView.setFocusTraversable(false);
         
         sifraColumn.setCellValueFactory(new PropertyValueFactory<>("sifra"));
@@ -358,6 +364,17 @@ public class LokacijeController implements Initializable {
             };
             return cell;
         });
+        
+        Util.preventColumnReordering(lokacijeTableView);
+        
+        sifraColumn.setMinWidth(50);
+        sifraColumn.setMaxWidth(1000);
+        
+        nazivColumn.setMinWidth(100);
+        nazivColumn.setMaxWidth(3000);
+        
+        opisColumn.setMinWidth(100);
+        opisColumn.setMaxWidth(4000);
         
         prikaziColumn.setText("");
         prikaziColumn.setMinWidth(35);

@@ -11,6 +11,8 @@ import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -74,15 +76,15 @@ public class KorisnickiNaloziController implements Initializable {
     private ImageView clearImageView;
 
     public static ObservableList<Korisnik> korisnickiNaloziList;
+    private static FilteredList<Korisnik> filteredList;
+    SortedList<Korisnik> sortedList;
     
-    /**
-     * Initializes the controller class.
-     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         clearImageView.setVisible(false);
 		
         traziTextField.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue)->{
+            filteredList.setPredicate(korisnik -> korisnik.getKorisnickoIme().toLowerCase().contains(newValue.toLowerCase()));
             if(!newValue.isEmpty()) {
                 clearImageView.setVisible(true);
             } else {
@@ -90,7 +92,10 @@ public class KorisnickiNaloziController implements Initializable {
             }
         });
 
-        korisnickiNaloziList=FXCollections.observableArrayList();
+        korisnickiNaloziList = FXCollections.observableArrayList();
+        filteredList = new FilteredList<>(korisnickiNaloziList);
+        sortedList = new SortedList<>(filteredList);
+        sortedList.comparatorProperty().bind(korisnickiNaloziTableView.comparatorProperty());
         
         MaskerPane progressPane=Util.getMaskerPane(anchorPane);
         new Thread(new Task<Void>() {
@@ -118,7 +123,7 @@ public class KorisnickiNaloziController implements Initializable {
             PrijavaController.korisnik.setPrivilegijaTip(PrijavaController.korisnik.getTip());
         }
         
-        korisnickiNaloziTableView.setItems(korisnickiNaloziList);
+        korisnickiNaloziTableView.setItems(sortedList);
         korisnickiNaloziTableView.setPlaceholder(new Label("Nema korisničkih naloga."));
         korisnickiNaloziTableView.setFocusTraversable(false);
         
@@ -233,6 +238,14 @@ public class KorisnickiNaloziController implements Initializable {
             };
             return cell;
         });
+        
+        Util.preventColumnReordering(korisnickiNaloziTableView);
+        
+        korisnickoImeColumn.setMinWidth(100);
+        korisnickoImeColumn.setMaxWidth(4000);
+        
+        tipColumn.setMinWidth(100);
+        tipColumn.setMaxWidth(1000);
         
         prikaziColumn.setText("");
         prikaziColumn.setMinWidth(35);

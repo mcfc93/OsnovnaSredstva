@@ -13,6 +13,8 @@ import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -91,8 +93,11 @@ public class OsnovnaSredstvaController implements Initializable {
     @FXML
     private JFXButton dodajVrstuButton;
     
+    private static ObservableList<VrstaOS> vrstaOsnovnogSredstvaList;
+    
     public static ObservableList<OsnovnoSredstvo> osnovnaSredstvaList;
-    public static ObservableList<VrstaOS> vrstaOsnovnogSredstvaList;
+    private static FilteredList<OsnovnoSredstvo> filteredList;
+    SortedList<OsnovnoSredstvo> sortedList;
     
     @FXML
     private JFXToggleButton postaniNadzornikToggleButton;
@@ -102,6 +107,7 @@ public class OsnovnaSredstvaController implements Initializable {
         clearImageView.setVisible(false);
 		
         traziTextField.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue)->{
+            filteredList.setPredicate(osnovnoSredstvo -> osnovnoSredstvo.getNaziv().toLowerCase().contains(newValue.toLowerCase()));
             if(!newValue.isEmpty()) {
                 clearImageView.setVisible(true);
             } else {
@@ -123,6 +129,9 @@ public class OsnovnaSredstvaController implements Initializable {
         
         vrstaOsnovnogSredstvaList = FXCollections.observableArrayList();
         osnovnaSredstvaList = FXCollections.observableArrayList();
+        filteredList = new FilteredList(osnovnaSredstvaList);
+        sortedList = new SortedList<>(filteredList);
+        sortedList.comparatorProperty().bind(osnovnaSredstvaTableView.comparatorProperty());
         /*
         MaskerPane progressPane=Util.getMaskerPane(anchorPane);
         Task<Void> task = new Task<Void>() {
@@ -227,7 +236,7 @@ public class OsnovnaSredstvaController implements Initializable {
 
         
         //osnovnaSredstvaList=FXCollections.observableArrayList();
-        osnovnaSredstvaTableView.setItems(osnovnaSredstvaList);
+        osnovnaSredstvaTableView.setItems(sortedList);
         osnovnaSredstvaTableView.setPlaceholder(new Label("Nema osnovnih sredstava za odabranu vrstu."));
         osnovnaSredstvaTableView.setFocusTraversable(false);
         
@@ -355,6 +364,17 @@ public class OsnovnaSredstvaController implements Initializable {
             };
             return cell;
         });
+        
+        Util.preventColumnReordering(osnovnaSredstvaTableView);
+        
+        invertarniBrojColumn.setMinWidth(100);
+        invertarniBrojColumn.setMaxWidth(4000);
+        
+        nazivColumn.setMinWidth(100);
+        nazivColumn.setMaxWidth(4000);
+        
+        vrstaColumn.setMinWidth(100);
+        vrstaColumn.setMaxWidth(2000);
         
         prikaziColumn.setText("");
         prikaziColumn.setMinWidth(35);

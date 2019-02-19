@@ -394,9 +394,10 @@
 }
 
 .table-view .placeholder .label {
-     -fx-text-fill: -fx-primary-color;
-     -fx-font-size: 15px;
-     -fx-font-weight: bold;
+    -fx-background-color: transparent;
+    -fx-text-fill: -fx-primary-color;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
  }
 
 .table-view .column-header {
@@ -408,13 +409,16 @@
     -fx-border-color: transparent transparent -fx-hover-color transparent;
     -fx-border-width: 2;
     -fx-background-insets: 0;
-    -fx-background-color: transparent;
 }
 
 .table-view .column-header-background .label{
     -fx-background-color: transparent;
     -fx-text-fill: -fx-primary-color;
     -fx-alignment: center-left;
+}
+
+.table-view .filler {
+    -fx-background-color: transparent;
 }
 
 .table-view .table-cell{

@@ -29,6 +29,8 @@ import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -90,7 +92,6 @@ public class OsobeController implements Initializable {
     @FXML
     private TableColumn<Osoba, Osoba> obrisiColumn;
 
-
     @FXML
     private JFXButton pdfButton;
 
@@ -107,12 +108,15 @@ public class OsobeController implements Initializable {
     private JFXToggleButton postaniNadzornikToggleButton;
     
     public static ObservableList<Osoba> osobeList;
+    private static FilteredList<Osoba> filteredList;
+    SortedList<Osoba> sortedList;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         clearImageView.setVisible(false);
 		
         traziTextField.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue)->{
+            filteredList.setPredicate(osoba -> osoba.getIme().toLowerCase().contains(newValue.toLowerCase()) || osoba.getPrezime().toLowerCase().contains(newValue.toLowerCase()));
             if(!newValue.isEmpty()) {
                 clearImageView.setVisible(true);
             } else {
@@ -130,10 +134,12 @@ public class OsobeController implements Initializable {
                 PrijavaController.korisnik.setPrivilegijaTip(PrijavaController.korisnik.getTip());
             }
         }
-
         
         osobeList = FXCollections.observableArrayList();
-        
+        filteredList = new FilteredList(osobeList);
+        sortedList = new SortedList<>(filteredList);
+        sortedList.comparatorProperty().bind(osobeTableView.comparatorProperty());
+
         MaskerPane progressPane=Util.getMaskerPane(anchorPane);
         Task<Void> task = new Task<Void>() {
             @Override
@@ -158,7 +164,7 @@ public class OsobeController implements Initializable {
         new Thread(task).start();
         
         
-        osobeTableView.setItems(osobeList);
+        osobeTableView.setItems(sortedList);
         osobeTableView.setPlaceholder(new Label("Nema osoba u tabeli."));
         osobeTableView.setFocusTraversable(false);
         imeColumn.setCellValueFactory(new PropertyValueFactory<>("ime"));
@@ -297,6 +303,20 @@ public class OsobeController implements Initializable {
             return cell;
         });
         
+        Util.preventColumnReordering(osobeTableView);
+        
+        imeColumn.setMinWidth(100);
+        imeColumn.setMaxWidth(4000);
+        
+        prezimeColumn.setMinWidth(100);
+        prezimeColumn.setMaxWidth(4000);
+        
+        jmbgColumn.setMinWidth(100);
+        jmbgColumn.setMaxWidth(2000);
+        
+        titulaColumn.setMinWidth(100);
+        titulaColumn.setMaxWidth(1000);
+        
         prikaziColumn.setText("");
         prikaziColumn.setMinWidth(35);
         prikaziColumn.setMaxWidth(35);
@@ -312,6 +332,8 @@ public class OsobeController implements Initializable {
         obrisiColumn.setMaxWidth(35);
         obrisiColumn.setResizable(false);
         obrisiColumn.setSortable(false);
+        
+        //osobeTableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         
         postaniNadzornikToggleButton.selectedProperty().addListener((observable, oldValue, newValue) -> {
             if(newValue) {

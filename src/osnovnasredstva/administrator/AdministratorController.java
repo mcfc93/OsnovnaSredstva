@@ -80,11 +80,6 @@ public class AdministratorController implements Initializable {
     @FXML
     private Button minimizeButton;
 
-    /**
-     * Initializes the controller class.
-     * @param url
-     * @param rb
-     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         informacijeLabel.setText(PrijavaController.korisnik.getKorisnickoIme());

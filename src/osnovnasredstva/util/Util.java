@@ -24,14 +24,19 @@ import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
+import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
+import javafx.event.Event;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextInputControl;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
@@ -491,5 +496,13 @@ System.out.println(Util.PROPERTY);
         };
         nameValidator.setIcon(new ImageView());
         return nameValidator;
+    }
+    
+    public static <T> void preventColumnReordering(TableView<T> tableView) {
+        Platform.runLater(() -> {
+            for (Node header : tableView.lookupAll(".column-header")) {
+                header.addEventFilter(MouseEvent.MOUSE_DRAGGED, Event::consume);
+            }
+        });
     }
 }
