@@ -210,8 +210,7 @@ public class LokacijeController implements Initializable {
                         try {
                             lokacijeList.clear();
                             if(zgradaComboBox.getValue().getNaziv() != null)
-                                filteredList.setPredicate(prostorija -> prostorija.getIdZgrade() == zgradaComboBox.getValue().getId());
-                                //lokacijeList.addAll(prostorijaDAO.loadAll2(PrijavaController.konekcija,zgradaComboBox.getValue().getId()));
+                                lokacijeList.addAll(prostorijaDAO.loadAll2(PrijavaController.konekcija,zgradaComboBox.getValue().getId()));
                             else
                                 lokacijeList.addAll(prostorijaDAO.loadAll(PrijavaController.konekcija));
                         } catch (SQLException e) {

@@ -8,6 +8,7 @@ import java.io.ObjectInputStream;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.Base64;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -41,7 +42,6 @@ public class PrijavaController implements Initializable {
     public static Korisnik korisnik=null;
     public static Connection konekcija;
     
-    
     @FXML
     private AnchorPane anchorPane;
 	
@@ -55,10 +55,10 @@ public class PrijavaController implements Initializable {
     private JFXCheckBox zapamtiMeCheckBox;
     
     @FXML
-    private Label greskaTextLabel;
+    private Label greskaLabel;
     
     @FXML
-    private Label greskaBackgroundLabel;
+    private Label copyrightLabel;
 
     @FXML
     private Button prijavaButton;
@@ -86,17 +86,11 @@ public class PrijavaController implements Initializable {
             }
     	}
         
-        greskaTextLabel.setVisible(false);
-	greskaBackgroundLabel.setVisible(false);
-	zapamtiMeCheckBox.setSelected(true);
-	prijavaButton.setDefaultButton(true);
-        
-        if(korisnickoImeTextField.getText().trim().isEmpty()) {
-            //focus se moze traziti samo nakon sto se Stage inicijalizuje
-            Platform.runLater(() -> korisnickoImeTextField.requestFocus());
-        } else {
-            Platform.runLater(() -> lozinkaTextField.requestFocus());
-        }
+        greskaLabel.setVisible(false);
+        zapamtiMeCheckBox.setSelected(true);
+        prijavaButton.setDefaultButton(true);
+        greskaLabel.setText("Korisničko ime ili lozinka pogrešni!");
+        copyrightLabel.setText("Copyright © " + LocalDate.now().getYear() + ". Sva prava zadržana.");
         
         //DragAndDrop
         anchorPane.setOnMousePressed(event -> {
@@ -126,6 +120,18 @@ public class PrijavaController implements Initializable {
         prijavaButton.disableProperty().bind(
 	    korisnickoImeTextField.textProperty().isEmpty().or(lozinkaTextField.textProperty().isEmpty())
 	);
+        
+        korisnickoImeTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+        	if(!newValue.isEmpty()) {
+        		greskaLabel.setVisible(false);
+        	}
+        });
+        
+        lozinkaTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+        	if(!newValue.isEmpty()) {
+        		greskaLabel.setVisible(false);
+        	}
+        });
     }
     
     @FXML
@@ -166,9 +172,7 @@ public class PrijavaController implements Initializable {
                         });
                     } else {
                         Platform.runLater(() -> {
-                            greskaTextLabel.setText("Korisničko ime ili lozinka pogrešni!");
-                            greskaTextLabel.setVisible(true);
-                            greskaBackgroundLabel.setVisible(true);
+                            greskaLabel.setVisible(true);
                             korisnickoImeTextField.clear();
                             lozinkaTextField.clear();
                             korisnickoImeTextField.requestFocus();
@@ -205,8 +209,7 @@ public class PrijavaController implements Initializable {
 
     @FXML
     void sakrijLabelu(MouseEvent event) {
-        greskaTextLabel.setVisible(false);
-        greskaBackgroundLabel.setVisible(false);
+        greskaLabel.setVisible(false);
     }
 
     @FXML

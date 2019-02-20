@@ -72,7 +72,7 @@ public class Osoba {
     }
 
     public String getJmbg() {
-          return PrijavaController.korisnik.getPrivilegijaTip()==0? this.jmbg: this.jmbg.substring(0, 7) + "******";
+        return PrijavaController.korisnik.getPrivilegijaTip()==0? this.jmbg: this.jmbg.substring(0, 7) + "******";
     }
     public void setJmbg(String jmbgIn) {
           this.jmbg = jmbgIn;

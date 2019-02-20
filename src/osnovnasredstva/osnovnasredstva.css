@@ -12,87 +12,114 @@
  * 
  * * * * * * */
 .rootPrijava {
-    -fx-background-image: url('img/background.png');
-    -fx-background-size: 500 500;
+    -fx-background-image: url('img/background.jpg');
+    -fx-background-size: 400 450;
     -fx-background-position: center center;
+    -fx-border-color: -fx-primary-color;
+    -fx-border-width: 0.25px;
 }
 
 #korisnickoImeTextField {
-    -fx-background-color: -fx-back-color;
-    -fx-background-radius: 0px;
-    -fx-prompt-text-fill: -fx-primary-color;
-    -fx-text-fill: -fx-primary-color;
-    -fx-font-weight: bold;
-    -fx-highlight-fill: -fx-primary-color;
-}
-
-#korisnickoImeTextField:focused {
-    -fx-background-color: -fx-hover-color;
-    -fx-background-radius: 0px;
-    -fx-prompt-text-fill: -fx-text-color;
-    -fx-text-fill: -fx-text-color;
-    -fx-font-weight: bold;
-}
-
-#lozinkaTextField {
-    -fx-background-color: -fx-back-color;
-    -fx-background-radius: 0px;
+    -fx-background-color: transparent;
     -fx-prompt-text-fill: -fx-primary-color;
     -fx-text-fill: -fx-primary-color;
     -fx-font-weight:bold;
-    -fx-highlight-fill: -fx-primary-color;
+    -fx-highlight-fill: -fx-secondary-color;
+
+    -fx-border-color: -fx-primary-color;
+    -fx-border-width: 0px 0px 1.25px 0px;
+    -fx-border-radius: 0px;
+
+    -fx-background-image:url('img/username.png');
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: left top;
+    -fx-background-size: 26px 26px;
+    -fx-padding: 0px 0px 0px 35px;
+}
+
+#korisnickoImeTextField:focused {
+    -fx-text-fill: -fx-secondary-color;
+    -fx-font-weight: normal;
+
+    /*-fx-border-color: -fx-secondary-color;*/
+    -fx-border-width: 0px 0px 2px 0px;
+}
+
+#lozinkaTextField {
+    -fx-background-color: transparent;
+    -fx-prompt-text-fill: -fx-primary-color;
+    -fx-text-fill: -fx-primary-color;
+    -fx-font-weight: bold;
+    -fx-highlight-fill: -fx-secondary-color;
+
+    -fx-border-color: -fx-primary-color;
+    -fx-border-width: 0px 0px 1.25px 0px;
+    -fx-border-radius: 0px;
+	
+    -fx-background-image:url('img/password.png');
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: left top;
+    -fx-background-size: 26px 26px;
+    -fx-padding: 0px 0px 0px 35px;
 }
 
 #lozinkaTextField:focused {
-    -fx-background-color: -fx-hover-color;
-    -fx-background-radius: 0px;
-    -fx-prompt-text-fill: -fx-text-color;
-    -fx-text-fill: -fx-text-color;
-    -fx-font-weight: bold;
+    -fx-text-fill: -fx-secondary-color;
+    -fx-font-weight: normal;
+
+    /*-fx-border-color: -fx-secondary-color;*/
+    -fx-border-width: 0px 0px 2px 0px;
 }
 
 #prijavaButton {
-    -fx-background-color: -fx-secondary-color;
-    -fx-text-fill: WHITE;
-    -fx-background-radius: 0px;
-    -fx-font-size: 12px !important;
-    -fx-font-family: verdana !important;
+    -fx-background-color: -fx-primary-color;
+    -fx-text-fill: -fx-text-color;
+    -fx-background-radius: 20px;
+    -fx-font-size: 14px !important;
+}
+
+#prijavaButton .jfx-rippler {
+    -jfx-rippler-fill: WHITE;
 }
 
 #prijavaButton:hover {
-    -fx-background-color: -fx-primary-color;
-    -fx-text-fill: WHITE;
+    -fx-background-color: -fx-secondary-color;
+    -fx-text-fill: -fx-text-color;
+}
+
+#zapamtiMeCheckBox {
+    -fx-text-fill: -fx-primary-color;
+    -jfx-focus-color: -fx-primary-color;
+    -jfx-unfocus-color: -fx-primary-color;
+    -jfx-checked-color: -fx-primary-color;
+    -jfx-unchecked-color: -fx-primary-color;
+}
+
+#zapamtiMeCheckBox .mark {
+    -fx-border-color: -fx-text-color;
 }
 
 #zaboravljenaLozinkaLabel {
-    -fx-text-fill: WHITE;
+    -fx-text-fill: -fx-primary-color;
 }
 
 #zaboravljenaLozinkaLabel:hover {
-    -fx-text-fill: #1976D2;
+    -fx-text-fill: #0f06b5;
     -fx-cursor: hand;
 }
 
-#greskaBackgroundLabel {
-    -fx-prompt-text-fill: WHITE;
+#greskaLabel {
+    -fx-text-fill: -fx-text-color;
     -fx-font-weight: bold;
     -fx-background-color: RED;
-    -fx-opacity: 0.6;
-    -fx-background-radius: 3px;
-	
+    /*-fx-opacity: 0.6;*/
+    -fx-background-radius: 20px;
+    -fx-alignment: center;
 }
 
-#greskaTextLabel {
-    -fx-prompt-text-fill: WHITE;
+#copyrightLabel {
+    -fx-text-fill: -fx-primary-color;
     -fx-font-weight: bold;
-}
-
-#usernameLabel {
-    -fx-background-color: -fx-secondary-color;
-}
-
-#passwordLabel {
-    -fx-background-color: -fx-secondary-color;
 }
 
 /* * * * * * *
@@ -142,6 +169,10 @@
     -fx-alignment: center;
 }
 
+.jfx-button .jfx-rippler {
+    -jfx-rippler-fill: WHITE;
+}
+
 /* * * * * * *
  * 
  * ToggleButton
@@ -167,14 +198,14 @@
     -fx-background-color: -fx-secondary-color;
     -fx-border-color: -fx-hover-color;
     -fx-border-width: 0px 4px 0px 0px;
-    -fx-cursor: normal;
+    -fx-cursor: default;
 }
 
 .toggle-button:disabled {
     -fx-background-color: -fx-secondary-color;
     -fx-border-color: -fx-hover-color;
     -fx-border-width: 0px 4px 0px 0px;
-    -fx-cursor: normal;
+    -fx-cursor: default;
     -fx-opacity: 1;
 }
 
@@ -188,10 +219,12 @@
     -fx-background-position: center;
     -fx-background-repeat: no-repeat;
     -fx-background-size: 20,20;
-    -fx-min-height: 20px;
-    -fx-min-width: 20px;
-    -fx-max-height: 20px;
-    -fx-max-width: 20px;
+    -fx-pref-height: 20px;
+    -fx-pref-width: 20px;
+    -fx-min-height: -fx-pref-height;
+    -fx-min-width: -fx-pref-width;
+    -fx-max-height: -fx-pref-height;
+    -fx-max-width: -fx-pref-width;
     -fx-background-color: transparent;
     -fx-border: none;
     -fx-border-radius: 0px;
@@ -210,10 +243,12 @@
     -fx-background-position: center;
     -fx-background-repeat: no-repeat;
     -fx-background-size: 20,20;
-    -fx-min-height: 20px;
-    -fx-min-width: 20px;
-    -fx-max-height: 20px;
-    -fx-max-width: 20px;
+    -fx-pref-height: 20px;
+    -fx-pref-width: 20px;
+    -fx-min-height: -fx-pref-height;
+    -fx-min-width: -fx-pref-width;
+    -fx-max-height: -fx-pref-height;
+    -fx-max-width: -fx-pref-width;
     -fx-background-color: transparent;
     -fx-border: none;
     -fx-border-radius: 0px;
@@ -224,7 +259,7 @@
 }
 
 .maximizeButton:hover {
-    -fx-background-color: -fx-secondary-color;
+    -fx-background-color: #303F9F;
 }
 
 .minimizeButton {
@@ -232,10 +267,12 @@
     -fx-background-position: center;
     -fx-background-repeat: no-repeat;
     -fx-background-size: 20,20;
-    -fx-min-height: 20px;
-    -fx-min-width: 20px;
-    -fx-max-height: 20px;
-    -fx-max-width: 20px;
+    -fx-pref-height: 20px;
+    -fx-pref-width: 20px;
+    -fx-min-height: -fx-pref-height;
+    -fx-min-width: -fx-pref-width;
+    -fx-max-height: -fx-pref-height;
+    -fx-max-width: -fx-pref-width;
     -fx-background-color: transparent;
     -fx-border: none;
     -fx-border-radius: 0px;
@@ -246,15 +283,15 @@
 }
 
 .minimizeButton:hover {
-    -fx-background-color: -fx-secondary-color;
+    -fx-background-color: #303F9F;
 }
 
 /* * * * * * *
  * 
- * TextField / PasswordField
+ * TextField / PasswordField / TextArea
  * 
  * * * * * * */
-.text-field, .password-field, .text-area, .combo-box {
+.text-field, .password-field, .text-area {
     -fx-font-size: 12px;
     -fx-text-fill: -fx-primary-color;
     -fx-prompt-text-fill: -fx-hover-color;
@@ -263,10 +300,10 @@
 
 /* * * * * * *
  * 
- * JFXTextField / JFXPasswordField
+ * JFXTextField / JFXPasswordField / JFXTextArea / JFXComboBox
  * 
  * * * * * * */
-.jfx-text-field, .jfx-password-field, .jfx-text-area, .jfx-combo-box{
+.jfx-text-field, .jfx-password-field, .jfx-text-area, .jfx-combo-box {
     -fx-text-fill: -fx-primary-color;
     -jfx-focus-color: -fx-hover-color;
     -jfx-unfocus-color: -fx-primary-color;
@@ -294,6 +331,96 @@
 
 /* * * * * * *
  * 
+ * JFXTextArea
+ * 
+ * * * * * * */
+.jfx-text-area .content {
+    -fx-background-color: -fx-back-color;
+    -fx-border-color: -fx-primary-color -fx-primary-color transparent -fx-primary-color;
+}
+
+/* * * * * * *
+ * 
+ * ComboBox
+ * 
+ * * * * * * */
+.combo-box > .list-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: -fx-hover-color;
+    -fx-padding: 0.333333em 0.666667em 0.333333em 0.666667em; /* 4 8 4 8 */
+}
+
+.combo-box-base > .arrow-button {
+    -fx-background-radius: 0 3 3 0, 0 2 2 0, 0 1 1 0;
+    -fx-padding: 0.5em 0.667em 0.5em 0.833333em; /* 6 8 6 10 */
+    -fx-background-color: transparent;
+}
+
+.combo-box-popup > .list-view {
+    -fx-background-color: -fx-primary-color;
+    -fx-background-insets: 0, 1;
+    -fx-effect: dropshadow( gaussian , -fx-primary-color , 12, 0.0 , 0 , 8 );
+}
+
+.combo-box-popup > .list-view > .virtual-flow > .clipped-container > .sheet > .list-cell {
+    -fx-padding: 4 0 4 5;
+}
+
+.combo-box-popup > .list-view > .virtual-flow > .clipped-container > .sheet > .list-cell:filled:hover {
+    -fx-background-color: -fx-primary-color;
+}
+
+.combo-box-popup  > .list-view > .virtual-flow > .clipped-container > .sheet > .list-cell:filled:selected,
+.combo-box-popup  > .list-view > .virtual-flow > .clipped-container > .sheet > .list-cell:filled:selected:hover {
+    -fx-background-color: -fx-primary-color, -fx-back-color, -fx-primary-color;
+    -fx-background-insets: 0, 1, 2;
+}
+/*
+.combo-box-popup > .list-view > .placeholder > .label {
+    -fx-text-fill: derive(-fx-control-inner-background,-30%);
+}
+*/
+.combo-box:hover, .combo-box:sohowing , .combo-box:focused{
+    -fx-background-color: transparent;
+}
+
+/* * * * * * *
+ * 
+ * JFXCheckBox 
+ * 
+ * * * * * * */
+.jfx-check-box {
+    /*-jfx-focus-color: #1fdbf8;*/
+    -jfx-focus-color: -fx-secondary-color;
+    -jfx-unfocus-color: -fx-primary-color;
+}
+
+.jfx-check-box {
+    /*-jfx-checked-color: #1fdbf8;*/
+    -jfx-checked-color: -fx-secondary-color;
+    -jfx-unchecked-color: -fx-primary-color;
+}
+
+.jfx-check-box .mark {
+    -fx-border-color: white;
+}
+
+/* * * * * * *
+ * 
+ * JFXRadioButton
+ * 
+ * * * * * * */
+.jfx-radio-button{
+    -jfx-selected-color: -fx-primary-color;
+    -jfx-unselected-color: -fx-hover-color;
+}
+
+.jfx-radio-button .radio-container:hover{
+    -fx-cursor: hand;
+}
+
+/* * * * * * *
+ * 
  * JFXAutocompletePopup
  * 
  * * * * * * */
@@ -301,8 +428,40 @@
     -fx-fixed-cell-size: 24;
     -jfx-cell-limit: 3;
     -fx-pref-width: 150.0px;
-    -fx-text-fill: RED;
-    -fx-background-color: -fx-hover-color;
+}
+
+.jfx-autocomplete-popup .list-view {
+    -fx-background-color: -fx-back-color;
+    -fx-background-insets: 0, 1;
+    -fx-border-color: -fx-primary-color;
+    -fx-effect: dropshadow( gaussian , -fx-primary-color , 12, 0.0 , 0 , 8 );
+}
+
+.jfx-autocomplete-popup .list-cell {
+    /*-fx-background-color: transparent;*/
+    -fx-text-fill: -fx-hover-color;
+    -fx-padding: 0.333333em 0.666667em 0.333333em 0.666667em; /* 4 8 4 8 */
+}
+
+.jfx-autocomplete-popup .list-cell:odd,
+.jfx-autocomplete-popup .list-cell:even {
+    -fx-background-color: transparent;
+}
+
+.jfx-autocomplete-popup .list-cell:focused {
+	-fx-background-color: -fx-back-color, -fx-primary-color, -fx-back-color;
+}
+
+.jfx-autocomplete-popup .list-cell:filled:hover {
+    -fx-background-color: -fx-primary-color;
+    -fx-text-fill: -fx-back-color;
+}
+
+.jfx-autocomplete-popup .list-cell:filled:selected,
+.jfx-autocomplete-popup .list-cell:filled:selected:hover {
+    -fx-background-color: -fx-primary-color, -fx-back-color, -fx-primary-color;
+    -fx-text-fill: -fx-back-color;
+    -fx-background-insets: 0, 1, 2;
 }
 
 /* * * * * * *
@@ -465,11 +624,6 @@
 }
 */
 /*
-.table-view .filler {
-	-fx-background-color: #005797;
-}
-*/
-/*
 .table-view > .virtual-flow > .scroll-bar:vertical,
 .table-view > .virtual-flow > .scroll-bar:vertical > .track,
 .table-view > .virtual-flow > .scroll-bar:vertical > .track-background, 
@@ -594,20 +748,6 @@
 
 /* * * * * * *
  * 
- * JFXRadioButton
- * 
- * * * * * * */
-.jfx-radio-button{
-    -jfx-selected-color: -fx-primary-color;
-    -jfx-unselected-color: -fx-hover-color;
-}
-
-.jfx-radio-button .radio-container:hover{
-    -fx-cursor: hand;
-}
-
-/* * * * * * *
- * 
  * SearchBox
  * 
  * * * * * * */
@@ -660,27 +800,6 @@
 
 .clearImageView:hover {
     -fx-cursor: hand;
-}
-
-/* * * * * * *
- * 
- * JFXCheckBox 
- * 
- * * * * * * */
-.jfx-check-box {
-    /*-jfx-focus-color: #1fdbf8;*/
-    -jfx-focus-color: -fx-secondary-color;
-    -jfx-unfocus-color: -fx-primary-color;
-}
-
-.jfx-check-box {
-    /*-jfx-checked-color: #1fdbf8;*/
-    -jfx-checked-color: -fx-secondary-color;
-    -jfx-unchecked-color: -fx-primary-color;
-}
-
-.jfx-check-box .mark {
-    -fx-border-color: white;
 }
 
 /* * * * * * *
@@ -874,9 +993,7 @@
  
  
  
-.alert.confirmation.dialog-pane,
-.text-input-dialog.dialog-pane,
-.choice-dialog.dialog-pane {
+.alert.confirmation.dialog-pane {
     -fx-graphic: url('file:src/osnovnasredstva/img/alert-confirmation.png');
 }
 
@@ -1075,32 +1192,6 @@
     -fx-max-height: -fx-pref-height;
 }
 
-
-
-
-
-
-
-
-
-/*Change selected cells of autocomplete popup*/
-.jfx-autocomplete-popup .list-cell:filled:selected {
-    /*-fx-background-color: #64ffe6;*/
-}
-/*Change cells of autocomplete popup*/
-.jfx-autocomplete-popup .list-cell {
-    /*-fx-background-color: #5f68ff;*/
-}
-/*Change cells of combobox*/
-.combo-box .list-cell {
-    /*-fx-background-color: #ff92b8;*/
-}
-
-
-
-
-
-
 .jfx-toggle-button {
     -fx-background-color: transparent !important;
     -fx-text-fill: -fx-primary-color !important;
@@ -1148,10 +1239,4 @@
     -fx-background-color: transparent !important;
     -fx-border-color: transparent !important;
     -fx-border-width: 0px 0px 0px 0px !important
-}
-
-
-.jfx-text-area .content {
-    -fx-background-color: -fx-back-color;
-    -fx-border-color: -fx-primary-color -fx-primary-color transparent -fx-primary-color;
 }

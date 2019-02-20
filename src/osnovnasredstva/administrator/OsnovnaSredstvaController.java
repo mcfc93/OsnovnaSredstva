@@ -64,7 +64,7 @@ public class OsnovnaSredstvaController implements Initializable {
     private TableColumn<?, ?> nazivColumn;
 
     @FXML
-    private TableColumn<?, ?> vrstaColumn;
+    private TableColumn<OsnovnoSredstvo, Integer> vrstaColumn;
 
     @FXML
     private TableColumn<OsnovnoSredstvo, OsnovnoSredstvo> prikaziColumn;
@@ -241,7 +241,23 @@ public class OsnovnaSredstvaController implements Initializable {
         
         invertarniBrojColumn.setCellValueFactory(new PropertyValueFactory<>("inventarniBroj"));
         nazivColumn.setCellValueFactory(new PropertyValueFactory<>("naziv"));
-        vrstaColumn.setCellValueFactory(new PropertyValueFactory<>("idVrsteString"));
+        vrstaColumn.setCellValueFactory(new PropertyValueFactory<>("idVrste"));
+        vrstaColumn.setCellFactory(tableCell -> {
+            TableCell<OsnovnoSredstvo, Integer> cell = new TableCell<OsnovnoSredstvo, Integer>() {
+                @Override
+                protected void updateItem(Integer item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if(!empty) {
+                        try {
+                            setText(VrstaOSDAO.getVrsteOSList().stream().filter(vrsta -> vrsta.getId() == item).findFirst().get().getNaziv());
+                        } catch(NullPointerException e) {
+                            setText("NEPOZNATO");
+                        }
+                    }
+                }
+            };
+            return cell;
+        });
         
         prikaziColumn.setCellValueFactory(
             param -> new ReadOnlyObjectWrapper<>(param.getValue())

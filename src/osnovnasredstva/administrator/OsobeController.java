@@ -78,7 +78,7 @@ public class OsobeController implements Initializable {
     private TableColumn<?, ?> prezimeColumn;
 
     @FXML
-    private TableColumn<?, ?> jmbgColumn;
+    private TableColumn<Osoba, String> jmbgColumn;
 
     @FXML
     private TableColumn<?, ?> titulaColumn;
@@ -173,6 +173,20 @@ public class OsobeController implements Initializable {
         //} else {
         //    jmbgColumn.setCellValueFactory(new PropertyValueFactory<>("jmbgValue"));
         //}
+/*
+        jmbgColumn.setCellFactory(tableCell -> {
+            TableCell<Osoba, String> cell = new TableCell<Osoba, String>() {
+                @Override
+                protected void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if(!empty) {
+                    	setText(PrijavaController.korisnik.getPrivilegijaTip()==0? item: item.substring(0, 7) + "******");
+                    }
+                }
+            };
+            return cell;
+        });
+*/
         titulaColumn.setCellValueFactory(new PropertyValueFactory<>("titula"));
         //prikaziColumn.setCellValueFactory(new PropertyValueFactory<>("pregled"));
         //izmjeniColumn.setCellValueFactory(new PropertyValueFactory<>("izmjeni"));
