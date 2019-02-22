@@ -71,7 +71,7 @@ public class PrikazOsobeController implements Initializable {
     @FXML
     private TextField jmbgTextField;
     @FXML
-    private TableView<OsnovnoSredstvo> osnovnaSredTableView;
+    private TableView<OsnovnoSredstvo> osnovnaSredstvaTableView;
     @FXML
     private TableColumn<?, ?> invBrColumn;
     @FXML
@@ -91,13 +91,10 @@ public class PrikazOsobeController implements Initializable {
     @FXML
     private TextField titulaTextField;
     
-    public static ObservableList<OsnovnoSredstvo> listOsnovnoSredstvo;
+    public static ObservableList<OsnovnoSredstvo> osnovnaSredstvaList;
     @FXML
     private JFXButton pdfButton;
     
-    /**
-     * Initializes the controller class.
-     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         //DragAndDrop
@@ -127,7 +124,7 @@ public class PrikazOsobeController implements Initializable {
             }
         });
         
-        osnovnaSredTableView.setPlaceholder(new Label("Nema zaduženja"));
+        osnovnaSredstvaTableView.setPlaceholder(new Label("Nema zaduženja"));
         
         imeTextField.setText(odabranaOsoba.getIme());
         prezimeTextField.setText(odabranaOsoba.getPrezime());
@@ -138,18 +135,32 @@ public class PrikazOsobeController implements Initializable {
         telefonTextField.setText(odabranaOsoba.getTelefon());
         emailTextField.setText(odabranaOsoba.getEmail());
         
-        listOsnovnoSredstvo = FXCollections.observableArrayList();
+        osnovnaSredstvaList = FXCollections.observableArrayList();
         try {
-            listOsnovnoSredstvo.addAll(osnovnoSredstvoDAO.loadAll3(PrijavaController.konekcija, odabranaOsoba.getId()));
+            osnovnaSredstvaList.addAll(osnovnoSredstvoDAO.loadAll3(PrijavaController.konekcija, odabranaOsoba.getId()));
         } catch (SQLException e) {
             Util.LOGGER.log(Level.SEVERE, e.toString(), e);
         }
-        osnovnaSredTableView.setItems(listOsnovnoSredstvo);
-        osnovnaSredTableView.setFocusTraversable(false);
+        osnovnaSredstvaTableView.setItems(osnovnaSredstvaList);
+        osnovnaSredstvaTableView.setFocusTraversable(false);
         invBrColumn.setCellValueFactory(new PropertyValueFactory<>("inventarniBroj"));
         nazivColumn.setCellValueFactory(new PropertyValueFactory<>("naziv"));
         opisColumn.setCellValueFactory(new PropertyValueFactory<>("opis"));
         vrijednostColumn.setCellValueFactory(new PropertyValueFactory<>("vrijednost"));
+        
+        Util.preventColumnReordering(osnovnaSredstvaTableView);
+        
+        invBrColumn.setMinWidth(100);
+        invBrColumn.setMaxWidth(1000);
+        
+        nazivColumn.setMinWidth(100);
+        nazivColumn.setMaxWidth(3000);
+        
+        opisColumn.setMinWidth(100);
+        opisColumn.setMaxWidth(4000);
+        
+        vrijednostColumn.setMinWidth(100);
+        vrijednostColumn.setMaxWidth(2000);
         
     }    
     
@@ -217,8 +228,8 @@ public class PrikazOsobeController implements Initializable {
 
                     table.setHeaderRows(1);
                     table.getDefaultCell().setHorizontalAlignment(Element.ALIGN_CENTER);
-                    if(!listOsnovnoSredstvo.isEmpty()){
-                        for(OsnovnoSredstvo os : listOsnovnoSredstvo){
+                    if(!osnovnaSredstvaList.isEmpty()){
+                        for(OsnovnoSredstvo os : osnovnaSredstvaList){
                                 table.addCell(os.getInventarniBroj());
                                 table.addCell(os.getNaziv());
                                 table.addCell(os.getOpis());

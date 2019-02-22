@@ -58,10 +58,16 @@ public class Util {
             if(!f.exists()) {
                     f.mkdirs();
             }
-            f=new File("PDF");
+            f=new File("PDF/prelaznica");
             if(!f.exists()) {
                     f.mkdirs();
             }
+            /*
+            f=new File("prelaznica");
+            if(!f.exists()) {
+                    f.mkdirs();
+            }
+            */
             //new FileHandler(System.getProperty("user.home") + File.separator + "error.log", true);
             fileHandler = new FileHandler(LOG_PATH, true);	//append
             LOGGER.addHandler(Util.fileHandler);

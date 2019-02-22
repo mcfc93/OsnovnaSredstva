@@ -25,7 +25,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -49,15 +48,13 @@ import org.controlsfx.control.MaskerPane;
 import osnovnasredstva.DAO.OsnovnoSredstvoDAO;
 import osnovnasredstva.DTO.OsnovnoSredstvo;
 import osnovnasredstva.DTO.Prostorija;
-import static osnovnasredstva.administrator.PrikazOsobeController.listOsnovnoSredstvo;
-import static osnovnasredstva.administrator.PrikazOsobeController.odabranaOsoba;
 import osnovnasredstva.prijava.PrijavaController;
 import osnovnasredstva.util.Util;
 
 public class PrikazProstorijeController implements Initializable {
     
     public static Prostorija odabranaProstorija=null;
-    private static OsnovnoSredstvoDAO osDAO = new OsnovnoSredstvoDAO();
+    private static OsnovnoSredstvoDAO osnovnoSredstvoDAO = new OsnovnoSredstvoDAO();
     @FXML
     private AnchorPane menuLine;
 
@@ -78,7 +75,7 @@ public class PrikazProstorijeController implements Initializable {
     @FXML
     private TextArea opisTextArea;
     @FXML
-    private TableView<OsnovnoSredstvo> osnovnaSredTableView;
+    private TableView<OsnovnoSredstvo> osnovnaSredstvaTableView;
     @FXML
     private TableColumn<?, ?> invBrColumn;
     @FXML
@@ -88,7 +85,7 @@ public class PrikazProstorijeController implements Initializable {
     @FXML
     private TableColumn<?, ?> vrijednostColumn;
     
-    public static ObservableList<OsnovnoSredstvo> listOsnovnoSredstvo;
+    public static ObservableList<OsnovnoSredstvo> osnovnaSredstvaList = FXCollections.observableArrayList();
     @FXML
     private AnchorPane anchorPane;
     
@@ -121,7 +118,7 @@ public class PrikazProstorijeController implements Initializable {
             }
         });
         
-         osnovnaSredTableView.setPlaceholder(new Label("Prostorija je prazna"));
+         osnovnaSredstvaTableView.setPlaceholder(new Label("Prostorija je prazna"));
          
          sifraTextField.setText(odabranaProstorija.getSifra());
          nazivTextField.setText(odabranaProstorija.getNaziv());
@@ -132,20 +129,34 @@ public class PrikazProstorijeController implements Initializable {
              }
          });
          
-        listOsnovnoSredstvo = FXCollections.observableArrayList();
+        osnovnaSredstvaList.clear();
         
         try {
-            listOsnovnoSredstvo.addAll(osDAO.loadAll4(PrijavaController.konekcija, odabranaProstorija.getId()));
+            osnovnaSredstvaList.addAll(osnovnoSredstvoDAO.loadAll4(PrijavaController.konekcija, odabranaProstorija.getId()));
         } catch (SQLException e) {
             Util.LOGGER.log(Level.SEVERE, e.toString(), e);
         }
         
-        osnovnaSredTableView.setItems(listOsnovnoSredstvo);
-        osnovnaSredTableView.setFocusTraversable(false);
+        osnovnaSredstvaTableView.setItems(osnovnaSredstvaList);
+        osnovnaSredstvaTableView.setFocusTraversable(false);
         invBrColumn.setCellValueFactory(new PropertyValueFactory<>("inventarniBroj"));
         nazivColumn.setCellValueFactory(new PropertyValueFactory<>("naziv"));
         opisColumn.setCellValueFactory(new PropertyValueFactory<>("opis"));
         vrijednostColumn.setCellValueFactory(new PropertyValueFactory<>("vrijednost"));
+        
+        Util.preventColumnReordering(osnovnaSredstvaTableView);
+        
+        invBrColumn.setMinWidth(100);
+        invBrColumn.setMaxWidth(1000);
+        
+        nazivColumn.setMinWidth(100);
+        nazivColumn.setMaxWidth(3000);
+        
+        opisColumn.setMinWidth(100);
+        opisColumn.setMaxWidth(4000);
+        
+        vrijednostColumn.setMinWidth(100);
+        vrijednostColumn.setMaxWidth(2000);
     }
 
     @FXML
@@ -217,8 +228,8 @@ public class PrikazProstorijeController implements Initializable {
 
                     table.setHeaderRows(1);
                     table.getDefaultCell().setHorizontalAlignment(Element.ALIGN_CENTER);
-                    if(!listOsnovnoSredstvo.isEmpty()){
-                        for(OsnovnoSredstvo os : listOsnovnoSredstvo){
+                    if(!osnovnaSredstvaList.isEmpty()){
+                        for(OsnovnoSredstvo os : osnovnaSredstvaList){
                                 table.addCell(os.getInventarniBroj());
                                 table.addCell(os.getNaziv());
                                 table.addCell(os.getOpis());

@@ -5,7 +5,6 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -48,18 +47,11 @@ public class AdministratorController implements Initializable {
 
     @FXML
     private Label informacijeLabel;
-
     
     @FXML
     private ToggleGroup toggleGroup;
-	
-
-    @FXML
-    private ToggleButton wButton;
     
-    BoundingBox savedBounds;
-    
-    boolean draggable=true;
+    BoundingBox originalStageSize;
     boolean maximized=false;
 
     private double xOffset=0;
@@ -85,7 +77,7 @@ public class AdministratorController implements Initializable {
         informacijeLabel.setText(PrijavaController.korisnik.getKorisnickoIme());
         //DragAndDrop
         menuLine.setOnMousePressed(event -> {
-            if(draggable && event.getButton().equals(MouseButton.PRIMARY)) {
+            if(event.getButton().equals(MouseButton.PRIMARY)) {
                 Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());
                 xOffset = stage.getX() - event.getScreenX();
                 yOffset = stage.getY() - event.getScreenY();
@@ -93,18 +85,16 @@ public class AdministratorController implements Initializable {
         });
 
         menuLine.setOnMouseDragged(event -> {
-            if(draggable && event.getButton().equals(MouseButton.PRIMARY)) {
+            if(!maximized && event.getButton().equals(MouseButton.PRIMARY)) {
                 Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());
-                if(!stage.isMaximized()) {
-                    stage.setX(event.getScreenX() + xOffset);
-                    stage.setY(event.getScreenY() + yOffset);
-                    stage.setOpacity(0.8);
-                }
+                stage.setX(event.getScreenX() + xOffset);
+                stage.setY(event.getScreenY() + yOffset);
+                stage.setOpacity(0.8);
             }
         });
 
         menuLine.setOnMouseReleased(event -> {
-            if(draggable && event.getButton().equals(MouseButton.PRIMARY)) {
+            if(event.getButton().equals(MouseButton.PRIMARY)) {
                 Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());
                 stage.setOpacity(1.0);
             }
@@ -124,10 +114,12 @@ public class AdministratorController implements Initializable {
                 if(PrijavaController.korisnik.getTip() == 0) {
                     KorisnikDAO.loadUsernames();
                 }
+                /*
                 VrstaOSDAO.loadVrsteOS();
                 ProstorijaDAO.loadProstorije();
                 ZgradaDAO.loadZgrade();
                 OsobaDAO.loadOsobe();
+                */
             }
         }.start();
         
@@ -157,35 +149,29 @@ public class AdministratorController implements Initializable {
     void maximize(MouseEvent event) {
         if(event.getButton().equals(MouseButton.PRIMARY)) {
             Stage stage=((Stage)((Node)event.getSource()).getScene().getWindow());
-            if(!maximized/*stage.isMaximized()*/) {
-                savedBounds = new BoundingBox(stage.getX(), stage.getY(), stage.getWidth(), stage.getHeight());
-                // Get current screen of the stage      
-                ObservableList<Screen> screens = Screen.getScreensForRectangle(new Rectangle2D(stage.getX(), stage.getY(), stage.getWidth(), stage.getHeight()));
-                // Change stage properties
-                Rectangle2D bounds = screens.get(0).getVisualBounds();
+            //stage.setMaximized(!stage.isMaximized());
+            if(!maximized) {
+                originalStageSize = new BoundingBox(stage.getX(), stage.getY(), stage.getWidth(), stage.getHeight());
+                Screen screen = Screen.getScreensForRectangle(stage.getX(), stage.getY(), stage.getWidth(), stage.getHeight()).get(0);
+                Rectangle2D bounds = screen.getVisualBounds();
                 stage.setX(bounds.getMinX());
                 stage.setY(bounds.getMinY());
                 stage.setWidth(bounds.getWidth());
                 stage.setHeight(bounds.getHeight());
-                //stage.setMaximized(true);
-                maximized=true;
-                draggable=false;
             } else {
-                stage.setX(savedBounds.getMinX());
-                stage.setY(savedBounds.getMinY());
-                stage.setWidth(savedBounds.getWidth());
-                stage.setHeight(savedBounds.getHeight());
-                //stage.setMaximized(false);
-                maximized=false;
-                draggable=true;
+                stage.setX(originalStageSize.getMinX());
+                stage.setY(originalStageSize.getMinY());
+                stage.setWidth(originalStageSize.getWidth());
+                stage.setHeight(originalStageSize.getHeight());
             }
+            maximized=!maximized;
         }
     }
     
     @FXML
     void doubleClick(MouseEvent event) {
         if(event.getButton().equals(MouseButton.PRIMARY)) {
-            if(event.getClickCount() > 1) {
+            if(event.getClickCount() == 2) {
                 maximize(event);
             }
         }
@@ -240,6 +226,21 @@ public class AdministratorController implements Initializable {
     void w(ActionEvent event) {
     	try {
             Parent root = FXMLLoader.load(getClass().getResource("/osnovnasredstva/administrator/KorisnickiNaloziView.fxml"));
+            AnchorPane.setTopAnchor(root,0.0);
+            AnchorPane.setBottomAnchor(root,0.0);
+            AnchorPane.setLeftAnchor(root,0.0);
+            AnchorPane.setRightAnchor(root,0.0);
+            dataAnchorPane.getChildren().removeAll();
+            dataAnchorPane.getChildren().setAll(root);
+        } catch(IOException e) {
+            Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+        }
+    }
+    
+    @FXML
+    void v(ActionEvent event) {
+    	try {
+            Parent root = FXMLLoader.load(getClass().getResource("/osnovnasredstva/administrator/PrelaznicaView.fxml"));
             AnchorPane.setTopAnchor(root,0.0);
             AnchorPane.setBottomAnchor(root,0.0);
             AnchorPane.setLeftAnchor(root,0.0);

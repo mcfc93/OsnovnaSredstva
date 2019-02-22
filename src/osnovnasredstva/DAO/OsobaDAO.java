@@ -328,7 +328,7 @@ public class OsobaDAO {
 
           return (List)searchResults;
     }
-
+    /*
     private static List<Osoba> osobeList = new ArrayList<>();
 	
     public static List<Osoba> getOsobeList() {
@@ -353,5 +353,6 @@ public class OsobaDAO {
             Util.close(r, s, c);
         }
     }
+    */
 }
 

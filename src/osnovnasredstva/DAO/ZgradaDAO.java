@@ -285,7 +285,7 @@ public class ZgradaDAO {
 
           return (List)searchResults;
     }
-
+    /*
     private static List<Zgrada> zgradeList = new ArrayList<>();
 	
     public static List<Zgrada> getZgradeList() {
@@ -310,4 +310,5 @@ public class ZgradaDAO {
             Util.close(r, s, c);
         }
     }
+    */
 }

@@ -21,13 +21,10 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Observable;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -51,8 +48,6 @@ import org.controlsfx.control.MaskerPane;
 import osnovnasredstva.DAO.PrelaznicaDAO;
 import osnovnasredstva.DTO.OsnovnoSredstvo;
 import osnovnasredstva.DTO.Prelaznica;
-import static osnovnasredstva.administrator.PrikazOsobeController.listOsnovnoSredstvo;
-import static osnovnasredstva.administrator.PrikazOsobeController.odabranaOsoba;
 import osnovnasredstva.prijava.PrijavaController;
 import osnovnasredstva.util.Util;
 
@@ -99,7 +94,7 @@ public class PrikazOsnovnogSredstvaController implements Initializable {
     @FXML
     private TableColumn<?, ?> naOsobuColumn;
     
-    public static ObservableList<Prelaznica> listPrelaznica;
+    public static ObservableList<Prelaznica> prelazniceList;
     private static ArrayList<Prelaznica> svePrelaznice = new ArrayList<>();
     @FXML
     private AnchorPane anchorPane;
@@ -133,7 +128,7 @@ public class PrikazOsnovnogSredstvaController implements Initializable {
             }
         });
         
-        listPrelaznica = FXCollections.observableArrayList();
+        prelazniceList = FXCollections.observableArrayList();
         
         prelaznicaTableView.setPlaceholder(new Label("Nema osnovnih sredstava."));
         prelaznicaTableView.setFocusTraversable(false);
@@ -145,7 +140,7 @@ public class PrikazOsnovnogSredstvaController implements Initializable {
         }
         svePrelaznice.forEach(pr ->{
             if(pr.getIdOsnovnogSredstva() == odabranoOS.getId())
-                listPrelaznica.add(pr);
+                prelazniceList.add(pr);
         });
         
         invBrTextField.setText(odabranoOS.getInventarniBroj());
@@ -156,12 +151,29 @@ public class PrikazOsnovnogSredstvaController implements Initializable {
         opisTextArea.setText(odabranoOS.getOpis());
         datePicker.setValue(odabranoOS.getDatumNabavke().toLocalDateTime().toLocalDate());
         
-        prelaznicaTableView.setItems(listPrelaznica);
+        prelaznicaTableView.setItems(prelazniceList);
         datumColumn.setCellValueFactory(new PropertyValueFactory<>("datumPrelaska"));
         izProstorijeColumn.setCellValueFactory(new PropertyValueFactory<>("idProstorijeIzString"));
         uProstorijuColumn.setCellValueFactory(new PropertyValueFactory<>("idProstorijeUString"));
         saOsobeColumn.setCellValueFactory(new PropertyValueFactory<>("idOsobeSaString"));
         naOsobuColumn.setCellValueFactory(new PropertyValueFactory<>("IdOsobeNaString"));
+        
+        Util.preventColumnReordering(prelaznicaTableView);
+        
+        datumColumn.setMinWidth(50);
+        datumColumn.setMaxWidth(2000);
+        
+        izProstorijeColumn.setMinWidth(50);
+        izProstorijeColumn.setMaxWidth(3000);
+        
+        uProstorijuColumn.setMinWidth(50);
+        uProstorijuColumn.setMaxWidth(3000);
+        
+        saOsobeColumn.setMinWidth(50);
+        saOsobeColumn.setMaxWidth(4000);
+        
+        naOsobuColumn.setMinWidth(50);
+        naOsobuColumn.setMaxWidth(4000);
     }
 
     @FXML
@@ -231,8 +243,8 @@ public class PrikazOsnovnogSredstvaController implements Initializable {
 
                     table.setHeaderRows(1);
                     table.getDefaultCell().setHorizontalAlignment(Element.ALIGN_CENTER);
-                    if(!listPrelaznica.isEmpty()){
-                        for(Prelaznica os : listPrelaznica){
+                    if(!prelazniceList.isEmpty()){
+                        for(Prelaznica os : prelazniceList){
                                 table.addCell(os.getDatumPrelaska().toString());
                                 table.addCell(os.getIdProstorijeIzString());
                                 table.addCell(os.getIdProstorijeUString());

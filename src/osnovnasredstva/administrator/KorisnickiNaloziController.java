@@ -75,9 +75,9 @@ public class KorisnickiNaloziController implements Initializable {
     @FXML
     private ImageView clearImageView;
 
-    public static ObservableList<Korisnik> korisnickiNaloziList;
+    public static ObservableList<Korisnik> korisnickiNaloziList = FXCollections.observableArrayList();
     private static FilteredList<Korisnik> filteredList;
-    SortedList<Korisnik> sortedList;
+    private SortedList<Korisnik> sortedList;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -92,7 +92,7 @@ public class KorisnickiNaloziController implements Initializable {
             }
         });
 
-        korisnickiNaloziList = FXCollections.observableArrayList();
+        korisnickiNaloziList.clear();
         filteredList = new FilteredList<>(korisnickiNaloziList);
         sortedList = new SortedList<>(filteredList);
         sortedList.comparatorProperty().bind(korisnickiNaloziTableView.comparatorProperty());

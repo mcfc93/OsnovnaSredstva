@@ -2,38 +2,36 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXDatePicker?>
+<?import com.jfoenix.controls.JFXTextArea?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane id="AnchorPane" fx:id="anchorPane" prefHeight="511.0" prefWidth="679.0" styleClass="rootBorder" stylesheets="@../osnovnasredstva.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="osnovnasredstva.administrator.PrikazOsnovnogSredstvaController">
+<AnchorPane id="AnchorPane" fx:id="anchorPane" prefHeight="511.0" prefWidth="679.0" styleClass="rootBorder" stylesheets="@../osnovnasredstva.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="osnovnasredstva.administrator.PrikazOsnovnogSredstvaController">
    <children>
       <AnchorPane fx:id="menuLine" prefHeight="30.0" prefWidth="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <Button fx:id="closeButton" layoutX="572.0" layoutY="3.0" mnemonicParsing="false" onMouseClicked="#close" styleClass="closeButton" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
          </children>
       </AnchorPane>
-      <JFXButton fx:id="pdfButton" layoutX="521.0" layoutY="281.0" onAction="#pdf" text=" " />
       <Label layoutX="24.0" layoutY="54.0" styleClass="naslovLabel" text="Osnovni podaci:" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="45.0" />
-      <TextField fx:id="invBrTextField" layoutX="133.0" layoutY="87.0" styleClass="opisTextField" AnchorPane.leftAnchor="133.0" />
-      <TextField fx:id="vrijednostTextField" layoutX="135.0" layoutY="256.0" maxWidth="220.0" minWidth="128.0" prefWidth="220.0" styleClass="opisTextField" AnchorPane.leftAnchor="133.0" />
-      <TextField fx:id="stopaAmTextField" layoutX="135.0" layoutY="213.0" styleClass="opisTextField" AnchorPane.leftAnchor="133.0" />
-      <TextField fx:id="nazivTextField" layoutX="140.0" layoutY="126.0" styleClass="opisTextField" AnchorPane.leftAnchor="133.0" />
-      <TextField fx:id="nabVrTextField" layoutX="135.0" layoutY="167.0" styleClass="opisTextField" AnchorPane.leftAnchor="133.0" />
-      <Label alignment="CENTER_RIGHT" layoutX="372.0" layoutY="64.0" prefHeight="17.0" prefWidth="30.0" styleClass="opisLabel" text="Opis" AnchorPane.leftAnchor="372.0" />
-      <Label alignment="CENTER_RIGHT" layoutX="374.0" layoutY="192.0" prefHeight="17.0" prefWidth="91.0" styleClass="opisLabel" text="Datum nabavke" AnchorPane.leftAnchor="374.0" />
-      <Label alignment="CENTER_RIGHT" layoutX="29.0" layoutY="130.0" prefHeight="17.0" prefWidth="82.0" styleClass="opisLabel" text="Naziv" AnchorPane.leftAnchor="29.0" AnchorPane.rightAnchor="560.0" />
-      <Label alignment="CENTER_RIGHT" layoutX="3.0" layoutY="217.0" prefHeight="17.0" prefWidth="114.0" styleClass="opisLabel" text="Stopa amortizacije" AnchorPane.leftAnchor="3.0" AnchorPane.rightAnchor="560.0" />
-      <Label alignment="CENTER_RIGHT" layoutX="3.0" layoutY="171.0" prefHeight="17.0" prefWidth="114.0" styleClass="opisLabel" text="Nabavna vrijednost" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="560.0" />
-      <Label alignment="CENTER_RIGHT" layoutX="29.0" layoutY="91.0" styleClass="opisLabel" text="Inventarni broj" AnchorPane.leftAnchor="29.0" AnchorPane.rightAnchor="560.0" />
-      <Label alignment="CENTER_RIGHT" layoutX="74.0" layoutY="260.0" prefHeight="17.0" prefWidth="86.0" styleClass="opisLabel" text="Vrijednost" AnchorPane.rightAnchor="562.0" />
-      <TextArea fx:id="opisTextArea" editable="false" layoutX="376.0" layoutY="87.0" prefHeight="99.0" prefWidth="191.0" />
-      <JFXDatePicker fx:id="datePicker" disable="true" editable="false" layoutX="376.0" layoutY="213.0" prefHeight="25.0" prefWidth="175.0" />
-      <TableView fx:id="prelaznicaTableView" layoutX="19.0" layoutY="299.0" prefHeight="173.0" prefWidth="645.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
+      <TextField fx:id="invBrTextField" layoutX="133.0" layoutY="87.0" styleClass="opisTextField" AnchorPane.leftAnchor="165.0" AnchorPane.topAnchor="75.0" />
+      <TextField fx:id="vrijednostTextField" layoutX="135.0" layoutY="256.0" maxWidth="220.0" minWidth="128.0" prefWidth="220.0" styleClass="opisTextField" AnchorPane.leftAnchor="165.0" AnchorPane.topAnchor="215.0" />
+      <TextField fx:id="stopaAmTextField" layoutX="135.0" layoutY="213.0" styleClass="opisTextField" AnchorPane.leftAnchor="165.0" AnchorPane.topAnchor="180.0" />
+      <TextField fx:id="nazivTextField" layoutX="140.0" layoutY="126.0" styleClass="opisTextField" AnchorPane.leftAnchor="165.0" AnchorPane.topAnchor="110.0" />
+      <TextField fx:id="nabVrTextField" layoutX="135.0" layoutY="167.0" styleClass="opisTextField" AnchorPane.leftAnchor="165.0" AnchorPane.topAnchor="145.0" />
+      <Label alignment="CENTER_RIGHT" layoutX="357.0" layoutY="225.0" prefHeight="17.0" prefWidth="91.0" styleClass="opisLabel" text="Datum nabavke" AnchorPane.leftAnchor="357.0" AnchorPane.topAnchor="217.0" />
+      <Label alignment="CENTER_RIGHT" layoutX="17.0" layoutY="116.0" prefHeight="17.0" prefWidth="114.0" styleClass="opisLabel" text="Naziv" AnchorPane.leftAnchor="35.0" AnchorPane.topAnchor="112.0" />
+      <Label alignment="CENTER_RIGHT" layoutX="9.0" layoutY="186.0" prefHeight="17.0" prefWidth="114.0" styleClass="opisLabel" text="Stopa amortizacije" AnchorPane.leftAnchor="35.0" AnchorPane.topAnchor="182.0" />
+      <Label alignment="CENTER_RIGHT" layoutX="3.0" layoutY="171.0" prefHeight="17.0" prefWidth="114.0" styleClass="opisLabel" text="Nabavna vrijednost" AnchorPane.leftAnchor="35.0" AnchorPane.topAnchor="147.0" />
+      <Label alignment="CENTER_RIGHT" layoutX="17.0" layoutY="81.0" prefHeight="17.0" prefWidth="114.0" styleClass="opisLabel" text="Inventarni broj" AnchorPane.leftAnchor="35.0" AnchorPane.topAnchor="77.0" />
+      <Label alignment="CENTER_RIGHT" layoutX="9.0" layoutY="225.0" prefHeight="17.0" prefWidth="114.0" styleClass="opisLabel" text="Vrijednost" AnchorPane.leftAnchor="35.0" AnchorPane.topAnchor="217.0" />
+      <JFXDatePicker fx:id="datePicker" layoutX="376.0" layoutY="213.0" prefHeight="25.0" prefWidth="175.0" AnchorPane.rightAnchor="45.0" AnchorPane.topAnchor="215.0" />
+      <TableView fx:id="prelaznicaTableView" layoutX="19.0" layoutY="299.0" prefHeight="173.0" prefWidth="645.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="285.0">
         <columns>
           <TableColumn fx:id="datumColumn" prefWidth="129.0" resizable="false" text="Datum prelaska" />
           <TableColumn fx:id="izProstorijeColumn" prefWidth="129.0" resizable="false" text="Iz prostorije" />
@@ -42,6 +40,11 @@
             <TableColumn fx:id="naOsobuColumn" prefWidth="119.0" resizable="false" text="Na osobu" />
         </columns>
       </TableView>
-      <Label layoutX="29.0" layoutY="296.0" styleClass="naslovLabel" text="Istorija zaduživanja osnovnog sredstva" AnchorPane.leftAnchor="29.0" />
+      <Label layoutX="29.0" layoutY="296.0" styleClass="naslovLabel" text="Istorija zaduživanja osnovnih sredstava:" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="265.0" />
+      <JFXTextArea fx:id="opisTextArea" editable="false" focusTraversable="false" layoutX="421.0" layoutY="76.0" prefHeight="100.0" prefWidth="200.0" promptText="Opis" wrapText="true" AnchorPane.topAnchor="75.0" />
+      <JFXButton fx:id="pdfButton" layoutX="521.0" layoutY="281.0" onAction="#pdf" text=" " AnchorPane.rightAnchor="45.0" AnchorPane.topAnchor="265.0">
+         <tooltip>
+            <Tooltip maxWidth="125.0" text="Kreiraj PDF?" wrapText="true" />
+         </tooltip></JFXButton>
    </children>
 </AnchorPane>

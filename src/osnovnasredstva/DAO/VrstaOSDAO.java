@@ -264,7 +264,7 @@ public class VrstaOSDAO {
 
           return (List)searchResults;
     }
-
+    /*
     private static List<VrstaOS> vrsteOSList = new ArrayList<>();
 	
     public static List<VrstaOS> getVrsteOSList() {
@@ -289,4 +289,5 @@ public class VrstaOSDAO {
             Util.close(r, s, c);
         }
     }
+    */
 }

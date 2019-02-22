@@ -6,10 +6,11 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" fx:id="anchorPane" prefHeight="475.0" prefWidth="650.0" styleClass="rootBorder" stylesheets="@../osnovnasredstva.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="osnovnasredstva.administrator.PrikazOsobeController">
+<AnchorPane id="AnchorPane" fx:id="anchorPane" prefHeight="475.0" prefWidth="650.0" styleClass="rootBorder" stylesheets="@../osnovnasredstva.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="osnovnasredstva.administrator.PrikazOsobeController">
    <children>
       <AnchorPane fx:id="menuLine" prefHeight="30.0" prefWidth="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -18,7 +19,7 @@
       </AnchorPane>
       <Label layoutX="14.0" layoutY="44.0" styleClass="naslovLabel" text="Osnovni podaci:" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="45.0" />
       <Label alignment="CENTER_RIGHT" layoutX="28.0" layoutY="51.0" prefHeight="17.0" prefWidth="48.0" styleClass="opisLabel" text="Ime" AnchorPane.leftAnchor="35.0" AnchorPane.topAnchor="77.0" />
-      <TextField fx:id="imeTextField" editable="false" layoutX="104.0" layoutY="79.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="150.0" styleClass="opisTextField" AnchorPane.leftAnchor="102.0" AnchorPane.topAnchor="77.0" />
+      <TextField fx:id="imeTextField" editable="false" layoutX="104.0" layoutY="79.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="150.0" styleClass="opisTextField" AnchorPane.leftAnchor="100.0" AnchorPane.topAnchor="75.0" />
       <Label alignment="CENTER_RIGHT" layoutX="28.0" layoutY="96.0" prefHeight="17.0" prefWidth="48.0" styleClass="opisLabel" text="Prezime" AnchorPane.leftAnchor="35.0" AnchorPane.topAnchor="112.0" />
       <TextField fx:id="prezimeTextField" editable="false" layoutX="138.0" layoutY="90.0" prefHeight="25.0" prefWidth="150.0" styleClass="opisTextField" AnchorPane.leftAnchor="100.0" AnchorPane.topAnchor="110.0" />
       <Label alignment="CENTER_RIGHT" layoutX="28.0" layoutY="138.0" prefHeight="17.0" prefWidth="48.0" styleClass="opisLabel" text="JMBG" AnchorPane.leftAnchor="35.0" AnchorPane.topAnchor="147.0" />
@@ -38,17 +39,20 @@
             <Font name="System Bold" size="20.0" />
          </font>
       </Label>
-      <TableView fx:id="osnovnaSredTableView" layoutX="11.0" layoutY="241.0" prefHeight="246.0" prefWidth="643.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="250.0">
-        <columns>
-          <TableColumn fx:id="invBrColumn" editable="false" prefWidth="133.578125" resizable="false" text="Inventarni broj" />
-          <TableColumn fx:id="nazivColumn" editable="false" prefWidth="149.93359375" resizable="false" text="Naziv" />
-            <TableColumn fx:id="opisColumn" editable="false" prefWidth="183.0" resizable="false" text="Opis" />
-            <TableColumn fx:id="vrijednostColumn" editable="false" prefWidth="112.0" resizable="false" text="Vrijednost" />
-        </columns>
+      <TableView fx:id="osnovnaSredstvaTableView" layoutX="33.0" layoutY="232.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="250.0">
+         <columns>
+            <TableColumn fx:id="invBrColumn" prefWidth="75.0" text="Inventarni broj" />
+            <TableColumn fx:id="nazivColumn" prefWidth="75.0" text="Naziv" />
+            <TableColumn fx:id="opisColumn" prefWidth="75.0" text="Opis" />
+            <TableColumn fx:id="vrijednostColumn" prefWidth="75.0" text="Vrijednost" />
+         </columns>
          <columnResizePolicy>
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
          </columnResizePolicy>
       </TableView>
-      <JFXButton fx:id="pdfButton" layoutX="573.0" layoutY="227.0" onAction="#pdf" text=" " />
+      <JFXButton fx:id="pdfButton" layoutX="573.0" layoutY="227.0" onAction="#pdf" text=" " AnchorPane.rightAnchor="45.0" AnchorPane.topAnchor="230.0">
+         <tooltip>
+            <Tooltip maxWidth="125.0" text="Kreiraj PDF?" wrapText="true" />
+         </tooltip></JFXButton>
    </children>
 </AnchorPane>

@@ -67,8 +67,6 @@ import osnovnasredstva.DTO.Osoba;
 import osnovnasredstva.DTO.Prelaznica;
 import osnovnasredstva.DTO.Prostorija;
 import osnovnasredstva.DTO.VrstaOS;
-import static osnovnasredstva.administrator.LokacijeController.lokacijeList;
-import static osnovnasredstva.administrator.LokacijeController.zgradeList;
 import osnovnasredstva.prijava.PrijavaController;
 import osnovnasredstva.util.NotFoundException;
 import osnovnasredstva.util.Util;
@@ -247,7 +245,7 @@ public class DodavanjeOsnovnogSredstvaController implements Initializable {
                     if (item == null || empty) {
                         setGraphic(null);
                     } else {
-                        setText(item.getNaziv() + " (" + ZgradaDAO.getZgradeList().stream().filter(z -> z.getId() == item.getIdZgrade()).findFirst().get().getNaziv() + ")");
+                        setText(item.getNaziv() + " (" + OsnovnaSredstvaController.zgradeList.stream().filter(z -> z.getId() == item.getIdZgrade()).findFirst().get().getNaziv() + ")");
                     }
                     
                 }
@@ -258,17 +256,21 @@ public class DodavanjeOsnovnogSredstvaController implements Initializable {
         lokacijaComboBox.setConverter(new StringConverter<Prostorija>() {
             @Override
             public String toString(Prostorija object) {
-                return object.getNaziv() + " (" + ZgradaDAO.getZgradeList().stream().filter(z -> z.getId() == object.getIdZgrade()).findFirst().get().getNaziv() + ")";
+                return object.getNaziv() + " (" + OsnovnaSredstvaController.zgradeList.stream().filter(z -> z.getId() == object.getIdZgrade()).findFirst().get().getNaziv() + ")";
             }
             @Override
             public Prostorija fromString(String string) {
                 return lokacijaComboBox.getItems().stream().filter(p -> p.getNaziv().equals(string)).findFirst().orElse(null);
             }
         });
-        
+        /*
         vrstaComboBox.getItems().setAll(VrstaOSDAO.getVrsteOSList());
         osobaComboBox.getItems().setAll(OsobaDAO.getOsobeList());
         lokacijaComboBox.getItems().setAll(ProstorijaDAO.getProstorijeList());
+        */
+        vrstaComboBox.getItems().setAll(OsnovnaSredstvaController.vrstaOsnovnogSredstvaList);
+        osobaComboBox.getItems().setAll(OsobeController.osobeList);
+        lokacijaComboBox.getItems().setAll(OsnovnaSredstvaController.prostorijeList);
         
         if(izmjena) {
             invertarniBrojTextField.setText(odabranoOS.getInventarniBroj());
@@ -318,14 +320,15 @@ public class DodavanjeOsnovnogSredstvaController implements Initializable {
                     prelaznica = new Prelaznica(new Timestamp(System.currentTimeMillis()), "", temp.getId(), lokacijaComboBox.getValue().getId(), tmp.getId(), osobaComboBox.getValue().getId(), odabranoOS.getId());
                     try {
                         ////////////napravi onaj svoj GUI//////////////
-                        Parent root = FXMLLoader.load(getClass().getResource("/osnovnasredstva/administrator/DodavanjePrelazniceNapomena.fxml"));
+                        Parent root = FXMLLoader.load(getClass().getResource("/osnovnasredstva/administrator/DodavanjePrelazniceNapomenaView.fxml"));
                         Scene scene = new Scene(root);
                         Stage stage=new Stage();
                         stage.setScene(scene);
                         stage.setResizable(false);
-                        //stage.initStyle(StageStyle.UNDECORATED);
+                        stage.initStyle(StageStyle.UNDECORATED);
                         stage.initModality(Modality.APPLICATION_MODAL);
                         stage.showAndWait();
+                        
                         prelaznicaDAO.create(PrijavaController.konekcija, prelaznica);
                         Platform.runLater(() -> Util.getNotifications("Obavještenje", "Prelaznica kreirana.", "Information").show());
                         generisiPDF(prelaznica);
@@ -357,7 +360,7 @@ public class DodavanjeOsnovnogSredstvaController implements Initializable {
     }
     public void generisiPDF(Prelaznica pr){
         MaskerPane progressPane=Util.getMaskerPane(anchorPane);
-        String naziv = "prelaznica/" + "Prelaznica_" + new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(new Date()) + ".pdf";
+        String naziv = "PDF/prelaznica/" + "Prelaznica_" + new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(new Date()) + ".pdf";
         
         new Thread(new Task<Void>() {
             @Override

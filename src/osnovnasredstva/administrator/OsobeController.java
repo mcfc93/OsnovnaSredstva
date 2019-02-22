@@ -107,9 +107,9 @@ public class OsobeController implements Initializable {
     @FXML
     private JFXToggleButton postaniNadzornikToggleButton;
     
-    public static ObservableList<Osoba> osobeList;
+    public static ObservableList<Osoba> osobeList = FXCollections.observableArrayList();
     private static FilteredList<Osoba> filteredList;
-    SortedList<Osoba> sortedList;
+    private SortedList<Osoba> sortedList;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -135,7 +135,7 @@ public class OsobeController implements Initializable {
             }
         }
         
-        osobeList = FXCollections.observableArrayList();
+        osobeList.clear();
         filteredList = new FilteredList(osobeList);
         sortedList = new SortedList<>(filteredList);
         sortedList.comparatorProperty().bind(osobeTableView.comparatorProperty());
@@ -297,7 +297,7 @@ public class OsobeController implements Initializable {
                                 try {
                                     osobaDAO.delete(PrijavaController.konekcija, item);
                                     osobeList.remove(item);
-                                    OsobaDAO.getOsobeList().remove(item);
+                                    //OsobaDAO.getOsobeList().remove(item);
                                     //getTableView().getItems().remove(item);
                                     osobeTableView.refresh();
                                     System.out.println("Obrisano: " + item);

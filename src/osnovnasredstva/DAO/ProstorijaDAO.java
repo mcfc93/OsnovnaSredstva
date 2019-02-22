@@ -326,7 +326,7 @@ public class ProstorijaDAO {
 
           return (List)searchResults;
     }
-
+    /*
     private static List<Prostorija> prostorijeList = new ArrayList<>();
 	
     public static List<Prostorija> getProstorijeList() {
@@ -351,4 +351,5 @@ public class ProstorijaDAO {
             Util.close(r, s, c);
         }
     }
+    */
 }

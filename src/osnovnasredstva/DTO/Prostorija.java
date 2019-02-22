@@ -2,7 +2,6 @@ package osnovnasredstva.DTO;
 
 import java.sql.SQLException;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 import osnovnasredstva.DAO.ZgradaDAO;
 import osnovnasredstva.prijava.PrijavaController;
 import osnovnasredstva.util.NotFoundException;

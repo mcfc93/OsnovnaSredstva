@@ -57,11 +57,13 @@ import javafx.stage.StageStyle;
 import javafx.util.StringConverter;
 import org.controlsfx.control.MaskerPane;
 import osnovnasredstva.DAO.OsnovnoSredstvoDAO;
+import osnovnasredstva.DAO.ProstorijaDAO;
 import osnovnasredstva.DAO.VrstaOSDAO;
+import osnovnasredstva.DAO.ZgradaDAO;
 import osnovnasredstva.DTO.OsnovnoSredstvo;
+import osnovnasredstva.DTO.Prostorija;
 import osnovnasredstva.DTO.VrstaOS;
-import static osnovnasredstva.administrator.PrikazOsobeController.listOsnovnoSredstvo;
-import static osnovnasredstva.administrator.PrikazOsobeController.odabranaOsoba;
+import osnovnasredstva.DTO.Zgrada;
 import osnovnasredstva.prijava.PrijavaController;
 import osnovnasredstva.util.NotFoundException;
 import osnovnasredstva.util.Util;
@@ -70,6 +72,9 @@ public class OsnovnaSredstvaController implements Initializable {
     
     private static OsnovnoSredstvoDAO osnovnoSredstvoDAO = new OsnovnoSredstvoDAO();
     private static VrstaOSDAO vrstaOSDAO = new VrstaOSDAO();
+    private static ProstorijaDAO prostorijaDAO = new ProstorijaDAO();
+    private static ZgradaDAO zgradaDAO = new ZgradaDAO();
+    
     @FXML
     private AnchorPane anchorPane;
 
@@ -112,11 +117,13 @@ public class OsnovnaSredstvaController implements Initializable {
     @FXML
     private JFXButton dodajVrstuButton;
     
-    private static ObservableList<VrstaOS> vrstaOsnovnogSredstvaList;
+    public static ObservableList<VrstaOS> vrstaOsnovnogSredstvaList = FXCollections.observableArrayList();
+    public static ObservableList<Zgrada> zgradeList = FXCollections.observableArrayList();
+    public static ObservableList<Prostorija> prostorijeList = FXCollections.observableArrayList();
     
-    public static ObservableList<OsnovnoSredstvo> osnovnaSredstvaList;
+    public static ObservableList<OsnovnoSredstvo> osnovnaSredstvaList = FXCollections.observableArrayList();
     private static FilteredList<OsnovnoSredstvo> filteredList;
-    SortedList<OsnovnoSredstvo> sortedList;
+    private SortedList<OsnovnoSredstvo> sortedList;
     
     @FXML
     private JFXToggleButton postaniNadzornikToggleButton;
@@ -148,8 +155,8 @@ public class OsnovnaSredstvaController implements Initializable {
             }
         }
         
-        vrstaOsnovnogSredstvaList = FXCollections.observableArrayList();
-        osnovnaSredstvaList = FXCollections.observableArrayList();
+        vrstaOsnovnogSredstvaList.clear();
+        osnovnaSredstvaList.clear();
         filteredList = new FilteredList(osnovnaSredstvaList);
         sortedList = new SortedList<>(filteredList);
         sortedList.comparatorProperty().bind(osnovnaSredstvaTableView.comparatorProperty());
@@ -160,8 +167,10 @@ public class OsnovnaSredstvaController implements Initializable {
             protected Void call() {
                 progressPane.setVisible(true);
                 try {
-                    //vrstaOsnovnogSredstvaList.addAll(vrstaOSDAO.loadAll(PrijavaController.konekcija));
-                    osnovnaSredstvaList.addAll(osnovnoSredstvoDAO.loadAll(PrijavaController.konekcija)); 
+                    vrstaOsnovnogSredstvaList.addAll(vrstaOSDAO.loadAll(PrijavaController.konekcija));
+                    osnovnaSredstvaList.addAll(osnovnoSredstvoDAO.loadAll(PrijavaController.konekcija));
+                    zgradeList.addAll(zgradaDAO.loadAll(PrijavaController.konekcija));
+                    prostorijeList.addAll(prostorijaDAO.loadAll(PrijavaController.konekcija));
                 } catch (SQLException e) {
                     Util.LOGGER.log(Level.SEVERE, e.toString(), e);
                 }
@@ -173,8 +182,8 @@ public class OsnovnaSredstvaController implements Initializable {
                 super.succeeded();
                 progressPane.setVisible(false);
                 Platform.runLater(() -> {
-                    vrstaOsnovnogSredstvaList.addAll(VrstaOSDAO.getVrsteOSList());
-                    vrstaOsnovnogSredstvaList.add(0, new VrstaOS());
+                    //vrstaOsnovnogSredstvaList.addAll(VrstaOSDAO.getVrsteOSList());
+                    vrstaComboBox.getItems().add(0, new VrstaOS());
                     vrstaComboBox.getItems().addAll(vrstaOsnovnogSredstvaList);
                     vrstaComboBox.getSelectionModel().selectFirst();
                 });
@@ -271,7 +280,7 @@ public class OsnovnaSredstvaController implements Initializable {
                     super.updateItem(item, empty);
                     if(!empty) {
                         try {
-                            setText(VrstaOSDAO.getVrsteOSList().stream().filter(vrsta -> vrsta.getId() == item).findFirst().get().getNaziv());
+                            setText(vrstaOsnovnogSredstvaList.stream().filter(vrsta -> vrsta.getId() == item).findFirst().get().getNaziv());
                         } catch(NullPointerException e) {
                             setText("NEPOZNATO");
                         }
@@ -474,7 +483,7 @@ public class OsnovnaSredstvaController implements Initializable {
             stage.showAndWait();
             
             if(DodavanjeVrsteOSController.vrstaOS != null) {
-                VrstaOSDAO.getVrsteOSList().add(DodavanjeVrsteOSController.vrstaOS);
+                //VrstaOSDAO.getVrsteOSList().add(DodavanjeVrsteOSController.vrstaOS);
                 vrstaOsnovnogSredstvaList.add(DodavanjeVrsteOSController.vrstaOS);
                 vrstaComboBox.getItems().add(DodavanjeVrsteOSController.vrstaOS);
             }

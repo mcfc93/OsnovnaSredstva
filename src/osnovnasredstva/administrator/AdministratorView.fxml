@@ -103,12 +103,12 @@
                <children>
                   <ImageView fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                      <image>
-                        <Image url="@../img/avatar.png" />
+                        <Image url="@../img/avatar_white.png" />
                      </image>
                   </ImageView>
                </children>
             </GridPane>
-            <ToggleButton fx:id="korisnickiNaloziButton" alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="15.0" layoutY="285.0" mnemonicParsing="false" onAction="#w" prefHeight="40.0" prefWidth="200.0" text="Korisnički nalozi" toggleGroup="$toggleGroup" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+            <ToggleButton fx:id="korisnickiNaloziButton" alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="15.0" layoutY="325.0" mnemonicParsing="false" onAction="#w" prefHeight="40.0" prefWidth="200.0" text="Korisnički nalozi" toggleGroup="$toggleGroup" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                <opaqueInsets>
                   <Insets />
                </opaqueInsets>
@@ -119,6 +119,21 @@
                   <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../img/user.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </ToggleButton>
+            <ToggleButton fx:id="prelaznicaButton" alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="15.0" layoutY="285.0" mnemonicParsing="false" onAction="#v" prefHeight="40.0" prefWidth="200.0" text="Prelaznica" toggleGroup="$toggleGroup" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <padding>
+                  <Insets left="20.0" />
+               </padding>
+               <graphic>
+                  <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../img/transfer.png" />
                      </image>
                   </ImageView>
                </graphic>

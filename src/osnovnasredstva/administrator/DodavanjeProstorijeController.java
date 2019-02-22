@@ -126,7 +126,7 @@ public class DodavanjeProstorijeController implements Initializable {
         });
         
         zgradaComboBox.setVisibleRowCount(5);
-        zgradaComboBox.getItems().setAll(ZgradaDAO.getZgradeList());
+        zgradaComboBox.getItems().setAll(LokacijeController.zgradeList);
         
         if(izmjena) {
             sifraTextField.setText(odabranaProstorija.getSifra());
@@ -173,14 +173,14 @@ public class DodavanjeProstorijeController implements Initializable {
                     Util.showBugAlert();
                 }
             }
-            
+            /*
             new Thread() {
                 @Override
                 public void run() {
                     ProstorijaDAO.loadProstorije();
                 }
             }.start();
-            
+            */
             ((Stage)((Node)event.getSource()).getScene().getWindow()).close();
         }
     }

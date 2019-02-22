@@ -23,7 +23,7 @@
     -fx-background-color: transparent;
     -fx-prompt-text-fill: -fx-primary-color;
     -fx-text-fill: -fx-primary-color;
-    -fx-font-weight:bold;
+    -fx-font-weight: bold;
     -fx-highlight-fill: -fx-secondary-color;
 
     -fx-border-color: -fx-primary-color;
@@ -39,7 +39,7 @@
 
 #korisnickoImeTextField:focused {
     -fx-text-fill: -fx-secondary-color;
-    -fx-font-weight: normal;
+    -fx-font-weight: bold;
 
     /*-fx-border-color: -fx-secondary-color;*/
     -fx-border-width: 0px 0px 2px 0px;
@@ -65,7 +65,7 @@
 
 #lozinkaTextField:focused {
     -fx-text-fill: -fx-secondary-color;
-    -fx-font-weight: normal;
+    -fx-font-weight: bold;
 
     /*-fx-border-color: -fx-secondary-color;*/
     -fx-border-width: 0px 0px 2px 0px;
@@ -357,7 +357,7 @@
 }
 
 .combo-box-popup > .list-view {
-    -fx-background-color: -fx-primary-color;
+    -fx-background-color: -fx-back-color;
     -fx-background-insets: 0, 1;
     -fx-effect: dropshadow( gaussian , -fx-primary-color , 12, 0.0 , 0 , 8 );
 }
@@ -1182,7 +1182,7 @@
     -fx-background-radius: 20px;
     -fx-background-color: transparent;
     -fx-border-width: 1.25px;
-    -fx-cursor: normal;
+    /*-fx-cursor: normal;*/
     -fx-focus-traversable: false;
     -fx-pref-width: 175;
     -fx-pref-height: 25;

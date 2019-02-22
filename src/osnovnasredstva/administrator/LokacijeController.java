@@ -58,11 +58,8 @@ import javafx.util.StringConverter;
 import org.controlsfx.control.MaskerPane;
 import osnovnasredstva.DAO.ProstorijaDAO;
 import osnovnasredstva.DAO.ZgradaDAO;
-import osnovnasredstva.DTO.OsnovnoSredstvo;
 import osnovnasredstva.DTO.Prostorija;
 import osnovnasredstva.DTO.Zgrada;
-import static osnovnasredstva.administrator.PrikazProstorijeController.listOsnovnoSredstvo;
-import static osnovnasredstva.administrator.PrikazProstorijeController.odabranaProstorija;
 import osnovnasredstva.prijava.PrijavaController;
 import osnovnasredstva.util.NotFoundException;
 import osnovnasredstva.util.Util;
@@ -119,11 +116,11 @@ public class LokacijeController implements Initializable {
     @FXML
     private JFXToggleButton postaniNadzornikToggleButton;
     
-    public static ObservableList<Zgrada> zgradeList;
+    public static ObservableList<Zgrada> zgradeList = FXCollections.observableArrayList();
     
-    public static ObservableList<Prostorija> lokacijeList;
+    public static ObservableList<Prostorija> lokacijeList = FXCollections.observableArrayList();
     private static FilteredList<Prostorija> filteredList;
-    SortedList<Prostorija> sortedList;
+    private SortedList<Prostorija> sortedList;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -150,8 +147,8 @@ public class LokacijeController implements Initializable {
             }
         }
 
-        zgradeList = FXCollections.observableArrayList();
-        lokacijeList = FXCollections.observableArrayList();
+        zgradeList.clear();
+        lokacijeList.clear();
         filteredList = new FilteredList(lokacijeList);
         sortedList = new SortedList<>(filteredList);
         sortedList.comparatorProperty().bind(lokacijeTableView.comparatorProperty());
@@ -175,7 +172,7 @@ public class LokacijeController implements Initializable {
                 super.succeeded();
                 progressPane.setVisible(false);
                 Platform.runLater(() -> {
-                    zgradeList.add(0, new Zgrada());
+                    zgradaComboBox.getItems().add(0, new Zgrada());
                     zgradaComboBox.getItems().addAll(zgradeList);
                     zgradaComboBox.getSelectionModel().selectFirst();
                 });
@@ -364,7 +361,7 @@ public class LokacijeController implements Initializable {
                                 try {
                                     prostorijaDAO.delete(PrijavaController.konekcija, item);
                                     lokacijeList.remove(item);
-                                    ProstorijaDAO.getProstorijeList().remove(item);
+                                    //ProstorijaDAO.getProstorijeList().remove(item);
                                     //getTableView().getItems().remove(item);
                                     lokacijeTableView.refresh();
                                     System.out.println("Obrisano: " + item);
@@ -469,7 +466,7 @@ public class LokacijeController implements Initializable {
             stage.showAndWait();
             
             if(DodavanjeZgradeController.zgrada != null) {
-                ZgradaDAO.getZgradeList().add(DodavanjeZgradeController.zgrada);
+                //ZgradaDAO.getZgradeList().add(DodavanjeZgradeController.zgrada);
                 zgradeList.add(DodavanjeZgradeController.zgrada);
                 zgradaComboBox.getItems().add(DodavanjeZgradeController.zgrada);
             }
