@@ -319,8 +319,9 @@ public class KorisnikDAO {
     
     public static final String hash(String lozinka, String salt) {
         try {
+            String saltApp = "cafecafecafecafe";
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            byte[] hash = digest.digest((lozinka + salt).getBytes(StandardCharsets.UTF_8));
+            byte[] hash = digest.digest((lozinka + salt + saltApp).getBytes(StandardCharsets.UTF_8));
             //lozinka = Base64.getEncoder().encodeToString(hash);
             StringBuilder sb = new StringBuilder();
             //sb.append(salt).append("#");

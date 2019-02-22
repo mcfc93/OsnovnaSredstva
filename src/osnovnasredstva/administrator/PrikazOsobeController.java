@@ -217,13 +217,20 @@ public class PrikazOsobeController implements Initializable {
 
                     table.setHeaderRows(1);
                     table.getDefaultCell().setHorizontalAlignment(Element.ALIGN_CENTER);
-                    for(OsnovnoSredstvo os : listOsnovnoSredstvo){
-                        table.addCell(os.getInventarniBroj());
-                        table.addCell(os.getNaziv());
-                        table.addCell(os.getOpis());
-                        table.addCell(os.getVrijednost().toString());
+                    if(!listOsnovnoSredstvo.isEmpty()){
+                        for(OsnovnoSredstvo os : listOsnovnoSredstvo){
+                                table.addCell(os.getInventarniBroj());
+                                table.addCell(os.getNaziv());
+                                table.addCell(os.getOpis());
+                                table.addCell(os.getVrijednost().toString());                       
+                        }
+                }
+                    else{
+                        table.addCell(" ");
+                        table.addCell(" ");
+                        table.addCell(" ");
+                        table.addCell(" ");
                     }
-
                     document.add(table);
                     document.close();
                 } catch (DocumentException | FileNotFoundException e) {

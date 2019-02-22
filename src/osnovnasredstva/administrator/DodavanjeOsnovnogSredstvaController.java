@@ -84,6 +84,9 @@ public class DodavanjeOsnovnogSredstvaController implements Initializable {
     @FXML
     private JFXComboBox<Prostorija> lokacijaComboBox;
     
+    Prostorija temp;
+    Osoba tmp;
+    
     private double xOffset=0;
     private double yOffset=0;
 
@@ -241,6 +244,9 @@ public class DodavanjeOsnovnogSredstvaController implements Initializable {
             osobaComboBox.getSelectionModel().select(osobaComboBox.getItems().stream().filter(osoba -> osoba.getId() == odabranoOS.getIdOsobe()).findFirst().orElse(null));
             lokacijaComboBox.getSelectionModel().select(lokacijaComboBox.getItems().stream().filter(lokacija -> lokacija.getId() == odabranoOS.getIdLokacije()).findFirst().orElse(null));
         }
+            tmp = osobaComboBox.getValue();
+            temp = lokacijaComboBox.getValue();
+            
     }    
     
     @FXML
@@ -261,7 +267,7 @@ public class DodavanjeOsnovnogSredstvaController implements Initializable {
                                 & stopaAmortizacijeTextField.validate()
                                     & osobaComboBox.validate()
                                         & lokacijaComboBox.validate()) {
-            if(izmjena) {
+            if(izmjena) {  
                 odabranoOS.setInventarniBroj(invertarniBrojTextField.getText());
                 odabranoOS.setNaziv(nazivTextField.getText());
                 odabranoOS.setOpis(opisTextArea.getText().trim());
@@ -271,6 +277,9 @@ public class DodavanjeOsnovnogSredstvaController implements Initializable {
                 odabranoOS.setIdLokacije(lokacijaComboBox.getSelectionModel().getSelectedItem().getId());
                 odabranoOS.setIdOsobe(osobaComboBox.getSelectionModel().getSelectedItem().getId());
                 odabranoOS.setIdVrste(vrstaComboBox.getSelectionModel().getSelectedItem().getId());
+                if(!tmp.equals(osobaComboBox.getValue()) || !temp.equals(lokacijaComboBox.getValue())){
+                    
+                }
                 try {
                     osnovnoSredstvoDAO.save(PrijavaController.konekcija, odabranoOS);
                     Platform.runLater(() -> Util.getNotifications("Obavještenje", "Osnovno sredstvo izmjenjeno.", "Information").show());

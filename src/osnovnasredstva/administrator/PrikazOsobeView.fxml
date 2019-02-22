@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" fx:id="anchorPane" prefHeight="475.0" prefWidth="650.0" styleClass="rootBorder" stylesheets="@../osnovnasredstva.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="osnovnasredstva.administrator.PrikazOsobeController">
+<AnchorPane id="AnchorPane" fx:id="anchorPane" prefHeight="475.0" prefWidth="650.0" styleClass="rootBorder" stylesheets="@../osnovnasredstva.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="osnovnasredstva.administrator.PrikazOsobeController">
    <children>
       <AnchorPane fx:id="menuLine" prefHeight="30.0" prefWidth="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -40,10 +40,10 @@
       </Label>
       <TableView fx:id="osnovnaSredTableView" layoutX="11.0" layoutY="241.0" prefHeight="246.0" prefWidth="643.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="250.0">
         <columns>
-          <TableColumn fx:id="invBrColumn" prefWidth="133.578125" text="Invertarni broj" />
-          <TableColumn fx:id="nazivColumn" prefWidth="149.93359375" text="Naziv" />
-            <TableColumn fx:id="opisColumn" prefWidth="155.5126953125" text="Opis" />
-            <TableColumn fx:id="vrijednostColumn" prefWidth="179.8125" text="Vrijednost" />
+          <TableColumn fx:id="invBrColumn" editable="false" prefWidth="133.578125" resizable="false" text="Inventarni broj" />
+          <TableColumn fx:id="nazivColumn" editable="false" prefWidth="149.93359375" resizable="false" text="Naziv" />
+            <TableColumn fx:id="opisColumn" editable="false" prefWidth="183.0" resizable="false" text="Opis" />
+            <TableColumn fx:id="vrijednostColumn" editable="false" prefWidth="112.0" resizable="false" text="Vrijednost" />
         </columns>
          <columnResizePolicy>
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
