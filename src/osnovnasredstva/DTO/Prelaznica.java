@@ -1,6 +1,13 @@
 package osnovnasredstva.DTO;
 
 import java.sql.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import osnovnasredstva.DAO.OsobaDAO;
+import osnovnasredstva.DAO.ProstorijaDAO;
+import osnovnasredstva.prijava.PrijavaController;
+import osnovnasredstva.util.NotFoundException;
+import osnovnasredstva.util.Util;
 
 public class Prelaznica {
 
@@ -103,4 +110,51 @@ public class Prelaznica {
           this.idOsnovnogSredstva = idOsnovnogSredstvaIn;
     }
 
+    public String getIdProstorijeIzString(){
+        ProstorijaDAO prostorijaDAO = new ProstorijaDAO();
+        Prostorija prostorija = new Prostorija();
+        prostorija.setId(idProstorijeIz);
+        try {
+            prostorijaDAO.load(PrijavaController.konekcija, prostorija);
+        } catch (NotFoundException | SQLException e) {
+            Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+        }
+        return prostorija.toString();
+    }
+    
+    public String getIdProstorijeUString(){
+        ProstorijaDAO prostorijaDAO = new ProstorijaDAO();
+        Prostorija prostorija = new Prostorija();
+        prostorija.setId(idProstorijeU);
+        try {
+            prostorijaDAO.load(PrijavaController.konekcija, prostorija);
+        } catch (NotFoundException | SQLException e) {
+            Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+        }
+        return prostorija.toString();
+    }
+    
+    public String getIdOsobeSaString(){
+        OsobaDAO osobaDAO = new OsobaDAO();
+        Osoba osoba = new Osoba();
+        osoba.setId(idOsobeSa);
+        try {
+            osobaDAO.load(PrijavaController.konekcija, osoba);
+        } catch (NotFoundException | SQLException e) {
+            Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+        }
+        return osoba.getIme() + " " + osoba.getPrezime();
+    }
+    
+    public String getIdOsobeNaString(){
+        OsobaDAO osobaDAO = new OsobaDAO();
+        Osoba osoba = new Osoba();
+        osoba.setId(idOsobeNa);
+        try {
+            osobaDAO.load(PrijavaController.konekcija, osoba);
+        } catch (NotFoundException | SQLException e) {
+            Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+        }
+        return osoba.getIme() + " " + osoba.getPrezime();
+    }
 }

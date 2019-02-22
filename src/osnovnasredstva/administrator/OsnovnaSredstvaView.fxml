@@ -12,13 +12,14 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane id="AnchorPane" fx:id="anchorPane" prefHeight="465.0" prefWidth="600.0" stylesheets="@../osnovnasredstva.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="osnovnasredstva.administrator.OsnovnaSredstvaController">
+<AnchorPane id="AnchorPane" fx:id="anchorPane" prefHeight="465.0" prefWidth="600.0" stylesheets="@../osnovnasredstva.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="osnovnasredstva.administrator.OsnovnaSredstvaController">
    <children>
       <TableView fx:id="osnovnaSredstvaTableView" layoutX="24.0" layoutY="145.0" prefHeight="316.0" prefWidth="574.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="130.0">
          <columns>
-            <TableColumn fx:id="invertarniBrojColumn" prefWidth="75.0" text="Invertarni broj" />
-            <TableColumn fx:id="nazivColumn" prefWidth="75.0" text="Naziv" />
-            <TableColumn fx:id="vrstaColumn" prefWidth="75.0" text="Vrsta" />
+            <TableColumn fx:id="invertarniBrojColumn" text="Invertarni broj" />
+            <TableColumn fx:id="nazivColumn" prefWidth="72.0" text="Naziv" />
+            <TableColumn fx:id="vrstaColumn" prefWidth="70.0" text="Vrsta" />
+            <TableColumn fx:id="vrijednostColumn" prefWidth="84.0" text="Vrijednost" />
             <TableColumn fx:id="prikaziColumn" prefWidth="75.0" text="PRIKAZI" />
             <TableColumn fx:id="izmjeniColumn" prefWidth="75.0" text="IZMJENI" />
             <TableColumn fx:id="obrisiColumn" prefWidth="75.0" text="OBRISI" />
@@ -44,7 +45,7 @@
             <Image url="@../img/clear.png" />
          </image>
       </ImageView>
-      <JFXButton fx:id="pdfButton" layoutX="154.0" layoutY="28.0" prefHeight="30.0" prefWidth="30.0" text=" " AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="30.0">
+      <JFXButton fx:id="pdfButton" layoutX="154.0" layoutY="28.0" onAction="#pdf" prefHeight="30.0" prefWidth="30.0" text=" " AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="30.0">
          <tooltip>
             <Tooltip maxWidth="125.0" text="Kreiraj PDF?" wrapText="true" />
          </tooltip></JFXButton>

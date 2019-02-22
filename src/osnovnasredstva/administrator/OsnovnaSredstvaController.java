@@ -1,11 +1,28 @@
 package osnovnasredstva.administrator;
 
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.PageSize;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXToggleButton;
+import java.awt.Desktop;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import javafx.application.Platform;
@@ -43,6 +60,8 @@ import osnovnasredstva.DAO.OsnovnoSredstvoDAO;
 import osnovnasredstva.DAO.VrstaOSDAO;
 import osnovnasredstva.DTO.OsnovnoSredstvo;
 import osnovnasredstva.DTO.VrstaOS;
+import static osnovnasredstva.administrator.PrikazOsobeController.listOsnovnoSredstvo;
+import static osnovnasredstva.administrator.PrikazOsobeController.odabranaOsoba;
 import osnovnasredstva.prijava.PrijavaController;
 import osnovnasredstva.util.NotFoundException;
 import osnovnasredstva.util.Util;
@@ -101,6 +120,8 @@ public class OsnovnaSredstvaController implements Initializable {
     
     @FXML
     private JFXToggleButton postaniNadzornikToggleButton;
+    @FXML
+    private TableColumn<?, ?> vrijednostColumn;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -242,6 +263,7 @@ public class OsnovnaSredstvaController implements Initializable {
         invertarniBrojColumn.setCellValueFactory(new PropertyValueFactory<>("inventarniBroj"));
         nazivColumn.setCellValueFactory(new PropertyValueFactory<>("naziv"));
         vrstaColumn.setCellValueFactory(new PropertyValueFactory<>("idVrste"));
+        vrijednostColumn.setCellValueFactory(new PropertyValueFactory<>("vrijednost"));
         vrstaColumn.setCellFactory(tableCell -> {
             TableCell<OsnovnoSredstvo, Integer> cell = new TableCell<OsnovnoSredstvo, Integer>() {
                 @Override
@@ -473,5 +495,89 @@ public class OsnovnaSredstvaController implements Initializable {
             dodajButton.setVisible(true);
             dodajVrstuButton.setVisible(true);
         }
+    }
+
+    @FXML
+    private void pdf(ActionEvent event) {
+        MaskerPane progressPane=Util.getMaskerPane(anchorPane);
+        String naziv = "PDF/" + "Izvjestaj_OsnovnaSredstva" + "_" + new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(new Date()) + ".pdf";
+        new Thread(new Task<Void>() {
+            @Override
+            protected Void call() {
+                progressPane.setVisible(true);
+                Font catFont = new Font(Font.FontFamily.TIMES_ROMAN, 18, Font.BOLD);
+                Font redFont = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.NORMAL, BaseColor.RED);
+                Font subFont = new Font(Font.FontFamily.TIMES_ROMAN, 16, Font.BOLD);
+                Font smallBold = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD);
+                try {
+                    Document document = new Document(PageSize.A4.rotate());
+                    PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(naziv));
+                    document.open();
+                    document.add(new Paragraph(" "));
+                    document.add(new Paragraph("Izvještaj svih osnovnih sredstava", catFont));
+                    document.add(new Paragraph(" "));
+                    document.add(new Paragraph("Izvještaj kreirao: " + PrijavaController.korisnik.getKorisnickoIme(), smallBold));
+                    document.add(new Paragraph("Datum kreiranja: " + new SimpleDateFormat("dd/MM/yyyy, HH:mm:ss").format(new Date()), smallBold));
+                    document.add(new Paragraph(" "));      
+                    document.add(new Paragraph("Tabela svih osnovnih sredstava", smallBold));
+                    document.add(new Paragraph(" "));  
+             
+                    PdfPTable table = new PdfPTable(4);
+                    table.setWidthPercentage(100);
+                    PdfPCell cell = new PdfPCell(new Phrase("Invertarni broj"));
+                    cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                    table.addCell(cell);
+
+                    cell = new PdfPCell(new Phrase("Naziv"));
+                    cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                    table.addCell(cell);
+
+                    cell = new PdfPCell(new Phrase("Opis"));
+                    cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                    table.addCell(cell);
+
+                    cell = new PdfPCell(new Phrase("Vrijednost"));
+                    cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                    table.addCell(cell);
+
+                    table.setHeaderRows(1);
+                    table.getDefaultCell().setHorizontalAlignment(Element.ALIGN_CENTER);
+                    if(!osnovnaSredstvaList.isEmpty()){
+                        for(OsnovnoSredstvo os : osnovnaSredstvaList){
+                                table.addCell(os.getInventarniBroj());
+                                table.addCell(os.getNaziv());
+                                table.addCell(os.getOpis());
+                                table.addCell(os.getVrijednost().toString());                       
+                        }
+                }
+                    else{
+                        table.addCell(" ");
+                        table.addCell(" ");
+                        table.addCell(" ");
+                        table.addCell(" ");
+                    }
+                    document.add(table);
+                    document.close();
+                } catch (DocumentException | FileNotFoundException e) {
+                    Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+                }
+                return null;
+            }
+            @Override
+            protected void succeeded(){
+                super.succeeded();
+                progressPane.setVisible(false);
+                Platform.runLater(() -> Util.getNotifications("Obavještenje", "Izvještaj kreiran.", "Information").show());
+                if(Desktop.isDesktopSupported()) {
+                    new Thread(() -> {
+                        try {
+                            Desktop.getDesktop().open(new File(naziv));
+                        } catch (IOException e) {
+                            Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+                        }
+                    }).start();
+                }
+            }
+        }).start();
     }
 }

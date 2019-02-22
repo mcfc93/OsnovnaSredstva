@@ -1,5 +1,13 @@
 package osnovnasredstva.DTO;
 
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import osnovnasredstva.DAO.ZgradaDAO;
+import osnovnasredstva.prijava.PrijavaController;
+import osnovnasredstva.util.NotFoundException;
+import osnovnasredstva.util.Util;
+
 public class Prostorija {
 
     private int id;
@@ -96,5 +104,19 @@ public class Prostorija {
         return true;
     }
 
+    @Override
+    public String toString() {
+        ZgradaDAO zgDAO = new ZgradaDAO();
+        Zgrada zg = new Zgrada();
+        zg.setId(idZgrade);
+        try {
+            zgDAO.load(PrijavaController.konekcija, zg);
+        } catch (NotFoundException | SQLException e) {
+            Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+        }
+        return naziv + " (" + zg.getNaziv() + ")";
+    }
+    
+    
     
 }
