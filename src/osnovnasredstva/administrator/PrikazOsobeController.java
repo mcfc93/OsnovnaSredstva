@@ -1,6 +1,7 @@
 package osnovnasredstva.administrator;
 
 import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
@@ -8,6 +9,7 @@ import com.itextpdf.text.Font;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
+import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
@@ -23,6 +25,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -186,9 +189,17 @@ public class PrikazOsobeController implements Initializable {
                 Font redFont = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.NORMAL, BaseColor.RED);
                 Font subFont = new Font(Font.FontFamily.TIMES_ROMAN, 16, Font.BOLD);
                 Font smallBold = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD);
+                
+               
+                
                 try {
                     Document document = new Document(PageSize.A4.rotate());
                     PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(naziv));
+                    HeaderFooterPageEvent event = new HeaderFooterPageEvent();
+                    writer.setPageEvent(event);
+                    BaseFont baseFont = null;
+                    baseFont = BaseFont.createFont(BaseFont.HELVETICA,BaseFont.CP1257,BaseFont.EMBEDDED);
+                    Font font = new Font(baseFont);
                     document.open();
                     document.add(new Paragraph(" "));
                     document.add(new Paragraph("Detaljan prikaz osobe", catFont));
@@ -196,10 +207,10 @@ public class PrikazOsobeController implements Initializable {
                     document.add(new Paragraph("Izvještaj kreirao: " + PrijavaController.korisnik.getKorisnickoIme(), smallBold));
                     document.add(new Paragraph("Datum kreiranja: " + new SimpleDateFormat("dd/MM/yyyy, HH:mm:ss").format(new Date()), smallBold));
                     document.add(new Paragraph(" "));      
-                    document.add(new Paragraph("Ime: " + odabranaOsoba.getIme()));
-                    document.add(new Paragraph("Prezime: " + odabranaOsoba.getPrezime()));
+                    document.add(new Paragraph(new Chunk("Ime: " + odabranaOsoba.getIme(), font)));
+                    document.add(new Paragraph(new Chunk("Prezime: " + odabranaOsoba.getPrezime(), font)));
                     document.add(new Paragraph("JMBG: " + odabranaOsoba.getJmbg()));
-                    document.add(new Paragraph("Adresa: " + odabranaOsoba.getAdresa()));
+                    document.add(new Paragraph(new Chunk("Adresa: " + odabranaOsoba.getAdresa(), font)));
                     document.add(new Paragraph("Titula: " + odabranaOsoba.getTitula()));
                     document.add(new Paragraph("Zaposlenje: " + odabranaOsoba.getZaposlenje()));
                     document.add(new Paragraph("Br.telefona: " + odabranaOsoba.getTelefon()));
@@ -210,7 +221,7 @@ public class PrikazOsobeController implements Initializable {
              
                     PdfPTable table = new PdfPTable(4);
                     table.setWidthPercentage(100);
-                    PdfPCell cell = new PdfPCell(new Phrase("Invertarni broj"));
+                    PdfPCell cell = new PdfPCell(new Phrase("Inventarni broj"));
                     cell.setHorizontalAlignment(Element.ALIGN_CENTER);
                     table.addCell(cell);
 
@@ -231,12 +242,13 @@ public class PrikazOsobeController implements Initializable {
                     if(!osnovnaSredstvaList.isEmpty()){
                         for(OsnovnoSredstvo os : osnovnaSredstvaList){
                                 table.addCell(os.getInventarniBroj());
-                                table.addCell(os.getNaziv());
-                                table.addCell(os.getOpis());
+                                table.addCell(new Phrase(new Chunk(os.getNaziv(),font)));
+                                table.addCell(new Phrase(new Chunk(os.getOpis(),font)));
                                 table.addCell(os.getVrijednost().toString());                       
                         }
                 }
                     else{
+                        table.addCell(" ");
                         table.addCell(" ");
                         table.addCell(" ");
                         table.addCell(" ");
@@ -246,6 +258,8 @@ public class PrikazOsobeController implements Initializable {
                     document.close();
                 } catch (DocumentException | FileNotFoundException e) {
                     Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+                } catch (IOException ex) {
+                    Logger.getLogger(PrikazOsobeController.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 return null;
             }

@@ -85,7 +85,7 @@ public class Util {
             LOGGER.log(Level.SEVERE, e.toString(), e);
         }
 
-System.out.println(Util.PROPERTY);
+            ///System.out.println(Util.PROPERTY);
     }
     
     //BAZA

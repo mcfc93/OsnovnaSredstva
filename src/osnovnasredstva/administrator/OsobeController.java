@@ -1,6 +1,7 @@
 package osnovnasredstva.administrator;
 
 import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
@@ -8,6 +9,7 @@ import com.itextpdf.text.Font;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
+import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
@@ -300,7 +302,7 @@ public class OsobeController implements Initializable {
                                     //OsobaDAO.getOsobeList().remove(item);
                                     //getTableView().getItems().remove(item);
                                     osobeTableView.refresh();
-                                    System.out.println("Obrisano: " + item);
+                                    //System.out.println("Obrisano: " + item);
                                     Util.getNotifications("Obavještenje", "Osoba obrisana.", "Information").show();
                                 } catch (SQLException | NotFoundException e) {
                                     Util.showBugAlert();
@@ -401,15 +403,18 @@ public class OsobeController implements Initializable {
         String naziv = "PDF/OsobeIzvjestaj_" + new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(new Date()) + ".pdf";
         new Thread(new Task<Void>() {
             @Override
-            protected Void call() {
+            protected Void call() throws IOException {
                 progressPane.setVisible(true);
                 Font catFont = new Font(Font.FontFamily.TIMES_ROMAN, 18, Font.BOLD);
                 Font redFont = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.NORMAL, BaseColor.RED);
                 Font subFont = new Font(Font.FontFamily.TIMES_ROMAN, 16, Font.BOLD);
                 Font smallBold = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD);
+                
                 try {
                     Document document = new Document(PageSize.A4.rotate());
                     PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(naziv));
+                    HeaderFooterPageEvent event = new HeaderFooterPageEvent();
+                    writer.setPageEvent(event);
                     document.open();
                     document.add(new Paragraph(" "));
                     document.add(new Paragraph("Izvještaj svih osoba", catFont));
@@ -419,7 +424,11 @@ public class OsobeController implements Initializable {
                     document.add(new Paragraph(" "));
                     document.add(new Paragraph("Tabela svih osoba", smallBold));
                     document.add(new Paragraph(" "));
-
+                    
+                    BaseFont baseFont = null;
+                    baseFont = BaseFont.createFont(BaseFont.HELVETICA,BaseFont.CP1257,BaseFont.EMBEDDED);
+                    Font font = new Font(baseFont);
+                    
                     PdfPTable table = new PdfPTable(8);
                     table.setWidthPercentage(100);
                     PdfPCell cell = new PdfPCell(new Phrase("Ime"));
@@ -457,12 +466,12 @@ public class OsobeController implements Initializable {
                     table.setHeaderRows(1);
                     table.getDefaultCell().setHorizontalAlignment(Element.ALIGN_CENTER);
                     for(Osoba os : osobeList){
-                        table.addCell(os.getIme());
-                        table.addCell(os.getPrezime());
+                        table.addCell(new Phrase(new Chunk(os.getIme(),font)));
+                        table.addCell(new Phrase(new Chunk(os.getPrezime(),font)));
                         table.addCell(os.getJmbg());
-                        table.addCell(os.getAdresa());
+                        table.addCell(new Phrase(new Chunk(os.getAdresa(),font)));
                         table.addCell(os.getTitula());
-                        table.addCell(os.getZaposlenje());
+                        table.addCell(new Phrase(new Chunk(os.getZaposlenje(),font)));
                         table.addCell(os.getTelefon());
                         table.addCell(os.getEmail());     
                     }

@@ -1,6 +1,7 @@
 package osnovnasredstva.administrator;
 
 import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
@@ -8,6 +9,7 @@ import com.itextpdf.text.Font;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
+import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
@@ -25,6 +27,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
@@ -364,7 +367,7 @@ public class LokacijeController implements Initializable {
                                     //ProstorijaDAO.getProstorijeList().remove(item);
                                     //getTableView().getItems().remove(item);
                                     lokacijeTableView.refresh();
-                                    System.out.println("Obrisano: " + item);
+                                    //System.out.println("Obrisano: " + item);
                                     Util.getNotifications("Obavještenje", "Lokacija obrisana.", "Information").show();
                                 } catch (SQLException | NotFoundException e) {
                                     Util.showBugAlert();
@@ -493,9 +496,12 @@ public class LokacijeController implements Initializable {
                     PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(naziv));
                     HeaderFooterPageEvent event = new HeaderFooterPageEvent();
                     writer.setPageEvent(event);
+                    BaseFont baseFont = null;
+                    baseFont = BaseFont.createFont(BaseFont.HELVETICA,BaseFont.CP1257,BaseFont.EMBEDDED);
+                    Font font = new Font(baseFont);
                     document.open();
                     document.add(new Paragraph(" "));
-                    document.add(new Paragraph("Izvjestaj svih prostorija", catFont));
+                    document.add(new Paragraph("Izvještaj svih prostorija", catFont));
                     document.add(new Paragraph(" "));
                     document.add(new Paragraph("Izvještaj kreirao: " + PrijavaController.korisnik.getKorisnickoIme(), smallBold));
                     document.add(new Paragraph("Datum kreiranja: " + new SimpleDateFormat("dd/MM/yyyy, HH:mm:ss").format(new Date()), smallBold));
@@ -529,8 +535,8 @@ public class LokacijeController implements Initializable {
                     if(!lokacijeList.isEmpty()){
                         lokacijeList.forEach(pr ->{
                                 table.addCell(pr.getSifra());
-                                table.addCell(pr.getNaziv());
-                                table.addCell(pr.getOpis());
+                                table.addCell(new Phrase(new Chunk(pr.getNaziv(), font)));
+                                table.addCell(new Phrase(new Chunk(pr.getOpis(), font)));
                           zgradeList.forEach(zg ->{
                               if(pr.getIdZgrade() == zg.getId())
                                   table.addCell(zg.getNaziv());
@@ -548,6 +554,8 @@ public class LokacijeController implements Initializable {
                     document.close();
                 } catch (DocumentException | FileNotFoundException e) {
                     Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+                } catch (IOException ex) {
+                    Logger.getLogger(LokacijeController.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 return null;
             }

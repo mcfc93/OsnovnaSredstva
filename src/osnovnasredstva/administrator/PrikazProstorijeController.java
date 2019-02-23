@@ -1,6 +1,7 @@
 package osnovnasredstva.administrator;
 
 import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
@@ -8,6 +9,7 @@ import com.itextpdf.text.Font;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
+import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.ColumnText;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
@@ -25,6 +27,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -184,6 +187,9 @@ public class PrikazProstorijeController implements Initializable {
                     PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(naziv));
                     HeaderFooterPageEvent event = new HeaderFooterPageEvent();
                     writer.setPageEvent(event);
+                    BaseFont baseFont = null;
+                    baseFont = BaseFont.createFont(BaseFont.HELVETICA,BaseFont.CP1257,BaseFont.EMBEDDED);
+                    Font font = new Font(baseFont);
                     document.open();
                     document.add(new Paragraph(" "));
                     document.add(new Paragraph("Detaljan prikaz prostorije", catFont));
@@ -192,25 +198,25 @@ public class PrikazProstorijeController implements Initializable {
                     document.add(new Paragraph("Datum kreiranja: " + new SimpleDateFormat("dd/MM/yyyy, HH:mm:ss").format(new Date()), smallBold));
                     document.add(new Paragraph(" "));      
                     document.add(new Paragraph("Šifra: " + odabranaProstorija.getSifra()));
-                    document.add(new Paragraph("Naziv: " + odabranaProstorija.getNaziv()));
+                    document.add(new Paragraph(new Chunk("Naziv: " + odabranaProstorija.getNaziv(), font)));
                     LokacijeController.zgradeList.forEach((zg) -> {
                         if(odabranaProstorija.getIdZgrade() == zg.getId()){
                             try {
-                                document.add(new Paragraph("Zgrada: " + zg.getNaziv()));
+                                document.add(new Paragraph(new Chunk("Zgrada: " + zg.getNaziv(), font)));
                             } catch (DocumentException e) {
                                 Util.LOGGER.log(Level.SEVERE, e.toString(), e);
                             }
                         }
                     });
                     
-                    document.add(new Paragraph("Opis: " + odabranaProstorija.getOpis()));
+                    document.add(new Paragraph(new Chunk("Opis: " + odabranaProstorija.getOpis(), font)));
                     document.add(new Paragraph(" "));
                     document.add(new Paragraph("Osnovna sredstva u prostoriji", smallBold));
                     document.add(new Paragraph(" "));
              
                     PdfPTable table = new PdfPTable(4);
                     table.setWidthPercentage(100);
-                    PdfPCell cell = new PdfPCell(new Phrase("Invertarni broj"));
+                    PdfPCell cell = new PdfPCell(new Phrase("Inventarni broj"));
                     cell.setHorizontalAlignment(Element.ALIGN_CENTER);
                     table.addCell(cell);
 
@@ -231,8 +237,8 @@ public class PrikazProstorijeController implements Initializable {
                     if(!osnovnaSredstvaList.isEmpty()){
                         for(OsnovnoSredstvo os : osnovnaSredstvaList){
                                 table.addCell(os.getInventarniBroj());
-                                table.addCell(os.getNaziv());
-                                table.addCell(os.getOpis());
+                                table.addCell(new Phrase(new Chunk(os.getNaziv(), font)));
+                                table.addCell(new Phrase(new Chunk(os.getOpis(), font)));
                                 table.addCell(os.getVrijednost().toString());                       
                         }
                 }
@@ -246,6 +252,8 @@ public class PrikazProstorijeController implements Initializable {
                     document.close();
                 } catch (DocumentException | FileNotFoundException e) {
                     Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+                } catch (IOException ex) {
+                    Logger.getLogger(PrikazProstorijeController.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 return null;
             }

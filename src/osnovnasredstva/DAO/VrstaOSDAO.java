@@ -3,10 +3,8 @@ package osnovnasredstva.DAO;
 
 import java.sql.*;
 import java.util.*;
-import java.util.logging.Level;
 import osnovnasredstva.DTO.VrstaOS;
 import osnovnasredstva.util.NotFoundException;
-import osnovnasredstva.util.Util;
 
 
 public class VrstaOSDAO {

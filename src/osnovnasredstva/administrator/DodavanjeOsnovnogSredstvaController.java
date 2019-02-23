@@ -1,15 +1,13 @@
 package osnovnasredstva.administrator;
 
 import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.Phrase;
-import com.itextpdf.text.pdf.PdfPCell;
-import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
@@ -57,11 +55,7 @@ import javafx.stage.StageStyle;
 import javafx.util.StringConverter;
 import org.controlsfx.control.MaskerPane;
 import osnovnasredstva.DAO.OsnovnoSredstvoDAO;
-import osnovnasredstva.DAO.OsobaDAO;
 import osnovnasredstva.DAO.PrelaznicaDAO;
-import osnovnasredstva.DAO.ProstorijaDAO;
-import osnovnasredstva.DAO.VrstaOSDAO;
-import osnovnasredstva.DAO.ZgradaDAO;
 import osnovnasredstva.DTO.OsnovnoSredstvo;
 import osnovnasredstva.DTO.Osoba;
 import osnovnasredstva.DTO.Prelaznica;
@@ -360,7 +354,7 @@ public class DodavanjeOsnovnogSredstvaController implements Initializable {
     }
     public void generisiPDF(Prelaznica pr){
         MaskerPane progressPane=Util.getMaskerPane(anchorPane);
-        String naziv = "PDF/prelaznica/" + "Prelaznica_" + new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(new Date()) + ".pdf";
+        String naziv = "PDF/prelaznica/" + "Prelaznica_" + new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(pr.getDatumPrelaska()) + ".pdf";
         
         new Thread(new Task<Void>() {
             @Override
@@ -375,6 +369,9 @@ public class DodavanjeOsnovnogSredstvaController implements Initializable {
                     PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(naziv));
                     HeaderFooterPageEvent event = new HeaderFooterPageEvent();
                     writer.setPageEvent(event);
+                    BaseFont baseFont = null;
+                    baseFont = BaseFont.createFont(BaseFont.HELVETICA,BaseFont.CP1257,BaseFont.EMBEDDED);
+                    Font font = new Font(baseFont);
                     document.open();
                     document.add(new Paragraph(" "));
                     document.add(new Paragraph("Prelaznica", catFont));
@@ -387,7 +384,7 @@ public class DodavanjeOsnovnogSredstvaController implements Initializable {
                     OsnovnaSredstvaController.osnovnaSredstvaList.forEach(os ->{
                         if(os.getId() == pr.getIdOsnovnogSredstva()){
                             try {
-                                document.add(new Paragraph("Osnovno sredstvo: " + os.getNaziv(), smallBold));
+                                document.add(new Paragraph(new Chunk("Osnovno sredstvo: " + os.getNaziv(), font)));
                             } catch (DocumentException e) {
                                 Util.LOGGER.log(Level.SEVERE, e.toString(), e);
                             }
@@ -396,7 +393,7 @@ public class DodavanjeOsnovnogSredstvaController implements Initializable {
                     OsobeController.osobeList.forEach(os ->{
                         if(pr.getIdOsobeSa() == os.getId()){
                             try {
-                                document.add(new Paragraph("Prethodno zaduženo kod: " + os.getIme() + " " + os.getPrezime()));
+                                document.add(new Paragraph(new Chunk("Prethodno zaduženo kod: " + os.getIme() + " " + os.getPrezime(), font)));
                             } catch (DocumentException e) {
                                 Util.LOGGER.log(Level.SEVERE, e.toString(), e);
                             }
@@ -405,7 +402,7 @@ public class DodavanjeOsnovnogSredstvaController implements Initializable {
                     OsobeController.osobeList.forEach(os ->{
                         if(pr.getIdOsobeNa()== os.getId()){
                             try {
-                                document.add(new Paragraph("Trenutno zaduženo kod: " + os.getIme() + " " + os.getPrezime()));
+                                document.add(new Paragraph(new Chunk("Trenutno zaduženo kod: " + os.getIme() + " " + os.getPrezime(), font)));
                             } catch (DocumentException e) {
                                 Util.LOGGER.log(Level.SEVERE, e.toString(), e);
                             }
@@ -415,7 +412,7 @@ public class DodavanjeOsnovnogSredstvaController implements Initializable {
                     LokacijeController.lokacijeList.forEach(lo -> {
                         if(pr.getIdProstorijeIz() == lo.getId()){
                             try {
-                                document.add(new Paragraph("Prethodna prostorija: " + lo));
+                                document.add(new Paragraph(new Chunk("Prethodna prostorija: " + lo, font)));
                             } catch (DocumentException e) {
                                 Util.LOGGER.log(Level.SEVERE, e.toString(), e);
                             }
@@ -424,7 +421,7 @@ public class DodavanjeOsnovnogSredstvaController implements Initializable {
                     LokacijeController.lokacijeList.forEach(lo -> {
                         if(pr.getIdProstorijeU()== lo.getId()){
                             try {
-                                document.add(new Paragraph("Trenutna prostorija: " + lo));
+                                document.add(new Paragraph(new Chunk("Trenutna prostorija: " + lo, font)));
                             } catch (DocumentException e) {
                                 Util.LOGGER.log(Level.SEVERE, e.toString(), e);
                             }
@@ -434,6 +431,8 @@ public class DodavanjeOsnovnogSredstvaController implements Initializable {
                     document.close();
                 } catch (DocumentException | FileNotFoundException e) {
                     Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+                } catch (IOException ex) {
+                    Logger.getLogger(DodavanjeOsnovnogSredstvaController.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 return null;
             }

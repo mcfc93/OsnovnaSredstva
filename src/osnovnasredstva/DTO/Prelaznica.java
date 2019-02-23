@@ -1,8 +1,9 @@
 package osnovnasredstva.DTO;
 
 import java.sql.*;
+import java.text.SimpleDateFormat;
 import java.util.logging.Level;
-import java.util.logging.Logger;
+import osnovnasredstva.DAO.OsnovnoSredstvoDAO;
 import osnovnasredstva.DAO.OsobaDAO;
 import osnovnasredstva.DAO.ProstorijaDAO;
 import osnovnasredstva.prijava.PrijavaController;
@@ -57,6 +58,11 @@ public class Prelaznica {
     public Timestamp getDatumPrelaska() {
           return this.datumPrelaska;
     }
+    
+    public String getDatum() {
+          return new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(this.datumPrelaska);
+    }
+    
     public void setDatumPrelaska(Timestamp datumPrelaskaIn) {
           this.datumPrelaska = datumPrelaskaIn;
     }
@@ -156,5 +162,17 @@ public class Prelaznica {
             Util.LOGGER.log(Level.SEVERE, e.toString(), e);
         }
         return osoba.getIme() + " " + osoba.getPrezime();
+    }
+    public String getNaziv(){
+        OsnovnoSredstvoDAO osDAO = new OsnovnoSredstvoDAO();
+        OsnovnoSredstvo os = new OsnovnoSredstvo();
+        os.setId(idOsnovnogSredstva);
+        try {
+            osDAO.load(PrijavaController.konekcija, os);
+        } catch (NotFoundException | SQLException e) {
+            Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+        }
+        
+        return "Prelaznica_" + os.getNaziv();
     }
 }

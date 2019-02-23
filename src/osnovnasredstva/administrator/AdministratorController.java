@@ -26,11 +26,6 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import osnovnasredstva.DAO.KorisnikDAO;
-import osnovnasredstva.DAO.OsobaDAO;
-import osnovnasredstva.DAO.ProstorijaDAO;
-import osnovnasredstva.DAO.VrstaOSDAO;
-import osnovnasredstva.DAO.ZgradaDAO;
 import osnovnasredstva.prijava.PrijavaController;
 import osnovnasredstva.util.Util;
 

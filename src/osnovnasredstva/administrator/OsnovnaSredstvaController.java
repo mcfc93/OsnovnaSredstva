@@ -1,6 +1,7 @@
 package osnovnasredstva.administrator;
 
 import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
@@ -8,6 +9,7 @@ import com.itextpdf.text.Font;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
+import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
@@ -25,6 +27,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
@@ -397,7 +400,7 @@ public class OsnovnaSredstvaController implements Initializable {
                                     osnovnaSredstvaList.remove(item);
                                     //getTableView().getItems().remove(item);
                                     osnovnaSredstvaTableView.refresh();
-                                    System.out.println("Obrisano: " + item);
+                                    //System.out.println("Obrisano: " + item);
                                     Util.getNotifications("Obavještenje", "Osnovno sredstvo obrisano.", "Information").show();
                                 } catch (SQLException | NotFoundException e) {
                                     Util.showBugAlert();
@@ -523,6 +526,11 @@ public class OsnovnaSredstvaController implements Initializable {
                 try {
                     Document document = new Document(PageSize.A4.rotate());
                     PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(naziv));
+                    HeaderFooterPageEvent event = new HeaderFooterPageEvent();
+                    writer.setPageEvent(event);
+                    BaseFont baseFont = null;
+                    baseFont = BaseFont.createFont(BaseFont.HELVETICA,BaseFont.CP1257,BaseFont.EMBEDDED);
+                    Font font = new Font(baseFont);
                     document.open();
                     document.add(new Paragraph(" "));
                     document.add(new Paragraph("Izvještaj svih osnovnih sredstava", catFont));
@@ -535,7 +543,7 @@ public class OsnovnaSredstvaController implements Initializable {
              
                     PdfPTable table = new PdfPTable(4);
                     table.setWidthPercentage(100);
-                    PdfPCell cell = new PdfPCell(new Phrase("Invertarni broj"));
+                    PdfPCell cell = new PdfPCell(new Phrase("Inventarni broj"));
                     cell.setHorizontalAlignment(Element.ALIGN_CENTER);
                     table.addCell(cell);
 
@@ -556,8 +564,8 @@ public class OsnovnaSredstvaController implements Initializable {
                     if(!osnovnaSredstvaList.isEmpty()){
                         for(OsnovnoSredstvo os : osnovnaSredstvaList){
                                 table.addCell(os.getInventarniBroj());
-                                table.addCell(os.getNaziv());
-                                table.addCell(os.getOpis());
+                                table.addCell(new Phrase(new Chunk(os.getNaziv(), font)));
+                                table.addCell(new Phrase(new Chunk(os.getOpis(), font)));
                                 table.addCell(os.getVrijednost().toString());                       
                         }
                 }
@@ -571,6 +579,8 @@ public class OsnovnaSredstvaController implements Initializable {
                     document.close();
                 } catch (DocumentException | FileNotFoundException e) {
                     Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+                } catch (IOException ex) {
+                    Logger.getLogger(OsnovnaSredstvaController.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 return null;
             }

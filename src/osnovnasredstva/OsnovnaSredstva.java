@@ -22,7 +22,7 @@ public class OsnovnaSredstva extends Application {
     
     @Override
     public void stop() {
-        System.out.println("CLOSE");
+        //System.out.println("CLOSE");
         Util.fileHandler.close();
     }
 

@@ -1,6 +1,7 @@
 package osnovnasredstva.administrator;
 
 import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
@@ -8,11 +9,11 @@ import com.itextpdf.text.Font;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
+import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXDatePicker;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -25,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -80,8 +82,6 @@ public class PrikazOsnovnogSredstvaController implements Initializable {
     @FXML
     private TextArea opisTextArea;
     @FXML
-    private JFXDatePicker datePicker;
-    @FXML
     private TableView<Prelaznica> prelaznicaTableView;
     @FXML
     private TableColumn<?, ?> datumColumn;
@@ -98,6 +98,12 @@ public class PrikazOsnovnogSredstvaController implements Initializable {
     private static ArrayList<Prelaznica> svePrelaznice = new ArrayList<>();
     @FXML
     private AnchorPane anchorPane;
+    @FXML
+    private TextField osobaTextField;
+    @FXML
+    private TextField lokacijaTextField;
+    @FXML
+    private TextField datumTextField;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -132,7 +138,7 @@ public class PrikazOsnovnogSredstvaController implements Initializable {
         
         prelaznicaTableView.setPlaceholder(new Label("Nema osnovnih sredstava."));
         prelaznicaTableView.setFocusTraversable(false);
-        
+        svePrelaznice.clear();
         try {
             svePrelaznice.addAll(prelaznicaDAO.loadAll(PrijavaController.konekcija));
         } catch (SQLException e) {
@@ -149,10 +155,21 @@ public class PrikazOsnovnogSredstvaController implements Initializable {
         stopaAmTextField.setText(String.valueOf(odabranoOS.getStopaAmortizacije()));
         vrijednostTextField.setText(String.valueOf(odabranoOS.getVrijednost()));
         opisTextArea.setText(odabranoOS.getOpis());
-        datePicker.setValue(odabranoOS.getDatumNabavke().toLocalDateTime().toLocalDate());
+        datumTextField.setText(new SimpleDateFormat("dd/MM/yyyy").format(odabranoOS.getDatumNabavke()));
+        OsobeController.osobeList.forEach(os ->{
+            if(odabranoOS.getIdOsobe() == os.getId())
+                osobaTextField.setText(os.getIme() + " " + os.getPrezime());
+        });
+        
+        
+        LokacijeController.lokacijeList.forEach(pr ->{
+            if(odabranoOS.getIdLokacije() == pr.getId())
+                lokacijaTextField.setText(pr.toString());
+        });
+        
         
         prelaznicaTableView.setItems(prelazniceList);
-        datumColumn.setCellValueFactory(new PropertyValueFactory<>("datumPrelaska"));
+        datumColumn.setCellValueFactory(new PropertyValueFactory<>("datum"));
         izProstorijeColumn.setCellValueFactory(new PropertyValueFactory<>("idProstorijeIzString"));
         uProstorijuColumn.setCellValueFactory(new PropertyValueFactory<>("idProstorijeUString"));
         saOsobeColumn.setCellValueFactory(new PropertyValueFactory<>("idOsobeSaString"));
@@ -200,6 +217,9 @@ public class PrikazOsnovnogSredstvaController implements Initializable {
                     PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(naziv));
                     HeaderFooterPageEvent event = new HeaderFooterPageEvent();
                     writer.setPageEvent(event);
+                    BaseFont baseFont = null;
+                    baseFont = BaseFont.createFont(BaseFont.HELVETICA,BaseFont.CP1257,BaseFont.EMBEDDED);
+                    Font font = new Font(baseFont);
                     document.open();
                     document.add(new Paragraph(" "));
                     document.add(new Paragraph("Detaljan prikaz osnovnog sredstva", catFont));
@@ -208,13 +228,14 @@ public class PrikazOsnovnogSredstvaController implements Initializable {
                     document.add(new Paragraph("Datum kreiranja: " + new SimpleDateFormat("dd/MM/yyyy, HH:mm:ss").format(new Date()), smallBold));
                     document.add(new Paragraph(" "));      
                     document.add(new Paragraph("Inventarni broj: " + odabranoOS.getInventarniBroj()));
-                    document.add(new Paragraph("Naziv: " + odabranoOS.getNaziv()));
+                    document.add(new Paragraph(new Chunk("Naziv: " + odabranoOS.getNaziv(), font)));
                     document.add(new Paragraph("Nabavna vrijednost: " + odabranoOS.getNabavnaVrijednost()));
                     document.add(new Paragraph("Stopa amortizacije: " + odabranoOS.getStopaAmortizacije()));
                     document.add(new Paragraph("Vrijednost: " + odabranoOS.getVrijednost()));
-                    document.add(new Paragraph("Opis: " + odabranoOS.getOpis()));
-                    document.add(new Paragraph("Datum nabavke: " + odabranoOS.getDatumNabavke()));
-   
+                    document.add(new Paragraph(new Chunk("Opis: " + odabranoOS.getOpis(), font)));
+                    document.add(new Paragraph("Datum nabavke: " + new SimpleDateFormat("dd/MM/yyyy, HH:mm:ss").format(odabranoOS.getDatumNabavke())));
+                    document.add(new Paragraph(new Chunk("Zaduženo kod: " + osobaTextField.getText(), font)));
+                    document.add(new Paragraph(new Chunk("Trenutno na: " + lokacijaTextField.getText(), font)));
                     document.add(new Paragraph(" "));
                     document.add(new Paragraph("Istorija zaduživanja osnovnog sredstva", smallBold));
                     document.add(new Paragraph(" "));
@@ -245,11 +266,11 @@ public class PrikazOsnovnogSredstvaController implements Initializable {
                     table.getDefaultCell().setHorizontalAlignment(Element.ALIGN_CENTER);
                     if(!prelazniceList.isEmpty()){
                         for(Prelaznica os : prelazniceList){
-                                table.addCell(os.getDatumPrelaska().toString());
-                                table.addCell(os.getIdProstorijeIzString());
-                                table.addCell(os.getIdProstorijeUString());
-                                table.addCell(os.getIdOsobeSaString());
-                                table.addCell(os.getIdOsobeNaString()); 
+                                table.addCell(new SimpleDateFormat("dd/MM/yyyy, HH:mm:ss").format(os.getDatumPrelaska()));
+                                table.addCell(new Phrase(new Chunk(os.getIdProstorijeIzString(), font)));
+                                table.addCell(new Phrase(new Chunk(os.getIdProstorijeUString(), font)));
+                                table.addCell(new Phrase(new Chunk(os.getIdOsobeSaString(), font)));
+                                table.addCell(new Phrase(new Chunk(os.getIdOsobeNaString(), font))); 
                         }
                 }
                     else{
@@ -263,6 +284,8 @@ public class PrikazOsnovnogSredstvaController implements Initializable {
                     document.close();
                 } catch (DocumentException | FileNotFoundException e) {
                     Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+                } catch (IOException ex) {
+                    Logger.getLogger(PrikazOsnovnogSredstvaController.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 return null;
             }

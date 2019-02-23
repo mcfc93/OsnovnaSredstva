@@ -222,7 +222,7 @@ public class KorisnickiNaloziController implements Initializable {
                                     korisnickiNaloziList.remove(item);
                                     //getTableView().getItems().remove(item);
                                     korisnickiNaloziTableView.refresh();
-                                    System.out.println("Obrisano: " + item);
+                                    //System.out.println("Obrisano: " + item);
                                     Util.getNotifications("Obavještenje", "Korisnički nalog obrisan.", "Information").show();
                                 } catch (SQLException | NotFoundException e) {
                                     Util.showBugAlert();

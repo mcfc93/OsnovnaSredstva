@@ -329,7 +329,7 @@ public class KorisnikDAO {
                 sb.append(String.format("%02x", b));
             }
             lozinka=sb.toString();
-            System.out.println("hash=" + lozinka);
+            //System.out.println("hash=" + lozinka);
         } catch(NoSuchAlgorithmException e) {
             Util.LOGGER.log(Level.SEVERE, e.toString(), e);
         }
@@ -355,7 +355,7 @@ public class KorisnikDAO {
             s=Util.prepareStatement(c, sql, false, korisnickoIme, 1);
             r=s.executeQuery();
             if(r.next()) {
-                System.out.println("salt=" + r.getString(1) + "\nhash=" + r.getString(2));
+                //System.out.println("salt=" + r.getString(1) + "\nhash=" + r.getString(2));
                 salt=r.getString("salt");
                 hash=hash(lozinka, salt);
                 if(hash.equals(r.getString("hash_lozinke"))) {
@@ -397,7 +397,7 @@ public class KorisnikDAO {
                     }
                     korisnik.setHashLozinke(hash);
                     lozinka="";
-System.out.println(korisnik);
+                    //System.out.println(korisnik);
                 }
             }
         } finally {
