@@ -344,6 +344,13 @@ System.out.println(Util.PROPERTY);
             }
         };
         samePasswordValidator.setIcon(new ImageView());
+
+        passwordField1.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue)->{
+            if(!passwordField2.getText().isEmpty()) {
+                passwordField2.validate();
+            }
+        });
+        
         return samePasswordValidator;
     }
         
@@ -506,7 +513,7 @@ System.out.println(Util.PROPERTY);
     
     public static <T> void preventColumnReordering(TableView<T> tableView) {
         Platform.runLater(() -> {
-            for (Node header : tableView.lookupAll(".column-header")) {
+            for(Node header : tableView.lookupAll(".column-header")) {
                 header.addEventFilter(MouseEvent.MOUSE_DRAGGED, Event::consume);
             }
         });

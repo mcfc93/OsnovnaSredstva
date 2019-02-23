@@ -97,7 +97,7 @@ public class DodavanjeKorisnickogNalogaController implements Initializable {
         
         korisnickoImeTextField.getValidators().addAll(Util.requiredFieldValidator(korisnickoImeTextField), usernameValidator(korisnickoImeTextField), Util.lengthValidator(korisnickoImeTextField, 255));
         lozinka1PasswordField.getValidators().addAll(Util.requiredFieldValidator(lozinka1PasswordField), Util.passwordValidator(lozinka1PasswordField));
-        lozinka2PasswordField.getValidators().addAll(Util.requiredFieldValidator(lozinka2PasswordField), Util.passwordValidator(lozinka1PasswordField), Util.samePasswordValidator(lozinka1PasswordField, lozinka2PasswordField));
+        lozinka2PasswordField.getValidators().addAll(Util.requiredFieldValidator(lozinka2PasswordField), Util.passwordValidator(lozinka2PasswordField), Util.samePasswordValidator(lozinka1PasswordField, lozinka2PasswordField));
         
         if(izmjena) {
             korisnickoImeTextField.setText(odabraniKorisnik.getKorisnickoIme());
@@ -113,7 +113,7 @@ public class DodavanjeKorisnickogNalogaController implements Initializable {
         ValidatorBase postalCodeValidator = new ValidatorBase("Zauzeto") {
             @Override
             protected void eval() {
-                if(!textField.getText().isEmpty() && KorisnikDAO.getUsernameList().contains(textField.getText())) {
+                if(!textField.getText().isEmpty() && korisnickiNaloziList.stream().anyMatch(k -> k.getKorisnickoIme().equals(textField.getText()))) {
                     hasErrors.set(true);
                     if(izmjena && odabraniKorisnik.getKorisnickoIme().equals(textField.getText())) {
                         hasErrors.set(false);
@@ -175,12 +175,14 @@ public class DodavanjeKorisnickogNalogaController implements Initializable {
                 
 
             }
+            /*
             new Thread() {
                 @Override
                 public void run() {
                     KorisnikDAO.loadUsernames();
                 }
             }.start();
+            */
             ((Stage)((Node)event.getSource()).getScene().getWindow()).close();
         }
     }

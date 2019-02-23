@@ -157,6 +157,8 @@ public class OsnovnaSredstvaController implements Initializable {
         
         vrstaOsnovnogSredstvaList.clear();
         osnovnaSredstvaList.clear();
+        zgradeList.clear();
+        prostorijeList.clear();
         filteredList = new FilteredList(osnovnaSredstvaList);
         sortedList = new SortedList<>(filteredList);
         sortedList.comparatorProperty().bind(osnovnaSredstvaTableView.comparatorProperty());

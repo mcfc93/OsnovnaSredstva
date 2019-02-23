@@ -405,7 +405,7 @@ System.out.println(korisnik);
         }
         return korisnik;
     }
-
+    /*
     private static List<String> usernameList = new ArrayList<>();
 	
     public static List<String> getUsernameList() {
@@ -430,4 +430,5 @@ System.out.println(korisnik);
             Util.close(r, s, c);
         }
     }
+    */
 }

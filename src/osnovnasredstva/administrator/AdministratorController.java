@@ -107,22 +107,20 @@ public class AdministratorController implements Initializable {
             }
         });
         
-        
+        /*
         new Thread() {
             @Override
             public void run() {
                 if(PrijavaController.korisnik.getTip() == 0) {
                     KorisnikDAO.loadUsernames();
                 }
-                /*
                 VrstaOSDAO.loadVrsteOS();
                 ProstorijaDAO.loadProstorije();
                 ZgradaDAO.loadZgrade();
                 OsobaDAO.loadOsobe();
-                */
             }
         }.start();
-        
+        */
         
         if(PrijavaController.korisnik.getTip() == 1) {
             korisnickiNaloziButton.setVisible(false);

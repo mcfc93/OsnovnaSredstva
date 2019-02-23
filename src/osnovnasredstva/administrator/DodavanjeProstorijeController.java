@@ -21,7 +21,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
 import osnovnasredstva.DAO.ProstorijaDAO;
-import osnovnasredstva.DAO.ZgradaDAO;
 import osnovnasredstva.DTO.Prostorija;
 import osnovnasredstva.DTO.Zgrada;
 import osnovnasredstva.prijava.PrijavaController;
