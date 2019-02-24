@@ -14,6 +14,7 @@ import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.validation.base.ValidatorBase;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -43,8 +44,10 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.DateCell;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.Tooltip;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -75,6 +78,9 @@ public class DodavanjeOsnovnogSredstvaController implements Initializable {
     
     @FXML
     private AnchorPane menuLine;
+    
+    @FXML
+    private Label naslovLabel;
 
     @FXML
     private JFXButton sacuvajButton;
@@ -156,7 +162,7 @@ public class DodavanjeOsnovnogSredstvaController implements Initializable {
             @Override
             public void updateItem(LocalDate item, boolean empty) {
                 super.updateItem(item, empty);
-                setDisable(empty || item.compareTo(LocalDate.now()) < 0 );
+                //setDisable(empty || item.compareTo(LocalDate.now()) < 0 );
                 if (item.getDayOfWeek() == DayOfWeek.SUNDAY) {
                     setTooltip(new Tooltip("Nedelja"));
                     setTextFill(Color.RED);
@@ -165,9 +171,19 @@ public class DodavanjeOsnovnogSredstvaController implements Initializable {
         });
         datumNabavkeDatePicker.setEditable(false);
         
-        invertarniBrojTextField.getValidators().addAll(Util.requiredFieldValidator(invertarniBrojTextField), Util.lengthValidator(invertarniBrojTextField, 255));
+        invertarniBrojTextField.getValidators().addAll(Util.requiredFieldValidator(invertarniBrojTextField), Util.inventarniBrojValidator(invertarniBrojTextField), postojiInventarniBrojValidator(invertarniBrojTextField), Util.lengthValidator(invertarniBrojTextField, 255));
         nazivTextField.getValidators().addAll(Util.requiredFieldValidator(nazivTextField), Util.lengthValidator(nazivTextField, 255));
-        opisTextArea.getValidators().addAll(Util.requiredFieldValidator(opisTextArea), Util.lengthValidator(opisTextArea, 1024));
+        opisTextArea.getValidators().addAll(Util.lengthValidator(opisTextArea, 1024));
+                
+        opisTextArea.focusedProperty().addListener((observable, oldValue, newValue)->{
+            if(!newValue) {
+                opisTextArea.validate();
+            }
+        });
+        opisTextArea.textProperty().addListener((observable, oldValue, newValue)->{
+            opisTextArea.validate();
+        });
+        
         vrstaComboBox.getValidators().addAll(Util.requiredFieldValidator(vrstaComboBox));
         vrstaComboBox.setVisibleRowCount(5);
         datumNabavkeDatePicker.getValidators().addAll(Util.requiredFieldValidator(datumNabavkeDatePicker));
@@ -266,7 +282,9 @@ public class DodavanjeOsnovnogSredstvaController implements Initializable {
         osobaComboBox.getItems().setAll(OsobeController.osobeList);
         lokacijaComboBox.getItems().setAll(OsnovnaSredstvaController.prostorijeList);
         
+        naslovLabel.setText("Dodavanje osnovnog sredstva");
         if(izmjena) {
+            naslovLabel.setText("Izmjena osnovnog sredstva");
             invertarniBrojTextField.setText(odabranoOS.getInventarniBroj());
             nazivTextField.setText(odabranoOS.getNaziv());
             opisTextArea.setText(odabranoOS.getOpis());
@@ -280,7 +298,25 @@ public class DodavanjeOsnovnogSredstvaController implements Initializable {
             tmp = osobaComboBox.getValue();
             temp = lokacijaComboBox.getValue();
             
-    }    
+    }
+    
+    public static ValidatorBase postojiInventarniBrojValidator(JFXTextField textField) {
+        ValidatorBase postojiInventarniBrojValidator = new ValidatorBase("Zauzeto") {
+            @Override
+            protected void eval() {
+                if(!textField.getText().isEmpty() && OsnovnaSredstvaController.osnovnaSredstvaList.stream().anyMatch(k -> k.getInventarniBroj().equalsIgnoreCase(textField.getText()))) {
+                    hasErrors.set(true);
+                    if(izmjena && odabranoOS.getInventarniBroj().equalsIgnoreCase(textField.getText())) {
+                        hasErrors.set(false);
+                    }
+                } else {
+                    hasErrors.set(false);
+                }
+            }
+        };
+        postojiInventarniBrojValidator.setIcon(new ImageView());
+        return postojiInventarniBrojValidator;
+    }
     
     @FXML
     void close(MouseEvent event) {
@@ -311,7 +347,8 @@ public class DodavanjeOsnovnogSredstvaController implements Initializable {
                 odabranoOS.setIdOsobe(osobaComboBox.getSelectionModel().getSelectedItem().getId());
                 odabranoOS.setIdVrste(vrstaComboBox.getSelectionModel().getSelectedItem().getId());
                 if(!tmp.equals(osobaComboBox.getValue()) || !temp.equals(lokacijaComboBox.getValue())){
-                    prelaznica = new Prelaznica(new Timestamp(System.currentTimeMillis()), "", temp.getId(), lokacijaComboBox.getValue().getId(), tmp.getId(), osobaComboBox.getValue().getId(), odabranoOS.getId());
+                    //prelaznica = new Prelaznica(new Timestamp(System.currentTimeMillis()), "", temp.getId(), lokacijaComboBox.getValue().getId(), tmp.getId(), osobaComboBox.getValue().getId(), odabranoOS.getId());
+                    prelaznica = new Prelaznica(new Timestamp((System.currentTimeMillis()/1000) *1000 ), "", temp.getId(), lokacijaComboBox.getValue().getId(), tmp.getId(), osobaComboBox.getValue().getId(), odabranoOS.getId());
                     try {
                         ////////////napravi onaj svoj GUI//////////////
                         Parent root = FXMLLoader.load(getClass().getResource("/osnovnasredstva/administrator/DodavanjePrelazniceNapomenaView.fxml"));
@@ -377,7 +414,7 @@ public class DodavanjeOsnovnogSredstvaController implements Initializable {
                     document.add(new Paragraph("Prelaznica", catFont));
                     document.add(new Paragraph(" "));
                     document.add(new Paragraph("Prelaznicu kreirao: " + PrijavaController.korisnik.getKorisnickoIme(), smallBold));
-                    document.add(new Paragraph("Datum kreiranja: " + new SimpleDateFormat("dd/MM/yyyy, HH:mm:ss").format(new Date()), smallBold));
+                    document.add(new Paragraph("Datum kreiranja: " + new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(pr.getDatumPrelaska()), smallBold));
                     document.add(new Paragraph(" "));      
                     document.add(new Paragraph(" "));
                     

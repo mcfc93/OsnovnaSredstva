@@ -15,6 +15,11 @@
       <AnchorPane fx:id="menuLine" prefHeight="30.0" prefWidth="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <Button fx:id="closeButton" layoutX="572.0" layoutY="3.0" mnemonicParsing="false" onMouseClicked="#close" styleClass="closeButton" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
+            <Label fx:id="naslovLabel" text="Naslov" textFill="WHITE" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="5.0">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Label>
          </children>
       </AnchorPane>
       <Label layoutX="14.0" layoutY="44.0" styleClass="naslovLabel" text="Osnovni podaci:" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="45.0" />
@@ -52,7 +57,7 @@
       </TableView>
       <JFXButton fx:id="pdfButton" layoutX="573.0" layoutY="227.0" onAction="#pdf" text=" " AnchorPane.rightAnchor="45.0" AnchorPane.topAnchor="230.0">
          <tooltip>
-            <Tooltip maxWidth="125.0" text="Kreiraj PDF?" wrapText="true" />
+            <Tooltip maxWidth="125.0" text="Kreiraj PDF" wrapText="true" />
          </tooltip></JFXButton>
    </children>
 </AnchorPane>

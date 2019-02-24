@@ -8,12 +8,18 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane id="AnchorPane" prefHeight="350.0" prefWidth="450.0" styleClass="rootBorder" stylesheets="@../osnovnasredstva.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="osnovnasredstva.administrator.DodavanjeKorisnickogNalogaController">
    <children>
       <AnchorPane fx:id="menuLine" prefHeight="30.0" prefWidth="600.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <Button fx:id="closeButton" layoutX="576.0" layoutY="6.0" mnemonicParsing="false" onMouseClicked="#close" styleClass="closeButton" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
+            <Label fx:id="naslovLabel" layoutX="14.0" layoutY="8.0" text="Naslov" textFill="WHITE" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="5.0">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Label>
          </children>
       </AnchorPane>
       <JFXTextField id="TextField" fx:id="korisnickoImeTextField" layoutX="58.0" layoutY="76.0" prefWidth="175.0" promptText="Korisničko ime" AnchorPane.leftAnchor="45.0" AnchorPane.topAnchor="70.0" />

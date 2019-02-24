@@ -138,7 +138,8 @@ public class OsnovnaSredstvaController implements Initializable {
         clearImageView.setVisible(false);
 		
         traziTextField.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue)->{
-            filteredList.setPredicate(osnovnoSredstvo -> osnovnoSredstvo.getNaziv().toLowerCase().contains(newValue.toLowerCase()));
+            filteredList.setPredicate(osnovnoSredstvo -> osnovnoSredstvo.getNaziv().toLowerCase().startsWith(newValue.toLowerCase()));
+            //osnovnaSredstvaTableView.refresh();
             if(!newValue.isEmpty()) {
                 clearImageView.setVisible(true);
             } else {
@@ -276,8 +277,9 @@ public class OsnovnaSredstvaController implements Initializable {
         
         invertarniBrojColumn.setCellValueFactory(new PropertyValueFactory<>("inventarniBroj"));
         nazivColumn.setCellValueFactory(new PropertyValueFactory<>("naziv"));
-        vrstaColumn.setCellValueFactory(new PropertyValueFactory<>("idVrste"));
+        vrstaColumn.setCellValueFactory(new PropertyValueFactory<>("idVrsteString"));
         vrijednostColumn.setCellValueFactory(new PropertyValueFactory<>("vrijednost"));
+        /*
         vrstaColumn.setCellFactory(tableCell -> {
             TableCell<OsnovnoSredstvo, Integer> cell = new TableCell<OsnovnoSredstvo, Integer>() {
                 @Override
@@ -294,7 +296,7 @@ public class OsnovnaSredstvaController implements Initializable {
             };
             return cell;
         });
-        
+        */
         prikaziColumn.setCellValueFactory(
             param -> new ReadOnlyObjectWrapper<>(param.getValue())
         );
@@ -307,7 +309,7 @@ public class OsnovnaSredstvaController implements Initializable {
                     super.updateItem(item, empty);
                     if (!empty) {
                     	button.getStyleClass().addAll("buttonTable", "buttonTableShow");
-                    	button.setTooltip(new Tooltip("Prikaži?"));
+                    	button.setTooltip(new Tooltip("Prikaži"));
                     	button.getTooltip().setAutoHide(false);
                     	setGraphic(button);
                     	button.setOnMouseClicked(event -> {
@@ -347,7 +349,7 @@ public class OsnovnaSredstvaController implements Initializable {
                     super.updateItem(item, empty);
                     if (!empty) {
                     	button.getStyleClass().addAll("buttonTable", "buttonTableEdit");
-                    	button.setTooltip(new Tooltip("Izmjeni?"));
+                    	button.setTooltip(new Tooltip("Izmjeni"));
                     	button.getTooltip().setAutoHide(false);
                     	setGraphic(button);
                     	button.setOnMouseClicked(event -> {
@@ -390,7 +392,7 @@ public class OsnovnaSredstvaController implements Initializable {
                     super.updateItem(item, empty);
                     if (!empty) {
                     	button.getStyleClass().addAll("buttonTable", "buttonTableDelete");
-                    	button.setTooltip(new Tooltip("Obriši?"));
+                    	button.setTooltip(new Tooltip("Obriši"));
                     	button.getTooltip().setAutoHide(false);
                     	setGraphic(button);
                     	button.setOnMouseClicked(event -> {

@@ -257,7 +257,7 @@ public class Util {
                     comboBox.validate();
             }
         });
-        comboBox.selectionModelProperty().addListener((observable, oldValue,newValue)->{
+        comboBox.valueProperty().addListener((observable, oldValue,newValue)->{
             if(newValue != null) {
                     comboBox.validate();
             }
@@ -329,6 +329,22 @@ public class Util {
         lengthValidator.setIcon(new ImageView());
         return lengthValidator;
     }
+    
+    public static ValidatorBase usernameValidator(JFXTextField textField) {
+        ValidatorBase usernameValidator = new ValidatorBase("Format: A-Z, a-z, 0-9, _") {
+            @Override
+            protected void eval() {
+                if(!textField.getText().isEmpty()
+                        && !textField.getText().matches("^[A-Za-z0-9_]+$")) {
+                    hasErrors.set(true);
+                } else {
+                    hasErrors.set(false);
+                }
+            }
+        };
+        usernameValidator.setIcon(new ImageView());
+        return usernameValidator;
+    }
         
     public static ValidatorBase samePasswordValidator(JFXPasswordField passwordField1, JFXPasswordField passwordField2) {
         ValidatorBase samePasswordValidator = new ValidatorBase("Ne poklapa se") {
@@ -383,7 +399,7 @@ public class Util {
     }
 	
     public static ValidatorBase naturalNumberValidator(JFXTextField textField) {
-        ValidatorBase naturalNumberValidator = new ValidatorBase("Nije pozitivan broj") {
+        ValidatorBase naturalNumberValidator = new ValidatorBase("Nije prirodan broj") {
             @Override
             protected void eval() {
                 if(!textField.getText().isEmpty()
@@ -415,7 +431,7 @@ public class Util {
     }
     
     public static ValidatorBase jmbgValidator(JFXTextField textField) {
-        ValidatorBase jmbgValidator = new ValidatorBase("Nekorektan unos") {
+        ValidatorBase jmbgValidator = new ValidatorBase("Nije 13 cifara") {
             @Override
             protected void eval() {
                 if(!textField.getText().isEmpty()
@@ -431,7 +447,7 @@ public class Util {
     }
     
     public static ValidatorBase emailValidator(JFXTextField textField) {
-        ValidatorBase emailValidator = new ValidatorBase("Nekorektan unos") {
+        ValidatorBase emailValidator = new ValidatorBase("Format: example@mail.com") {
             @Override
             protected void eval() {
                 if(!textField.getText().isEmpty()
@@ -447,7 +463,7 @@ public class Util {
     }
     
     public static ValidatorBase webValidator(JFXTextField textField) {
-        ValidatorBase webValidator = new ValidatorBase("Nekorektan unos") {
+        ValidatorBase webValidator = new ValidatorBase("Format: www.example.com") {
             @Override
             protected void eval() {
                 if(!textField.getText().isEmpty()
@@ -463,7 +479,7 @@ public class Util {
     }
 		
     public static ValidatorBase phoneValidator(JFXTextField textField) {
-        ValidatorBase phoneValidator = new ValidatorBase("Nekorektan unos") {	
+        ValidatorBase phoneValidator = new ValidatorBase("Format: +000000000") {	
             @Override
             protected void eval() {
                 if(!textField.getText().isEmpty()
@@ -509,6 +525,22 @@ public class Util {
         };
         nameValidator.setIcon(new ImageView());
         return nameValidator;
+    }
+    
+    public static ValidatorBase inventarniBrojValidator(JFXTextField textField) {
+        ValidatorBase inventarniBrojValidator = new ValidatorBase("Format: 0-0000") {
+            @Override
+            protected void eval() {
+                if(!textField.getText().isEmpty()
+                        && !textField.getText().matches("^([0-9]-[0-9]{4})$")) {
+                    hasErrors.set(true);
+                } else {
+                    hasErrors.set(false);
+                }
+            }
+        };
+        inventarniBrojValidator.setIcon(new ImageView());
+        return inventarniBrojValidator;
     }
     
     public static <T> void preventColumnReordering(TableView<T> tableView) {

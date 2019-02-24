@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.JFXToggleButton?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane id="AnchorPane" fx:id="anchorPane" prefHeight="465.0" prefWidth="600.0" stylesheets="@../osnovnasredstva.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="osnovnasredstva.administrator.PrelaznicaController">
+<AnchorPane id="AnchorPane" fx:id="anchorPane" prefHeight="465.0" prefWidth="600.0" stylesheets="@../osnovnasredstva.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="osnovnasredstva.administrator.PrelaznicaController">
    <children>
       <TableView fx:id="prelazniceTableView" layoutX="20.0" layoutY="72.0" prefHeight="330.0" prefWidth="570.0" AnchorPane.bottomAnchor="18.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="72.0">
          <columnResizePolicy>
@@ -27,8 +27,10 @@
          <padding>
             <Insets left="30.0" right="20.0" />
          </padding>
+         <tooltip>
+            <Tooltip text="Pretraga po nazivu" />
+         </tooltip>
       </TextField>
       <ImageView fx:id="clearImageView" fitHeight="20.0" fitWidth="15.0" layoutX="562.0" layoutY="98.0" onMouseClicked="#clear" pickOnBounds="true" preserveRatio="true" styleClass="clearImageView" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="45.0" />
-      <JFXToggleButton fx:id="postaniNadzornikToggleButton" layoutX="185.0" layoutY="33.0" styleClass="nadzornikToggleButton" text="Pogled nadzornika" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
    </children>
 </AnchorPane>

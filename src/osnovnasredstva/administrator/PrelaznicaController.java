@@ -74,7 +74,7 @@ public class PrelaznicaController implements Initializable {
         clearImageView.setVisible(false);
 		
         traziTextField.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue)->{
-            //filteredList.setPredicate(prelaznica -> prelaznica.get().contains(newValue.));
+            filteredList.setPredicate(prelaznica -> prelaznica.getNaziv().toLowerCase().contains(newValue.toLowerCase()));
             if(!newValue.isEmpty()) {
                 clearImageView.setVisible(true);
             } else {
@@ -157,14 +157,20 @@ public class PrelaznicaController implements Initializable {
             };
             return cell;
         });
-        
-        
-        
-        //Column.setCellValueFactory(new PropertyValueFactory<>(""));
-        //Column.setCellValueFactory(new PropertyValueFactory<>(""));
-        
-        
+
         Util.preventColumnReordering(prelazniceTableView);
+        
+        nazivColumn.setMinWidth(100);
+        nazivColumn.setMaxWidth(5000);
+                
+        datumColumn.setMinWidth(100);
+        datumColumn.setMaxWidth(3000);
+        
+        otvoriColumn.setText("");
+        otvoriColumn.setMinWidth(35);
+        otvoriColumn.setMaxWidth(35);
+        otvoriColumn.setResizable(false);
+        otvoriColumn.setSortable(false);
     }
     
     @FXML

@@ -14,6 +14,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
@@ -35,6 +36,9 @@ public class DodavanjeKorisnickogNalogaController implements Initializable {
 
     @FXML
     private AnchorPane menuLine;
+    
+    @FXML
+    private Label naslovLabel;
 
     @FXML
     private JFXButton sacuvajButton;
@@ -95,11 +99,13 @@ public class DodavanjeKorisnickogNalogaController implements Initializable {
 
         sacuvajButton.setDefaultButton(true);
         
-        korisnickoImeTextField.getValidators().addAll(Util.requiredFieldValidator(korisnickoImeTextField), usernameValidator(korisnickoImeTextField), Util.lengthValidator(korisnickoImeTextField, 255));
+        korisnickoImeTextField.getValidators().addAll(Util.requiredFieldValidator(korisnickoImeTextField), Util.usernameValidator(korisnickoImeTextField), sameUsernameValidator(korisnickoImeTextField), Util.lengthValidator(korisnickoImeTextField, 255));
         lozinka1PasswordField.getValidators().addAll(Util.requiredFieldValidator(lozinka1PasswordField), Util.passwordValidator(lozinka1PasswordField));
         lozinka2PasswordField.getValidators().addAll(Util.requiredFieldValidator(lozinka2PasswordField), Util.passwordValidator(lozinka2PasswordField), Util.samePasswordValidator(lozinka1PasswordField, lozinka2PasswordField));
         
+        naslovLabel.setText("Dodavanje korisničkog naloga");
         if(izmjena) {
+            naslovLabel.setText("Izmjena korisničkog naloga");
             korisnickoImeTextField.setText(odabraniKorisnik.getKorisnickoIme());
             if(odabraniKorisnik.getTip()==0) {
                 administratorRadioButton.setSelected(true);
@@ -109,13 +115,13 @@ public class DodavanjeKorisnickogNalogaController implements Initializable {
         }
     }
     
-    public static ValidatorBase usernameValidator(JFXTextField textField) {
-        ValidatorBase postalCodeValidator = new ValidatorBase("Zauzeto") {
+    public static ValidatorBase sameUsernameValidator(JFXTextField textField) {
+        ValidatorBase sameUsernameValidator = new ValidatorBase("Zauzeto") {
             @Override
             protected void eval() {
-                if(!textField.getText().isEmpty() && korisnickiNaloziList.stream().anyMatch(k -> k.getKorisnickoIme().equals(textField.getText()))) {
+                if(!textField.getText().isEmpty() && korisnickiNaloziList.stream().anyMatch(k -> k.getKorisnickoIme().equalsIgnoreCase(textField.getText()))) {
                     hasErrors.set(true);
-                    if(izmjena && odabraniKorisnik.getKorisnickoIme().equals(textField.getText())) {
+                    if(izmjena && odabraniKorisnik.getKorisnickoIme().equalsIgnoreCase(textField.getText())) {
                         hasErrors.set(false);
                     }
                 } else {
@@ -123,8 +129,8 @@ public class DodavanjeKorisnickogNalogaController implements Initializable {
                 }
             }
         };
-        postalCodeValidator.setIcon(new ImageView());
-        return postalCodeValidator;
+        sameUsernameValidator.setIcon(new ImageView());
+        return sameUsernameValidator;
     }
     
     @FXML

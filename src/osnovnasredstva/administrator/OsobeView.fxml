@@ -28,11 +28,11 @@
       </TableView>
       <JFXButton fx:id="pdfButton" layoutX="144.0" layoutY="53.0" onAction="#pdf" text=" " AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="30.0">
          <tooltip>
-            <Tooltip maxWidth="125.0" text="Kreiraj PDF?" wrapText="true" />
+            <Tooltip maxWidth="125.0" text="Kreiraj PDF" wrapText="true" />
          </tooltip></JFXButton>
       <JFXButton fx:id="dodajOsobuButton" layoutX="241.0" layoutY="53.0" onAction="#dodaj" text=" " AnchorPane.leftAnchor="90.0" AnchorPane.topAnchor="30.0">
          <tooltip>
-            <Tooltip maxWidth="125.0" text="Dodaj osobu?" wrapText="true" />
+            <Tooltip maxWidth="125.0" text="Dodaj osobu" wrapText="true" />
          </tooltip></JFXButton>
       <TextField fx:id="traziTextField" layoutX="434.0" layoutY="93.0" maxWidth="150.0" minWidth="100.0" prefHeight="25.0" prefWidth="150.0" promptText="Traži" styleClass="searchTextField" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="40.0">
          <opaqueInsets>
@@ -41,8 +41,11 @@
          <padding>
             <Insets left="30.0" right="20.0" />
          </padding>
+         <tooltip>
+            <Tooltip text="Pretraga po imenu ili prezimenu" />
+         </tooltip>
       </TextField>
       <ImageView fx:id="clearImageView" fitHeight="20.0" fitWidth="15.0" layoutX="562.0" layoutY="98.0" onMouseClicked="#clear" pickOnBounds="true" preserveRatio="true" styleClass="clearImageView" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="45.0" />
-      <JFXToggleButton fx:id="postaniNadzornikToggleButton" layoutX="185.0" layoutY="33.0" styleClass="nadzornikToggleButton" text="Pogled nadzornika" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
+      <JFXToggleButton fx:id="postaniNadzornikToggleButton" layoutX="185.0" layoutY="33.0" pickOnBounds="false" styleClass="nadzornikToggleButton" text="Pogled nadzornika" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
    </children>
 </AnchorPane>

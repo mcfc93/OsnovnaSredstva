@@ -84,7 +84,7 @@ public class KorisnickiNaloziController implements Initializable {
         clearImageView.setVisible(false);
 		
         traziTextField.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue)->{
-            filteredList.setPredicate(korisnik -> korisnik.getKorisnickoIme().toLowerCase().contains(newValue.toLowerCase()));
+            filteredList.setPredicate(korisnik -> korisnik.getKorisnickoIme().toLowerCase().startsWith(newValue.toLowerCase()));
             if(!newValue.isEmpty()) {
                 clearImageView.setVisible(true);
             } else {
@@ -143,7 +143,7 @@ public class KorisnickiNaloziController implements Initializable {
                     super.updateItem(item, empty);
                     if (!empty) {
                         button.getStyleClass().addAll("buttonTable", "buttonTableShow");
-                    	button.setTooltip(new Tooltip("Prikaži?"));
+                    	button.setTooltip(new Tooltip("Prikaži"));
                     	button.getTooltip().setAutoHide(false);
                     	setGraphic(button);
                     	button.setOnMouseClicked(event -> {
@@ -169,7 +169,7 @@ public class KorisnickiNaloziController implements Initializable {
                     super.updateItem(item, empty);
                     if (!empty) {
                         button.getStyleClass().addAll("buttonTable", "buttonTableEdit");
-                    	button.setTooltip(new Tooltip("Izmjeni?"));
+                    	button.setTooltip(new Tooltip("Izmjeni"));
                     	button.getTooltip().setAutoHide(false);
                     	setGraphic(button);
                     	button.setOnMouseClicked(event -> {
@@ -212,7 +212,7 @@ public class KorisnickiNaloziController implements Initializable {
                     super.updateItem(item, empty);
                     if (!empty) {
                         button.getStyleClass().addAll("buttonTable", "buttonTableDelete");
-                    	button.setTooltip(new Tooltip("Obriši?"));
+                    	button.setTooltip(new Tooltip("Obriši"));
                     	button.getTooltip().setAutoHide(false);
                     	setGraphic(button);
                     	button.setOnMouseClicked(event -> {

@@ -4,6 +4,7 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.validation.base.ValidatorBase;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
@@ -14,7 +15,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -36,6 +39,9 @@ public class DodavanjeProstorijeController implements Initializable {
     
     @FXML
     private AnchorPane menuLine;
+    
+    @FXML
+    private Label naslovLabel;
 
     @FXML
     private Button closeButton;
@@ -93,9 +99,18 @@ public class DodavanjeProstorijeController implements Initializable {
         sacuvajButton.setDefaultButton(true);
         
         nazivTextField.getValidators().addAll(Util.requiredFieldValidator(nazivTextField), Util.lengthValidator(nazivTextField, 255));
-        sifraTextField.getValidators().addAll(Util.requiredFieldValidator(sifraTextField), Util.lengthValidator(sifraTextField, 255));
+        sifraTextField.getValidators().addAll(Util.requiredFieldValidator(sifraTextField), postojiProstorijaUZgradiValidator(sifraTextField, zgradaComboBox), Util.lengthValidator(sifraTextField, 255));
         zgradaComboBox.getValidators().addAll(Util.requiredFieldValidator(zgradaComboBox));
-        opisTextArea.getValidators().addAll(Util.requiredFieldValidator(opisTextArea), Util.lengthValidator(opisTextArea, 1024));
+        opisTextArea.getValidators().addAll(Util.lengthValidator(opisTextArea, 1024));
+        
+        opisTextArea.focusedProperty().addListener((observable, oldValue, newValue)->{
+            if(!newValue) {
+                opisTextArea.validate();
+            }
+        });
+        opisTextArea.textProperty().addListener((observable, oldValue, newValue)->{
+            opisTextArea.validate();
+        });
 
         zgradaComboBox.setCellFactory(param -> {
             ListCell<Zgrada> cell = new ListCell<Zgrada>() {
@@ -127,12 +142,39 @@ public class DodavanjeProstorijeController implements Initializable {
         zgradaComboBox.setVisibleRowCount(5);
         zgradaComboBox.getItems().setAll(LokacijeController.zgradeList);
         
+        naslovLabel.setText("Dodavanaje prostorije");
         if(izmjena) {
+            naslovLabel.setText("Izmjena prostorije");
             sifraTextField.setText(odabranaProstorija.getSifra());
             nazivTextField.setText(odabranaProstorija.getNaziv());
             opisTextArea.setText(odabranaProstorija.getOpis());
             zgradaComboBox.getSelectionModel().select(zgradaComboBox.getItems().stream().filter(zgrada -> zgrada.getId() == odabranaProstorija.getIdZgrade()).findFirst().orElse(null));
         }
+    }
+    
+    public static ValidatorBase postojiProstorijaUZgradiValidator(JFXTextField textField, JFXComboBox<Zgrada> comboBox) {
+        ValidatorBase postojiProstorijaUZgradiValidator = new ValidatorBase("Prostorija postoji u zgradi") {
+            @Override
+            protected void eval() {
+                if(!textField.getText().isEmpty() && LokacijeController.lokacijeList.stream().anyMatch(p -> p.getSifra().equalsIgnoreCase(textField.getText()) && comboBox.getSelectionModel().getSelectedItem() != null && p.getIdZgrade() == comboBox.getSelectionModel().getSelectedItem().getId())) {
+                    hasErrors.set(true);
+                    if(izmjena && odabranaProstorija.getSifra().equalsIgnoreCase(textField.getText()) && odabranaProstorija.getIdZgrade() == comboBox.getSelectionModel().getSelectedItem().getId()) {
+                        hasErrors.set(false);
+                    }
+                } else {
+                    hasErrors.set(false);
+                }
+            }
+        };
+        postojiProstorijaUZgradiValidator.setIcon(new ImageView());
+        
+        comboBox.valueProperty().addListener((observable, oldValue, newValue)->{
+            if(newValue != null) {
+                textField.validate();
+            }
+        });
+        
+        return postojiProstorijaUZgradiValidator;
     }
     
     @FXML

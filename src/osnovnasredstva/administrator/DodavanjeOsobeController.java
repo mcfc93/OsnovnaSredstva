@@ -10,6 +10,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -30,6 +31,9 @@ public class DodavanjeOsobeController implements Initializable {
 
     @FXML
     private AnchorPane menuLine;
+    
+    @FXML
+    private Label naslovLabel;
 
     @FXML
     private JFXButton sacuvajButon;
@@ -104,7 +108,9 @@ public class DodavanjeOsobeController implements Initializable {
         emailTextField.getValidators().addAll(Util.requiredFieldValidator(emailTextField), Util.emailValidator(emailTextField), Util.lengthValidator(emailTextField, 50));
         adresaTextField.getValidators().addAll(Util.requiredFieldValidator(adresaTextField), Util.lengthValidator(adresaTextField, 255));
         
+        naslovLabel.setText("Dodavanje osobe");
         if(izmjena) {
+            naslovLabel.setText("Izmjena osobe");
             imeTextField.setText(odabranaOsoba.getIme());
             prezimeTextField.setText(odabranaOsoba.getPrezime());
             jmbgTextField.setText(odabranaOsoba.getJmbg());

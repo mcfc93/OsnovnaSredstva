@@ -60,6 +60,9 @@ public class PrikazOsnovnogSredstvaController implements Initializable {
     
     @FXML
     private AnchorPane menuLine;
+    
+    @FXML
+    private Label naslovLabel;
 
     @FXML
     private Button closeButton;
@@ -134,6 +137,8 @@ public class PrikazOsnovnogSredstvaController implements Initializable {
             }
         });
         
+        naslovLabel.setText("Detaljan prikaz osnovnog sredstva");
+        
         prelazniceList = FXCollections.observableArrayList();
         
         prelaznicaTableView.setPlaceholder(new Label("Nema osnovnih sredstava."));
@@ -162,7 +167,7 @@ public class PrikazOsnovnogSredstvaController implements Initializable {
         });
         
         
-        LokacijeController.lokacijeList.forEach(pr ->{
+        OsnovnaSredstvaController.prostorijeList.forEach(pr ->{
             if(odabranoOS.getIdLokacije() == pr.getId())
                 lokacijaTextField.setText(pr.toString());
         });

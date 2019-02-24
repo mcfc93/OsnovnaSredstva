@@ -13,6 +13,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -30,6 +31,9 @@ public class DodavanjeVrsteOSController implements Initializable {
     
     @FXML
     private AnchorPane menuLine;
+    
+    @FXML
+    private Label naslovLabel;
 
     @FXML
     private JFXButton sacuvajButton;
@@ -76,9 +80,19 @@ public class DodavanjeVrsteOSController implements Initializable {
         });
         
         sacuvajButton.setDefaultButton(true);
+        naslovLabel.setText("Dodavanje vrste osnovnog sredstva");
         
         nazivTextField.getValidators().addAll(Util.requiredFieldValidator(nazivTextField), Util.lengthValidator(nazivTextField, 255));
-        opisTextArea.getValidators().addAll(Util.requiredFieldValidator(opisTextArea), Util.lengthValidator(opisTextArea, 1024));
+        opisTextArea.getValidators().addAll(Util.lengthValidator(opisTextArea, 1024));
+        
+        opisTextArea.focusedProperty().addListener((observable, oldValue, newValue)->{
+            if(!newValue) {
+                opisTextArea.validate();
+            }
+        });
+        opisTextArea.textProperty().addListener((observable, oldValue, newValue)->{
+            opisTextArea.validate();
+        });
         
         vrstaOS=null;
     }    

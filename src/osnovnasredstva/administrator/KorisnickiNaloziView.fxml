@@ -10,7 +10,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane id="AnchorPane" fx:id="anchorPane" prefHeight="465.0" prefWidth="600.0" stylesheets="@../osnovnasredstva.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="osnovnasredstva.administrator.KorisnickiNaloziController">
+<AnchorPane id="AnchorPane" fx:id="anchorPane" prefHeight="465.0" prefWidth="600.0" stylesheets="@../osnovnasredstva.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="osnovnasredstva.administrator.KorisnickiNaloziController">
    <children>
       <TableView fx:id="korisnickiNaloziTableView" layoutX="17.0" layoutY="94.0" prefHeight="356.0" prefWidth="570.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="70.0">
          <columns>
@@ -26,7 +26,7 @@
       </TableView>
       <JFXButton id="dodajOsobuButton" fx:id="dodajButton" layoutX="32.0" layoutY="39.0" onAction="#dodaj" prefHeight="30.0" prefWidth="30.0" text=" " AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="30.0">
          <tooltip>
-            <Tooltip maxWidth="125.0" text="Dodaj korisnički nalog?" wrapText="true" />
+            <Tooltip maxWidth="125.0" text="Dodaj korisnički nalog" wrapText="true" />
          </tooltip></JFXButton>
       <TextField fx:id="traziTextField" layoutX="430.0" layoutY="41.0" maxWidth="150.0" minWidth="100.0" prefHeight="25.0" prefWidth="150.0" promptText="Traži" styleClass="searchTextField" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="30.0">
          <opaqueInsets>
@@ -35,6 +35,9 @@
          <padding>
             <Insets left="30.0" right="20.0" />
          </padding>
+         <tooltip>
+            <Tooltip text="Pretraga po korisničkom imenu" />
+         </tooltip>
       </TextField>
       <ImageView fx:id="clearImageView" fitHeight="20.0" fitWidth="15.0" layoutX="555.0" layoutY="46.0" onMouseClicked="#clear" pickOnBounds="true" preserveRatio="true" styleClass="clearImageView" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="35.0">
          <image>

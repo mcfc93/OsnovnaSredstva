@@ -60,6 +60,9 @@ public class PrikazProstorijeController implements Initializable {
     private static OsnovnoSredstvoDAO osnovnoSredstvoDAO = new OsnovnoSredstvoDAO();
     @FXML
     private AnchorPane menuLine;
+    
+    @FXML
+    private Label naslovLabel;
 
     @FXML
     private Button closeButton;
@@ -121,16 +124,18 @@ public class PrikazProstorijeController implements Initializable {
             }
         });
         
-         osnovnaSredstvaTableView.setPlaceholder(new Label("Prostorija je prazna"));
-         
-         sifraTextField.setText(odabranaProstorija.getSifra());
-         nazivTextField.setText(odabranaProstorija.getNaziv());
-         opisTextArea.setText(odabranaProstorija.getOpis());
-         LokacijeController.zgradeList.forEach((zg) -> {
-             if(odabranaProstorija.getIdZgrade() == zg.getId()){
-                 zgradaTextField.setText(zg.getNaziv());
-             }
-         });
+        naslovLabel.setText("Detaljan prikaz prostorije");
+        
+        osnovnaSredstvaTableView.setPlaceholder(new Label("Prostorija je prazna"));
+
+        sifraTextField.setText(odabranaProstorija.getSifra());
+        nazivTextField.setText(odabranaProstorija.getNaziv());
+        opisTextArea.setText(odabranaProstorija.getOpis());
+        LokacijeController.zgradeList.forEach((zg) -> {
+            if(odabranaProstorija.getIdZgrade() == zg.getId()){
+                zgradaTextField.setText(zg.getNaziv());
+            }
+        });
          
         osnovnaSredstvaList.clear();
         

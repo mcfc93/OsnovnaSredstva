@@ -118,7 +118,7 @@ public class OsobeController implements Initializable {
         clearImageView.setVisible(false);
         
         traziTextField.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue)->{
-            filteredList.setPredicate(osoba -> osoba.getIme().toLowerCase().contains(newValue.toLowerCase()) || osoba.getPrezime().toLowerCase().contains(newValue.toLowerCase()));
+            filteredList.setPredicate(osoba -> osoba.getIme().toLowerCase().startsWith(newValue.toLowerCase()) || osoba.getPrezime().toLowerCase().startsWith(newValue.toLowerCase()));
             if(!newValue.isEmpty()) {
                 clearImageView.setVisible(true);
             } else {
@@ -208,7 +208,7 @@ public class OsobeController implements Initializable {
                     super.updateItem(item, empty);
                     if (!empty) {
                     	button.getStyleClass().addAll("buttonTable", "buttonTableShow");
-                    	button.setTooltip(new Tooltip("Prikaži?"));
+                    	button.setTooltip(new Tooltip("Prikaži"));
                     	button.getTooltip().setAutoHide(false);
                     	setGraphic(button);
                     	button.setOnMouseClicked(event -> {
@@ -248,7 +248,7 @@ public class OsobeController implements Initializable {
                     super.updateItem(item, empty);
                     if (!empty) {
                     	button.getStyleClass().addAll("buttonTable", "buttonTableEdit");
-                    	button.setTooltip(new Tooltip("Izmjeni?"));
+                    	button.setTooltip(new Tooltip("Izmjeni"));
                     	button.getTooltip().setAutoHide(false);
                     	setGraphic(button);
                     	button.setOnMouseClicked(event -> {
@@ -291,7 +291,7 @@ public class OsobeController implements Initializable {
                     super.updateItem(item, empty);
                     if (!empty) {
                     	button.getStyleClass().addAll("buttonTable", "buttonTableDelete");
-                    	button.setTooltip(new Tooltip("Obriši?"));
+                    	button.setTooltip(new Tooltip("Obriši"));
                     	button.getTooltip().setAutoHide(false);
                     	setGraphic(button);
                     	button.setOnMouseClicked(event -> {

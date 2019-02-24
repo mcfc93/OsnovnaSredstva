@@ -8,6 +8,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -17,6 +18,9 @@ public class DodavanjePrelazniceNapomenaController implements Initializable {
 
     @FXML
     private AnchorPane menuLine;
+    
+    @FXML
+    private Label naslovLabel;
     
     @FXML
     private JFXTextArea opisTextArea;
@@ -54,6 +58,9 @@ public class DodavanjePrelazniceNapomenaController implements Initializable {
                 stage.setOpacity(1.0);
             }
         });
+        
+        sacuvajButton.setDefaultButton(true);
+        naslovLabel.setText("Dodavanje napomene prelaznice");
     }
     
     @FXML

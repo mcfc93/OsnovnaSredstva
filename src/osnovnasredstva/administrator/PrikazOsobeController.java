@@ -66,6 +66,9 @@ public class PrikazOsobeController implements Initializable {
     private AnchorPane anchorPane;
     
     @FXML
+    private Label naslovLabel;
+    
+    @FXML
     private Button closeButton;
     @FXML
     private TextField imeTextField;
@@ -126,6 +129,8 @@ public class PrikazOsobeController implements Initializable {
                 stage.setOpacity(1.0);
             }
         });
+        
+        naslovLabel.setText("Detaljan prikaz osobe");
         
         osnovnaSredstvaTableView.setPlaceholder(new Label("Nema zaduženja"));
         
