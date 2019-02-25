@@ -3,6 +3,8 @@ package osnovnasredstva.DTO;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import osnovnasredstva.DAO.ZgradaDAO;
+import osnovnasredstva.administrator.LokacijeController;
+import osnovnasredstva.administrator.OsobeController;
 import osnovnasredstva.prijava.PrijavaController;
 import osnovnasredstva.util.NotFoundException;
 import osnovnasredstva.util.Util;
@@ -102,7 +104,7 @@ public class Prostorija {
         }
         return true;
     }
-
+    /*
     @Override
     public String toString() {
         ZgradaDAO zgDAO = new ZgradaDAO();
@@ -115,7 +117,8 @@ public class Prostorija {
         }
         return naziv + " (" + zg.getNaziv() + ")";
     }
-    
-    
-    
+    */
+    public String getNazivZgrade() {
+        return LokacijeController.zgradeList.stream().filter(z -> z.getId() == getIdZgrade()).findFirst().get().getNaziv();
+    }
 }

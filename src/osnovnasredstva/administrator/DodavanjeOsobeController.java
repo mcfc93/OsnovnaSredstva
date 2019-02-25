@@ -6,6 +6,7 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -151,6 +152,7 @@ public class DodavanjeOsobeController implements Initializable {
                 odabranaOsoba.setAdresa(adresaTextField.getText());                
                 try {
                     osobaDAO.save(PrijavaController.konekcija, odabranaOsoba);
+                    Platform.runLater(() -> Util.getNotifications("Obavještenje", "Osoba izmjenjena.", "Information").show());
                 } catch (SQLException | NotFoundException e) {
                     Util.LOGGER.log(Level.SEVERE, e.toString(), e);
                 }
@@ -158,6 +160,7 @@ public class DodavanjeOsobeController implements Initializable {
                 odabranaOsoba = new Osoba(imeTextField.getText(), prezimeTextField.getText(), titulaTextField.getText(), jmbgTextField.getText(), zaposlenjeTextField.getText(), brojTelefonaTextField.getText(), emailTextField.getText(), adresaTextField.getText());
                 try {
                     osobaDAO.create(PrijavaController.konekcija, odabranaOsoba);
+                    Platform.runLater(() -> Util.getNotifications("Obavještenje", "Osoba dodana.", "Information").show());
                 } catch (SQLException e) {
                     Util.LOGGER.log(Level.SEVERE, e.toString(), e);
                 }

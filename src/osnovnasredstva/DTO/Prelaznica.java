@@ -6,6 +6,10 @@ import java.util.logging.Level;
 import osnovnasredstva.DAO.OsnovnoSredstvoDAO;
 import osnovnasredstva.DAO.OsobaDAO;
 import osnovnasredstva.DAO.ProstorijaDAO;
+import osnovnasredstva.administrator.OsnovnaSredstvaController;
+import osnovnasredstva.administrator.OsobeController;
+import osnovnasredstva.administrator.PrelaznicaController;
+import osnovnasredstva.administrator.PrikazOsnovnogSredstvaController;
 import osnovnasredstva.prijava.PrijavaController;
 import osnovnasredstva.util.NotFoundException;
 import osnovnasredstva.util.Util;
@@ -60,7 +64,7 @@ public class Prelaznica {
     }
     
     public String getDatum() {
-          return new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(this.datumPrelaska);
+          return new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(this.datumPrelaska);
     }
     
     public void setDatumPrelaska(Timestamp datumPrelaskaIn) {
@@ -117,6 +121,7 @@ public class Prelaznica {
     }
 
     public String getIdProstorijeIzString(){
+        /*
         ProstorijaDAO prostorijaDAO = new ProstorijaDAO();
         Prostorija prostorija = new Prostorija();
         prostorija.setId(idProstorijeIz);
@@ -126,9 +131,17 @@ public class Prelaznica {
             Util.LOGGER.log(Level.SEVERE, e.toString(), e);
         }
         return prostorija.toString();
+        */
+        Prostorija prostorija = OsnovnaSredstvaController.prostorijeList.stream().filter(p -> p.getId() == idProstorijeIz).findFirst().orElse(null);
+        Zgrada zgrada = null;
+        if(prostorija != null) {
+            zgrada = OsnovnaSredstvaController.zgradeList.stream().filter(z -> z.getId() == prostorija.getIdZgrade()).findFirst().orElse(null);
+        }
+        return (prostorija!=null ?prostorija.getNaziv():"NEPOZNATO") + " (" + (zgrada!=null?zgrada.getNaziv():"NEPOZNATO") + ")";
     }
     
     public String getIdProstorijeUString(){
+        /*
         ProstorijaDAO prostorijaDAO = new ProstorijaDAO();
         Prostorija prostorija = new Prostorija();
         prostorija.setId(idProstorijeU);
@@ -138,9 +151,17 @@ public class Prelaznica {
             Util.LOGGER.log(Level.SEVERE, e.toString(), e);
         }
         return prostorija.toString();
+        */
+        Prostorija prostorija = OsnovnaSredstvaController.prostorijeList.stream().filter(p -> p.getId() == idProstorijeU).findFirst().orElse(null);
+        Zgrada zgrada = null;
+        if(prostorija != null) {
+            zgrada = OsnovnaSredstvaController.zgradeList.stream().filter(z -> z.getId() == prostorija.getIdZgrade()).findFirst().orElse(null);
+        }
+        return (prostorija!=null ?prostorija.getNaziv():"NEPOZNATO") + " (" + (zgrada!=null?zgrada.getNaziv():"NEPOZNATO") + ")";
     }
     
     public String getIdOsobeSaString(){
+        /*
         OsobaDAO osobaDAO = new OsobaDAO();
         Osoba osoba = new Osoba();
         osoba.setId(idOsobeSa);
@@ -150,9 +171,12 @@ public class Prelaznica {
             Util.LOGGER.log(Level.SEVERE, e.toString(), e);
         }
         return osoba.getIme() + " " + osoba.getPrezime();
+        */
+        return OsobeController.osobeList.stream().filter(o -> o.getId() == idOsobeSa).findFirst().get().getImePrezime();
     }
     
     public String getIdOsobeNaString(){
+        /*
         OsobaDAO osobaDAO = new OsobaDAO();
         Osoba osoba = new Osoba();
         osoba.setId(idOsobeNa);
@@ -162,8 +186,11 @@ public class Prelaznica {
             Util.LOGGER.log(Level.SEVERE, e.toString(), e);
         }
         return osoba.getIme() + " " + osoba.getPrezime();
+        */
+        return OsobeController.osobeList.stream().filter(o -> o.getId() == idOsobeNa).findFirst().get().getImePrezime();
     }
     public String getNaziv(){
+        /*
         OsnovnoSredstvoDAO osDAO = new OsnovnoSredstvoDAO();
         OsnovnoSredstvo os = new OsnovnoSredstvo();
         os.setId(idOsnovnogSredstva);
@@ -174,5 +201,7 @@ public class Prelaznica {
         }
         
         return "Prelaznica_" + os.getNaziv();
+        */
+        return "Prelaznica_" + PrelaznicaController.osnovnaSredstvaList.stream().filter(os -> os.getId() == idOsnovnogSredstva).findFirst().get().getNaziv();
     }
 }

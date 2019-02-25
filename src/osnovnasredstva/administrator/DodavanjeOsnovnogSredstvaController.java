@@ -402,7 +402,7 @@ public class DodavanjeOsnovnogSredstvaController implements Initializable {
                 Font subFont = new Font(Font.FontFamily.TIMES_ROMAN, 16, Font.BOLD);
                 Font smallBold = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD);
                 try {
-                    Document document = new Document(PageSize.A4.rotate());
+                    Document document = new Document(PageSize.A4);
                     PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(naziv));
                     HeaderFooterPageEvent event = new HeaderFooterPageEvent();
                     writer.setPageEvent(event);
@@ -414,14 +414,15 @@ public class DodavanjeOsnovnogSredstvaController implements Initializable {
                     document.add(new Paragraph("Prelaznica", catFont));
                     document.add(new Paragraph(" "));
                     document.add(new Paragraph("Prelaznicu kreirao: " + PrijavaController.korisnik.getKorisnickoIme(), smallBold));
-                    document.add(new Paragraph("Datum kreiranja: " + new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(pr.getDatumPrelaska()), smallBold));
+                    document.add(new Paragraph("Datum i vrijeme kreiranja: " + new SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(pr.getDatumPrelaska()), smallBold));
                     document.add(new Paragraph(" "));      
                     document.add(new Paragraph(" "));
                     
                     OsnovnaSredstvaController.osnovnaSredstvaList.forEach(os ->{
                         if(os.getId() == pr.getIdOsnovnogSredstva()){
                             try {
-                                document.add(new Paragraph(new Chunk("Osnovno sredstvo: " + os.getNaziv(), font)));
+                                document.add(new Paragraph(new Chunk("Naziv osnovno sredstva: " + os.getNaziv(), font)));
+                                document.add(new Paragraph(new Chunk("Inventarni broj: " + os.getInventarniBroj(), font)));
                             } catch (DocumentException e) {
                                 Util.LOGGER.log(Level.SEVERE, e.toString(), e);
                             }
@@ -446,7 +447,7 @@ public class DodavanjeOsnovnogSredstvaController implements Initializable {
                         }
                     });
                     
-                    LokacijeController.lokacijeList.forEach(lo -> {
+                    OsnovnaSredstvaController.prostorijeList.forEach(lo -> {
                         if(pr.getIdProstorijeIz() == lo.getId()){
                             try {
                                 document.add(new Paragraph(new Chunk("Prethodna prostorija: " + lo, font)));
@@ -455,7 +456,7 @@ public class DodavanjeOsnovnogSredstvaController implements Initializable {
                             }
                         }
                     });
-                    LokacijeController.lokacijeList.forEach(lo -> {
+                    OsnovnaSredstvaController.prostorijeList.forEach(lo -> {
                         if(pr.getIdProstorijeU()== lo.getId()){
                             try {
                                 document.add(new Paragraph(new Chunk("Trenutna prostorija: " + lo, font)));

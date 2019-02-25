@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" fx:id="anchorPane" prefHeight="550.0" prefWidth="700.0" styleClass="rootBorder" stylesheets="@../osnovnasredstva.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="osnovnasredstva.administrator.PrikazOsnovnogSredstvaController">
+<AnchorPane id="AnchorPane" fx:id="anchorPane" prefHeight="550.0" prefWidth="700.0" styleClass="rootBorder" stylesheets="@../osnovnasredstva.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="osnovnasredstva.administrator.PrikazOsnovnogSredstvaController">
    <children>
       <AnchorPane fx:id="menuLine" prefHeight="30.0" prefWidth="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -34,14 +34,14 @@
       <Label alignment="CENTER_RIGHT" layoutX="9.0" layoutY="186.0" prefHeight="17.0" prefWidth="114.0" styleClass="opisLabel" text="Stopa amortizacije" AnchorPane.leftAnchor="35.0" AnchorPane.topAnchor="182.0" />
       <Label alignment="CENTER_RIGHT" layoutX="3.0" layoutY="171.0" prefHeight="17.0" prefWidth="114.0" styleClass="opisLabel" text="Nabavna vrijednost" AnchorPane.leftAnchor="35.0" AnchorPane.topAnchor="147.0" />
       <Label alignment="CENTER_RIGHT" layoutX="17.0" layoutY="81.0" prefHeight="17.0" prefWidth="114.0" styleClass="opisLabel" text="Inventarni broj" AnchorPane.leftAnchor="35.0" AnchorPane.topAnchor="77.0" />
-      <Label alignment="CENTER_RIGHT" layoutX="9.0" layoutY="225.0" prefHeight="17.0" prefWidth="114.0" styleClass="opisLabel" text="Vrijednost" AnchorPane.leftAnchor="35.0" AnchorPane.topAnchor="217.0" />
+      <Label alignment="CENTER_RIGHT" layoutX="9.0" layoutY="225.0" prefHeight="17.0" prefWidth="114.0" styleClass="opisLabel" text="Trenutna vrijednost" AnchorPane.leftAnchor="35.0" AnchorPane.topAnchor="217.0" />
       <TableView fx:id="prelaznicaTableView" layoutX="14.0" layoutY="338.0" prefHeight="235.0" prefWidth="655.0" AnchorPane.bottomAnchor="12.0" AnchorPane.leftAnchor="12.0" AnchorPane.rightAnchor="12.0" AnchorPane.topAnchor="320.0">
         <columns>
-          <TableColumn fx:id="datumColumn" prefWidth="129.0" resizable="false" text="Datum prelaska" />
-          <TableColumn fx:id="izProstorijeColumn" prefWidth="129.0" resizable="false" text="Iz prostorije" />
-            <TableColumn fx:id="uProstorijuColumn" prefWidth="166.0" resizable="false" text="U prostoriju" />
-            <TableColumn fx:id="saOsobeColumn" prefWidth="129.0" resizable="false" text="Sa osobe" />
-            <TableColumn fx:id="naOsobuColumn" prefWidth="119.0" resizable="false" text="Na osobu" />
+          <TableColumn fx:id="datumColumn" prefWidth="129.0" text="Datum prelaska" />
+          <TableColumn fx:id="izProstorijeColumn" prefWidth="129.0" text="Iz prostorije" />
+            <TableColumn fx:id="uProstorijuColumn" prefWidth="166.0" text="U prostoriju" />
+            <TableColumn fx:id="saOsobeColumn" prefWidth="129.0" text="Sa osobe" />
+            <TableColumn fx:id="naOsobuColumn" prefWidth="119.0" text="Na osobu" />
         </columns>
       </TableView>
       <Label layoutX="29.0" layoutY="328.0" styleClass="naslovLabel" text="Istorija zaduživanja osnovnih sredstava:" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="300.0" />

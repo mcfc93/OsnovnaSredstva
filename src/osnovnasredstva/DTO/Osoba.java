@@ -147,5 +147,7 @@ public class Osoba {
         return true;
     }
     
-    
+    public String getImePrezime() {
+          return this.ime + " " + this.prezime;
+    }
 }

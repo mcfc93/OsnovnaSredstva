@@ -52,6 +52,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
@@ -313,21 +314,8 @@ public class OsnovnaSredstvaController implements Initializable {
                     	button.getTooltip().setAutoHide(false);
                     	setGraphic(button);
                     	button.setOnMouseClicked(event -> {
-                            try {
-                                PrikazOsnovnogSredstvaController.odabranoOS=item;
-                                
-                                Parent root = FXMLLoader.load(getClass().getResource("/osnovnasredstva/administrator/PrikazOsnovnogSredstvaView.fxml"));
-                                Scene scene = new Scene(root);
-                                scene.getStylesheets().add(getClass().getResource("/osnovnasredstva/osnovnasredstva.css").toExternalForm());
-                                Stage stage=new Stage();
-                                stage.setScene(scene);
-                                stage.setResizable(false);
-                                stage.initStyle(StageStyle.UNDECORATED);
-                                stage.initModality(Modality.APPLICATION_MODAL);
-                                stage.showAndWait();
-                            } catch(IOException e) {
-                                Util.LOGGER.log(Level.SEVERE, e.toString(), e);
-                            }
+                            osnovnaSredstvaTableView.getSelectionModel().select(item);
+                            prikaziOS(item);
                         });
                     } else {
                     	setGraphic(null);
@@ -353,6 +341,7 @@ public class OsnovnaSredstvaController implements Initializable {
                     	button.getTooltip().setAutoHide(false);
                     	setGraphic(button);
                     	button.setOnMouseClicked(event -> {
+                            osnovnaSredstvaTableView.getSelectionModel().select(item);
                             try {
                                 DodavanjeOsnovnogSredstvaController.odabranoOS=item;
                                 DodavanjeOsnovnogSredstvaController.izmjena=true;
@@ -396,6 +385,7 @@ public class OsnovnaSredstvaController implements Initializable {
                     	button.getTooltip().setAutoHide(false);
                     	setGraphic(button);
                     	button.setOnMouseClicked(event -> {
+                            osnovnaSredstvaTableView.getSelectionModel().select(item);
                             if(Util.showConfirmationAlert()) {
                                 try {
                                     osnovnoSredstvoDAO.delete(PrijavaController.konekcija, item);
@@ -421,13 +411,16 @@ public class OsnovnaSredstvaController implements Initializable {
         Util.preventColumnReordering(osnovnaSredstvaTableView);
         
         invertarniBrojColumn.setMinWidth(100);
-        invertarniBrojColumn.setMaxWidth(4000);
+        invertarniBrojColumn.setMaxWidth(2000);
         
         nazivColumn.setMinWidth(100);
         nazivColumn.setMaxWidth(4000);
         
         vrstaColumn.setMinWidth(100);
         vrstaColumn.setMaxWidth(2000);
+        
+        vrijednostColumn.setMinWidth(100);
+        vrijednostColumn.setMaxWidth(3000);
         
         prikaziColumn.setText("");
         prikaziColumn.setMinWidth(35);
@@ -445,6 +438,14 @@ public class OsnovnaSredstvaController implements Initializable {
         obrisiColumn.setResizable(false);
         obrisiColumn.setSortable(false);
         
+        osnovnaSredstvaTableView.setOnMouseClicked( event -> {
+            if(event.getButton().equals(MouseButton.PRIMARY)) {
+                if(event.getClickCount() == 2) {
+                    prikaziOS(osnovnaSredstvaTableView.getSelectionModel().getSelectedItem());
+                }
+            }
+        });
+        
         postaniNadzornikToggleButton.selectedProperty().addListener((observable, oldValue, newValue) -> {
             if(newValue) {
                 PrijavaController.korisnik.setPrivilegijaTip(1);
@@ -454,7 +455,25 @@ public class OsnovnaSredstvaController implements Initializable {
             postaviPrivilegije();
             osnovnaSredstvaTableView.refresh();
         });
-    }    
+    }
+    
+    private void prikaziOS(OsnovnoSredstvo item) {
+        try {
+            PrikazOsnovnogSredstvaController.odabranoOS=item;
+
+            Parent root = FXMLLoader.load(getClass().getResource("/osnovnasredstva/administrator/PrikazOsnovnogSredstvaView.fxml"));
+            Scene scene = new Scene(root);
+            scene.getStylesheets().add(getClass().getResource("/osnovnasredstva/osnovnasredstva.css").toExternalForm());
+            Stage stage=new Stage();
+            stage.setScene(scene);
+            stage.setResizable(false);
+            stage.initStyle(StageStyle.UNDECORATED);
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.showAndWait();
+        } catch(IOException e) {
+            Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+        }
+    }
     
     @FXML
     void clear(MouseEvent event) {
@@ -538,7 +557,7 @@ public class OsnovnaSredstvaController implements Initializable {
                     document.add(new Paragraph("Izvještaj svih osnovnih sredstava", catFont));
                     document.add(new Paragraph(" "));
                     document.add(new Paragraph("Izvještaj kreirao: " + PrijavaController.korisnik.getKorisnickoIme(), smallBold));
-                    document.add(new Paragraph("Datum kreiranja: " + new SimpleDateFormat("dd/MM/yyyy, HH:mm:ss").format(new Date()), smallBold));
+                    document.add(new Paragraph("Datum i vrijeme kreiranja: " + new SimpleDateFormat("dd.MM.yyyy, HH:mm:ss").format(new Date()), smallBold));
                     document.add(new Paragraph(" "));      
                     document.add(new Paragraph("Tabela svih osnovnih sredstava", smallBold));
                     document.add(new Paragraph(" "));  
@@ -546,18 +565,22 @@ public class OsnovnaSredstvaController implements Initializable {
                     PdfPTable table = new PdfPTable(4);
                     table.setWidthPercentage(100);
                     PdfPCell cell = new PdfPCell(new Phrase("Inventarni broj"));
+                    cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
                     cell.setHorizontalAlignment(Element.ALIGN_CENTER);
                     table.addCell(cell);
 
                     cell = new PdfPCell(new Phrase("Naziv"));
+                    cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
                     cell.setHorizontalAlignment(Element.ALIGN_CENTER);
                     table.addCell(cell);
 
                     cell = new PdfPCell(new Phrase("Opis"));
+                    cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
                     cell.setHorizontalAlignment(Element.ALIGN_CENTER);
                     table.addCell(cell);
 
-                    cell = new PdfPCell(new Phrase("Vrijednost"));
+                    cell = new PdfPCell(new Phrase("Trenutna vrijednost"));
+                    cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
                     cell.setHorizontalAlignment(Element.ALIGN_CENTER);
                     table.addCell(cell);
 
@@ -572,10 +595,10 @@ public class OsnovnaSredstvaController implements Initializable {
                         }
                 }
                     else{
-                        table.addCell(" ");
-                        table.addCell(" ");
-                        table.addCell(" ");
-                        table.addCell(" ");
+                        cell = new PdfPCell(new Phrase(new Chunk("Nema podataka o osnovnim sredstvima",font)));
+                        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                        cell.setColspan(4);
+                        table.addCell(cell);
                     }
                     document.add(table);
                     document.close();

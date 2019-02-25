@@ -174,6 +174,7 @@ public class KorisnickiNaloziController implements Initializable {
                     	setGraphic(button);
                     	button.setOnMouseClicked(event -> {
                             try {
+                                korisnickiNaloziTableView.getSelectionModel().select(item);
                                 DodavanjeKorisnickogNalogaController.odabraniKorisnik=item;
                                 DodavanjeKorisnickogNalogaController.izmjena=true;
                                 
@@ -216,6 +217,7 @@ public class KorisnickiNaloziController implements Initializable {
                     	button.getTooltip().setAutoHide(false);
                     	setGraphic(button);
                     	button.setOnMouseClicked(event -> {
+                            korisnickiNaloziTableView.getSelectionModel().select(item);
                             if(Util.showConfirmationAlert()) {
                                 try {
                                     korisnikDAO.delete(PrijavaController.konekcija, item);

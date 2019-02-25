@@ -29,10 +29,13 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import org.controlsfx.control.MaskerPane;
+import osnovnasredstva.DAO.OsnovnoSredstvoDAO;
 import osnovnasredstva.DAO.PrelaznicaDAO;
+import osnovnasredstva.DTO.OsnovnoSredstvo;
 import osnovnasredstva.DTO.Prelaznica;
 import osnovnasredstva.prijava.PrijavaController;
 import osnovnasredstva.util.Util;
@@ -40,6 +43,7 @@ import osnovnasredstva.util.Util;
 public class PrelaznicaController implements Initializable {
     
     private static PrelaznicaDAO prelaznicaDAO = new PrelaznicaDAO();
+    private static OsnovnoSredstvoDAO osnovnoSredstvoDAO = new OsnovnoSredstvoDAO();
 
     @FXML
     private AnchorPane anchorPane;
@@ -65,6 +69,8 @@ public class PrelaznicaController implements Initializable {
     @FXML
     private TableColumn<Prelaznica, Prelaznica> otvoriColumn;
     
+    public static ObservableList<OsnovnoSredstvo> osnovnaSredstvaList = FXCollections.observableArrayList();
+    
     public static ObservableList<Prelaznica> prelazniceList = FXCollections.observableArrayList();
     private static FilteredList<Prelaznica> filteredList;
     SortedList<Prelaznica> sortedList;
@@ -82,6 +88,7 @@ public class PrelaznicaController implements Initializable {
             }
         });
         
+        osnovnaSredstvaList.clear();
         prelazniceList.clear();
         filteredList = new FilteredList<>(prelazniceList);
         sortedList = new SortedList<>(filteredList);
@@ -94,6 +101,7 @@ public class PrelaznicaController implements Initializable {
                 progressPane.setVisible(true);
                 try {
                     prelazniceList.addAll(prelaznicaDAO.loadAll(PrijavaController.konekcija));
+                    osnovnaSredstvaList.addAll(osnovnoSredstvoDAO.loadAll(PrijavaController.konekcija));
                 } catch (SQLException e) {
                     Util.LOGGER.log(Level.SEVERE, e.toString(), e);
                 }
@@ -138,17 +146,8 @@ public class PrelaznicaController implements Initializable {
                     	button.getTooltip().setAutoHide(false);
                     	setGraphic(button);
                     	button.setOnMouseClicked(event -> {
-                            String naziv = "PDF/prelaznica/" + "Prelaznica_" + new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(item.getDatumPrelaska()) + ".pdf";
-                            if(Desktop.isDesktopSupported()) {
-                                new Thread(() -> {
-                                    try {
-                                        Desktop.getDesktop().open(new File(naziv));
-                                    } catch (IOException e) {
-                                        Util.LOGGER.log(Level.SEVERE, e.toString(), e);
-                                    }
-                                }).start();
-                            }
-                            
+                            prelazniceTableView.getSelectionModel().select(item);
+                            otvoriPrelaznicu(item);
                         });
                     } else {
                     	setGraphic(null);
@@ -171,6 +170,27 @@ public class PrelaznicaController implements Initializable {
         otvoriColumn.setMaxWidth(35);
         otvoriColumn.setResizable(false);
         otvoriColumn.setSortable(false);
+        
+        prelazniceTableView.setOnMouseClicked( event -> {
+            if(event.getButton().equals(MouseButton.PRIMARY)) {
+                if(event.getClickCount() == 2) {
+                    otvoriPrelaznicu(prelazniceTableView.getSelectionModel().getSelectedItem());
+                }
+            }
+        });
+    }
+    
+    private void otvoriPrelaznicu(Prelaznica item) {
+        String naziv = "PDF/prelaznica/" + "Prelaznica_" + new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(item.getDatumPrelaska()) + ".pdf";
+        if(Desktop.isDesktopSupported()) {
+            new Thread(() -> {
+                try {
+                    Desktop.getDesktop().open(new File(naziv));
+                } catch (IOException e) {
+                    Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+                }
+            }).start();
+        }
     }
     
     @FXML

@@ -87,7 +87,7 @@ public class PrikazProstorijeController implements Initializable {
     @FXML
     private TableColumn<?, ?> nazivColumn;
     @FXML
-    private TableColumn<?, ?> opisColumn;
+    private TableColumn<?, ?> osobaColumn;
     @FXML
     private TableColumn<?, ?> vrijednostColumn;
     
@@ -131,25 +131,37 @@ public class PrikazProstorijeController implements Initializable {
         sifraTextField.setText(odabranaProstorija.getSifra());
         nazivTextField.setText(odabranaProstorija.getNaziv());
         opisTextArea.setText(odabranaProstorija.getOpis());
-        LokacijeController.zgradeList.forEach((zg) -> {
-            if(odabranaProstorija.getIdZgrade() == zg.getId()){
-                zgradaTextField.setText(zg.getNaziv());
-            }
-        });
+        zgradaTextField.setText(odabranaProstorija.getNazivZgrade());
          
         osnovnaSredstvaList.clear();
         
-        try {
-            osnovnaSredstvaList.addAll(osnovnoSredstvoDAO.loadAll4(PrijavaController.konekcija, odabranaProstorija.getId()));
-        } catch (SQLException e) {
-            Util.LOGGER.log(Level.SEVERE, e.toString(), e);
-        }
+        MaskerPane progressPane=Util.getMaskerPane(anchorPane);
+        new Thread(new Task<Void>() {
+            @Override
+            protected Void call() {
+                progressPane.setVisible(true);
+                try {
+                    osnovnaSredstvaList.addAll(osnovnoSredstvoDAO.loadAll4(PrijavaController.konekcija, odabranaProstorija.getId()));
+                } catch (SQLException e) {
+                    Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+                }
+                return null;
+            }
+            @Override
+            protected void succeeded(){
+                super.succeeded();
+                progressPane.setVisible(false);
+                Platform.runLater(() -> {
+                    osnovnaSredstvaTableView.refresh();
+                });
+            }
+        }).start();
         
         osnovnaSredstvaTableView.setItems(osnovnaSredstvaList);
         osnovnaSredstvaTableView.setFocusTraversable(false);
         invBrColumn.setCellValueFactory(new PropertyValueFactory<>("inventarniBroj"));
         nazivColumn.setCellValueFactory(new PropertyValueFactory<>("naziv"));
-        opisColumn.setCellValueFactory(new PropertyValueFactory<>("opis"));
+        osobaColumn.setCellValueFactory(new PropertyValueFactory<>("imePrezimeOsobe"));
         vrijednostColumn.setCellValueFactory(new PropertyValueFactory<>("vrijednost"));
         
         Util.preventColumnReordering(osnovnaSredstvaTableView);
@@ -160,11 +172,11 @@ public class PrikazProstorijeController implements Initializable {
         nazivColumn.setMinWidth(100);
         nazivColumn.setMaxWidth(3000);
         
-        opisColumn.setMinWidth(100);
-        opisColumn.setMaxWidth(4000);
+        osobaColumn.setMinWidth(100);
+        osobaColumn.setMaxWidth(4000);
         
         vrijednostColumn.setMinWidth(100);
-        vrijednostColumn.setMaxWidth(2000);
+        vrijednostColumn.setMaxWidth(3000);
     }
 
     @FXML
@@ -200,7 +212,7 @@ public class PrikazProstorijeController implements Initializable {
                     document.add(new Paragraph("Detaljan prikaz prostorije", catFont));
                     document.add(new Paragraph(" "));
                     document.add(new Paragraph("Izvještaj kreirao: " + PrijavaController.korisnik.getKorisnickoIme(), smallBold));
-                    document.add(new Paragraph("Datum kreiranja: " + new SimpleDateFormat("dd/MM/yyyy, HH:mm:ss").format(new Date()), smallBold));
+                    document.add(new Paragraph("Datum i vrijeme kreiranja: " + new SimpleDateFormat("dd.MM.yyyy, HH:mm:ss").format(new Date()), smallBold));
                     document.add(new Paragraph(" "));      
                     document.add(new Paragraph("Šifra: " + odabranaProstorija.getSifra()));
                     document.add(new Paragraph(new Chunk("Naziv: " + odabranaProstorija.getNaziv(), font)));
@@ -219,21 +231,30 @@ public class PrikazProstorijeController implements Initializable {
                     document.add(new Paragraph("Osnovna sredstva u prostoriji", smallBold));
                     document.add(new Paragraph(" "));
              
-                    PdfPTable table = new PdfPTable(4);
+                    PdfPTable table = new PdfPTable(5);
                     table.setWidthPercentage(100);
                     PdfPCell cell = new PdfPCell(new Phrase("Inventarni broj"));
+                    cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
                     cell.setHorizontalAlignment(Element.ALIGN_CENTER);
                     table.addCell(cell);
 
                     cell = new PdfPCell(new Phrase("Naziv"));
+                    cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
                     cell.setHorizontalAlignment(Element.ALIGN_CENTER);
                     table.addCell(cell);
 
                     cell = new PdfPCell(new Phrase("Opis"));
+                    cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
+                    cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                    table.addCell(cell);
+                    
+                    cell = new PdfPCell(new Phrase(new Chunk("Zadužena osoba", font)));
+                    cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
                     cell.setHorizontalAlignment(Element.ALIGN_CENTER);
                     table.addCell(cell);
 
-                    cell = new PdfPCell(new Phrase("Vrijednost"));
+                    cell = new PdfPCell(new Phrase("Trenutna vrijednost"));
+                    cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
                     cell.setHorizontalAlignment(Element.ALIGN_CENTER);
                     table.addCell(cell);
 
@@ -241,17 +262,17 @@ public class PrikazProstorijeController implements Initializable {
                     table.getDefaultCell().setHorizontalAlignment(Element.ALIGN_CENTER);
                     if(!osnovnaSredstvaList.isEmpty()){
                         for(OsnovnoSredstvo os : osnovnaSredstvaList){
-                                table.addCell(os.getInventarniBroj());
-                                table.addCell(new Phrase(new Chunk(os.getNaziv(), font)));
-                                table.addCell(new Phrase(new Chunk(os.getOpis(), font)));
-                                table.addCell(os.getVrijednost().toString());                       
+                            table.addCell(os.getInventarniBroj());
+                            table.addCell(new Phrase(new Chunk(os.getNaziv(), font)));
+                            table.addCell(new Phrase(new Chunk(os.getOpis(), font)));
+                            table.addCell(new Phrase(new Chunk(os.getImePrezimeOsobe(), font)));
+                            table.addCell(os.getVrijednost().toString());                       
                         }
-                }
-                    else{
-                        table.addCell(" ");
-                        table.addCell(" ");
-                        table.addCell(" ");
-                        table.addCell(" ");
+                    } else{
+                        cell = new PdfPCell(new Phrase(new Chunk("Nema podataka o zaduživanjima",font)));
+                        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                        cell.setColspan(4);
+                        table.addCell(cell);
                     }
                     document.add(table);
                     document.close();

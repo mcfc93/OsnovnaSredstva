@@ -52,6 +52,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
@@ -82,7 +83,7 @@ public class LokacijeController implements Initializable {
     private TableColumn<?, ?> nazivColumn;
 
     @FXML
-    private TableColumn<?, ?> opisColumn;
+    private TableColumn<?, ?> zgradaColumn;
 
     @FXML
     private TableColumn<Prostorija, Prostorija> prikaziColumn;
@@ -259,7 +260,7 @@ public class LokacijeController implements Initializable {
         
         sifraColumn.setCellValueFactory(new PropertyValueFactory<>("sifra"));
         nazivColumn.setCellValueFactory(new PropertyValueFactory<>("naziv"));
-        opisColumn.setCellValueFactory(new PropertyValueFactory<>("opis"));
+        zgradaColumn.setCellValueFactory(new PropertyValueFactory<>("nazivZgrade"));
         
         prikaziColumn.setCellValueFactory(
             param -> new ReadOnlyObjectWrapper<>(param.getValue())
@@ -277,21 +278,8 @@ public class LokacijeController implements Initializable {
                     	button.getTooltip().setAutoHide(false);
                     	setGraphic(button);
                     	button.setOnMouseClicked(event -> {
-                            try {
-                                PrikazProstorijeController.odabranaProstorija=item;
-                                
-                                Parent root = FXMLLoader.load(getClass().getResource("/osnovnasredstva/administrator/PrikazProstorijeView.fxml"));
-                                Scene scene = new Scene(root);
-                                scene.getStylesheets().add(getClass().getResource("/osnovnasredstva/osnovnasredstva.css").toExternalForm());
-                                Stage stage=new Stage();
-                                stage.setScene(scene);
-                                stage.setResizable(false);
-                                stage.initStyle(StageStyle.UNDECORATED);
-                                stage.initModality(Modality.APPLICATION_MODAL);
-                                stage.showAndWait();
-                            } catch(IOException e) {
-                                Util.LOGGER.log(Level.SEVERE, e.toString(), e);
-                            }
+                            lokacijeTableView.getSelectionModel().select(item);
+                            prikaziLokaciju(item);
                         });
                     } else {
                     	setGraphic(null);
@@ -317,6 +305,7 @@ public class LokacijeController implements Initializable {
                     	button.getTooltip().setAutoHide(false);
                     	setGraphic(button);
                     	button.setOnMouseClicked(event -> {
+                            lokacijeTableView.getSelectionModel().select(item);
                             try {
                                 DodavanjeProstorijeController.odabranaProstorija=item;
                                 DodavanjeProstorijeController.izmjena=true;
@@ -360,6 +349,7 @@ public class LokacijeController implements Initializable {
                     	button.getTooltip().setAutoHide(false);
                     	setGraphic(button);
                     	button.setOnMouseClicked(event -> {
+                            lokacijeTableView.getSelectionModel().select(item);
                             if(Util.showConfirmationAlert()) {
                                 try {
                                     prostorijaDAO.delete(PrijavaController.konekcija, item);
@@ -391,8 +381,8 @@ public class LokacijeController implements Initializable {
         nazivColumn.setMinWidth(100);
         nazivColumn.setMaxWidth(3000);
         
-        opisColumn.setMinWidth(100);
-        opisColumn.setMaxWidth(4000);
+        zgradaColumn.setMinWidth(100);
+        zgradaColumn.setMaxWidth(4000);
         
         prikaziColumn.setText("");
         prikaziColumn.setMinWidth(35);
@@ -410,6 +400,14 @@ public class LokacijeController implements Initializable {
         obrisiColumn.setResizable(false);
         obrisiColumn.setSortable(false);
         
+        lokacijeTableView.setOnMouseClicked( event -> {
+            if(event.getButton().equals(MouseButton.PRIMARY)) {
+                if(event.getClickCount() == 2) {
+                    prikaziLokaciju(lokacijeTableView.getSelectionModel().getSelectedItem());
+                }
+            }
+        });
+        
         postaniNadzornikToggleButton.selectedProperty().addListener((observable, oldValue, newValue) -> {
             if(newValue) {
                 PrijavaController.korisnik.setPrivilegijaTip(1);
@@ -419,7 +417,25 @@ public class LokacijeController implements Initializable {
             postaviPrivilegije();
             lokacijeTableView.refresh();
         });
-    }    
+    }
+    
+    private void prikaziLokaciju(Prostorija item) {
+        try {
+            PrikazProstorijeController.odabranaProstorija=item;
+
+            Parent root = FXMLLoader.load(getClass().getResource("/osnovnasredstva/administrator/PrikazProstorijeView.fxml"));
+            Scene scene = new Scene(root);
+            scene.getStylesheets().add(getClass().getResource("/osnovnasredstva/osnovnasredstva.css").toExternalForm());
+            Stage stage=new Stage();
+            stage.setScene(scene);
+            stage.setResizable(false);
+            stage.initStyle(StageStyle.UNDECORATED);
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.showAndWait();
+        } catch(IOException e) {
+            Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+        }
+    }
     
     @FXML
     void clear(MouseEvent event) {
@@ -504,7 +520,7 @@ public class LokacijeController implements Initializable {
                     document.add(new Paragraph("Izvještaj svih prostorija", catFont));
                     document.add(new Paragraph(" "));
                     document.add(new Paragraph("Izvještaj kreirao: " + PrijavaController.korisnik.getKorisnickoIme(), smallBold));
-                    document.add(new Paragraph("Datum kreiranja: " + new SimpleDateFormat("dd/MM/yyyy, HH:mm:ss").format(new Date()), smallBold));
+                    document.add(new Paragraph("Datum i vrijeme kreiranja: " + new SimpleDateFormat("dd.MM.yyyy, HH:mm:ss").format(new Date()), smallBold));
                     document.add(new Paragraph(" "));      
                     
                     
@@ -515,18 +531,22 @@ public class LokacijeController implements Initializable {
                     PdfPTable table = new PdfPTable(4);
                     table.setWidthPercentage(100);
                     PdfPCell cell = new PdfPCell(new Phrase("Šifra"));
+                    cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
                     cell.setHorizontalAlignment(Element.ALIGN_CENTER);
                     table.addCell(cell);
 
                     cell = new PdfPCell(new Phrase("Naziv"));
+                    cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
                     cell.setHorizontalAlignment(Element.ALIGN_CENTER);
                     table.addCell(cell);
 
                     cell = new PdfPCell(new Phrase("Opis"));
+                    cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
                     cell.setHorizontalAlignment(Element.ALIGN_CENTER);
                     table.addCell(cell);
 
                     cell = new PdfPCell(new Phrase("Zgrada"));
+                    cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
                     cell.setHorizontalAlignment(Element.ALIGN_CENTER);
                     table.addCell(cell);
 
@@ -545,10 +565,10 @@ public class LokacijeController implements Initializable {
                         });
                 }
                     else{
-                        table.addCell(" ");
-                        table.addCell(" ");
-                        table.addCell(" ");
-                        table.addCell(" ");
+                        cell = new PdfPCell(new Phrase(new Chunk("Nema podataka o prostorijama",font)));
+                        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                        cell.setColspan(4);
+                        table.addCell(cell);
                     }
                     document.add(table);
                     document.close();

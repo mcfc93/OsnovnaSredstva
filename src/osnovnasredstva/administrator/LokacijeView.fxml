@@ -12,7 +12,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane id="AnchorPane" fx:id="anchorPane" prefHeight="465.0" prefWidth="600.0" stylesheets="@../osnovnasredstva.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="osnovnasredstva.administrator.LokacijeController">
+<AnchorPane id="AnchorPane" fx:id="anchorPane" prefHeight="465.0" prefWidth="600.0" stylesheets="@../osnovnasredstva.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="osnovnasredstva.administrator.LokacijeController">
    <children>
       <TextField fx:id="traziTextField" layoutX="435.0" layoutY="78.0" maxWidth="150.0" minWidth="100.0" prefHeight="25.0" prefWidth="150.0" promptText="Traži" styleClass="searchTextField" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="90.0">
          <opaqueInsets>
@@ -49,7 +49,7 @@
         <columns>
           <TableColumn fx:id="sifraColumn" prefWidth="75.0" text="Šifra" />
           <TableColumn fx:id="nazivColumn" prefWidth="75.0" text="Naziv" />
-            <TableColumn fx:id="opisColumn" prefWidth="75.0" text="Opis" />
+            <TableColumn fx:id="zgradaColumn" prefWidth="75.0" text="Zgrada" />
             <TableColumn fx:id="prikaziColumn" prefWidth="75.0" text="PRIKAZI" />
             <TableColumn fx:id="izmjeniColumn" prefWidth="75.0" text="IZMJENI" />
             <TableColumn fx:id="obrisiColumn" prefWidth="75.0" text="OBRISI" />

@@ -83,7 +83,7 @@ public class PrikazOsobeController implements Initializable {
     @FXML
     private TableColumn<?, ?> nazivColumn;
     @FXML
-    private TableColumn<?, ?> opisColumn;
+    private TableColumn<?, ?> lokacijaColumn;
     @FXML
     private TableColumn<?, ?> vrijednostColumn;
     @FXML
@@ -144,16 +144,36 @@ public class PrikazOsobeController implements Initializable {
         emailTextField.setText(odabranaOsoba.getEmail());
         
         osnovnaSredstvaList = FXCollections.observableArrayList();
-        try {
-            osnovnaSredstvaList.addAll(osnovnoSredstvoDAO.loadAll3(PrijavaController.konekcija, odabranaOsoba.getId()));
-        } catch (SQLException e) {
-            Util.LOGGER.log(Level.SEVERE, e.toString(), e);
-        }
+        
+        MaskerPane progressPane=Util.getMaskerPane(anchorPane);
+        new Thread(new Task<Void>() {
+            @Override
+            protected Void call() {
+                progressPane.setVisible(true);
+                try {
+                    osnovnaSredstvaList.addAll(osnovnoSredstvoDAO.loadAll3(PrijavaController.konekcija, odabranaOsoba.getId()));
+                } catch (SQLException e) {
+                    Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+                }
+                return null;
+            }
+            @Override
+            protected void succeeded(){
+                super.succeeded();
+                progressPane.setVisible(false);
+                Platform.runLater(() -> {
+                    osnovnaSredstvaTableView.refresh();
+                });
+            }
+        }).start();
+        
+        
+        
         osnovnaSredstvaTableView.setItems(osnovnaSredstvaList);
         osnovnaSredstvaTableView.setFocusTraversable(false);
         invBrColumn.setCellValueFactory(new PropertyValueFactory<>("inventarniBroj"));
         nazivColumn.setCellValueFactory(new PropertyValueFactory<>("naziv"));
-        opisColumn.setCellValueFactory(new PropertyValueFactory<>("opis"));
+        lokacijaColumn.setCellValueFactory(new PropertyValueFactory<>("prostorijaZgrada"));
         vrijednostColumn.setCellValueFactory(new PropertyValueFactory<>("vrijednost"));
         
         Util.preventColumnReordering(osnovnaSredstvaTableView);
@@ -164,11 +184,11 @@ public class PrikazOsobeController implements Initializable {
         nazivColumn.setMinWidth(100);
         nazivColumn.setMaxWidth(3000);
         
-        opisColumn.setMinWidth(100);
-        opisColumn.setMaxWidth(4000);
+        lokacijaColumn.setMinWidth(100);
+        lokacijaColumn.setMaxWidth(4000);
         
         vrijednostColumn.setMinWidth(100);
-        vrijednostColumn.setMaxWidth(2000);
+        vrijednostColumn.setMaxWidth(3000);
         
     }    
     
@@ -210,35 +230,45 @@ public class PrikazOsobeController implements Initializable {
                     document.add(new Paragraph("Detaljan prikaz osobe", catFont));
                     document.add(new Paragraph(" "));
                     document.add(new Paragraph("Izvještaj kreirao: " + PrijavaController.korisnik.getKorisnickoIme(), smallBold));
-                    document.add(new Paragraph("Datum kreiranja: " + new SimpleDateFormat("dd/MM/yyyy, HH:mm:ss").format(new Date()), smallBold));
-                    document.add(new Paragraph(" "));      
-                    document.add(new Paragraph(new Chunk("Ime: " + odabranaOsoba.getIme(), font)));
-                    document.add(new Paragraph(new Chunk("Prezime: " + odabranaOsoba.getPrezime(), font)));
-                    document.add(new Paragraph("JMBG: " + odabranaOsoba.getJmbg()));
-                    document.add(new Paragraph(new Chunk("Adresa: " + odabranaOsoba.getAdresa(), font)));
-                    document.add(new Paragraph("Titula: " + odabranaOsoba.getTitula()));
-                    document.add(new Paragraph("Zaposlenje: " + odabranaOsoba.getZaposlenje()));
-                    document.add(new Paragraph("Br.telefona: " + odabranaOsoba.getTelefon()));
-                    document.add(new Paragraph("E-mail: " + odabranaOsoba.getEmail()));
+                    document.add(new Paragraph("Datum i vrijeme kreiranja: " + new SimpleDateFormat("dd.MM.yyyy, HH:mm:ss").format(new Date()), smallBold));
+                    document.add(new Paragraph(" "));
+                    document.add(new Paragraph("Osnovni podaci o osobi: ", smallBold));
+                    document.add(new Paragraph(new Chunk("     Ime: " + odabranaOsoba.getIme(), font)));
+                    document.add(new Paragraph(new Chunk("     Prezime: " + odabranaOsoba.getPrezime(), font)));
+                    document.add(new Paragraph("     JMBG: " + odabranaOsoba.getJmbg()));
+                    document.add(new Paragraph(new Chunk("     Adresa: " + odabranaOsoba.getAdresa(), font)));
+                    document.add(new Paragraph("     Titula: " + odabranaOsoba.getTitula()));
+                    document.add(new Paragraph("     Zaposlenje: " + odabranaOsoba.getZaposlenje()));
+                    document.add(new Paragraph("     Br.telefona: " + odabranaOsoba.getTelefon()));
+                    document.add(new Paragraph("     E-mail: " + odabranaOsoba.getEmail()));
                     document.add(new Paragraph(" "));
                     document.add(new Paragraph("Istorija zaduživanja osnovnih sredstava:", smallBold));
                     document.add(new Paragraph(" "));
              
-                    PdfPTable table = new PdfPTable(4);
+                    PdfPTable table = new PdfPTable(5);
                     table.setWidthPercentage(100);
                     PdfPCell cell = new PdfPCell(new Phrase("Inventarni broj"));
+                    cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
                     cell.setHorizontalAlignment(Element.ALIGN_CENTER);
                     table.addCell(cell);
 
                     cell = new PdfPCell(new Phrase("Naziv"));
+                    cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
                     cell.setHorizontalAlignment(Element.ALIGN_CENTER);
                     table.addCell(cell);
-
+                    
                     cell = new PdfPCell(new Phrase("Opis"));
+                    cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
                     cell.setHorizontalAlignment(Element.ALIGN_CENTER);
                     table.addCell(cell);
 
-                    cell = new PdfPCell(new Phrase("Vrijednost"));
+                    cell = new PdfPCell(new Phrase("Lokacija"));
+                    cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
+                    cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                    table.addCell(cell);
+
+                    cell = new PdfPCell(new Phrase("Trenutna vrijednost"));
+                    cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
                     cell.setHorizontalAlignment(Element.ALIGN_CENTER);
                     table.addCell(cell);
 
@@ -249,15 +279,15 @@ public class PrikazOsobeController implements Initializable {
                                 table.addCell(os.getInventarniBroj());
                                 table.addCell(new Phrase(new Chunk(os.getNaziv(),font)));
                                 table.addCell(new Phrase(new Chunk(os.getOpis(),font)));
+                                table.addCell(new Phrase(new Chunk(os.getProstorijaZgrada(),font)));
                                 table.addCell(os.getVrijednost().toString());                       
                         }
                 }
                     else{
-                        table.addCell(" ");
-                        table.addCell(" ");
-                        table.addCell(" ");
-                        table.addCell(" ");
-                        table.addCell(" ");
+                        cell = new PdfPCell(new Phrase(new Chunk("Nema podataka o zaduživanjima",font)));
+                        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                        cell.setColspan(5);
+                        table.addCell(cell);
                     }
                     document.add(table);
                     document.close();

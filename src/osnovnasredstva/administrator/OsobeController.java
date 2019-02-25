@@ -49,6 +49,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
@@ -56,7 +57,11 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.controlsfx.control.MaskerPane;
 import osnovnasredstva.DAO.OsobaDAO;
+import osnovnasredstva.DAO.ProstorijaDAO;
+import osnovnasredstva.DAO.ZgradaDAO;
 import osnovnasredstva.DTO.Osoba;
+import osnovnasredstva.DTO.Prostorija;
+import osnovnasredstva.DTO.Zgrada;
 import osnovnasredstva.prijava.PrijavaController;
 import osnovnasredstva.util.NotFoundException;
 import osnovnasredstva.util.Util;
@@ -64,6 +69,8 @@ import osnovnasredstva.util.Util;
 public class OsobeController implements Initializable {
 
     private static OsobaDAO osobaDAO = new OsobaDAO();
+    private static ZgradaDAO zgradaDAO = new ZgradaDAO();
+    private static ProstorijaDAO prostorijaDAO = new ProstorijaDAO();
     
     public static int tip;
     
@@ -109,6 +116,9 @@ public class OsobeController implements Initializable {
     @FXML
     private JFXToggleButton postaniNadzornikToggleButton;
     
+    public static ObservableList<Zgrada> zgradeList = FXCollections.observableArrayList();
+    public static ObservableList<Prostorija> prostorijeList = FXCollections.observableArrayList();
+    
     public static ObservableList<Osoba> osobeList = FXCollections.observableArrayList();
     private static FilteredList<Osoba> filteredList;
     private SortedList<Osoba> sortedList;
@@ -137,6 +147,8 @@ public class OsobeController implements Initializable {
             }
         }
         
+        zgradeList.clear();
+        prostorijeList.clear();
         osobeList.clear();
         filteredList = new FilteredList(osobeList);
         sortedList = new SortedList<>(filteredList);
@@ -149,6 +161,8 @@ public class OsobeController implements Initializable {
                 progressPane.setVisible(true);
                 try {
                     osobeList.addAll(osobaDAO.loadAll(PrijavaController.konekcija));
+                    zgradeList.addAll(zgradaDAO.loadAll(PrijavaController.konekcija));
+                    prostorijeList.addAll(prostorijaDAO.loadAll(PrijavaController.konekcija));
                 } catch (SQLException e) {
                     Util.LOGGER.log(Level.SEVERE, e.toString(), e);
                 }
@@ -212,21 +226,8 @@ public class OsobeController implements Initializable {
                     	button.getTooltip().setAutoHide(false);
                     	setGraphic(button);
                     	button.setOnMouseClicked(event -> {
-                            try {
-                                PrikazOsobeController.odabranaOsoba=item;
-                                
-                                Parent root = FXMLLoader.load(getClass().getResource("/osnovnasredstva/administrator/PrikazOsobeView.fxml"));
-                                Scene scene = new Scene(root);
-                                scene.getStylesheets().add(getClass().getResource("/osnovnasredstva/osnovnasredstva.css").toExternalForm());
-                                Stage stage=new Stage();
-                                stage.setScene(scene);
-                                stage.setResizable(false);
-                                stage.initStyle(StageStyle.UNDECORATED);
-                                stage.initModality(Modality.APPLICATION_MODAL);
-                                stage.showAndWait();
-                            } catch(IOException e) {
-                                Util.LOGGER.log(Level.SEVERE, e.toString(), e);
-                            }
+                            osobeTableView.getSelectionModel().select(item);
+                            prikaziOsobu(item);
                         });
                     } else {
                     	setGraphic(null);
@@ -252,6 +253,7 @@ public class OsobeController implements Initializable {
                     	button.getTooltip().setAutoHide(false);
                     	setGraphic(button);
                     	button.setOnMouseClicked(event -> {
+                            osobeTableView.getSelectionModel().select(item);
                             try {
                                 DodavanjeOsobeController.odabranaOsoba=item;
                                 DodavanjeOsobeController.izmjena=true;
@@ -295,18 +297,23 @@ public class OsobeController implements Initializable {
                     	button.getTooltip().setAutoHide(false);
                     	setGraphic(button);
                     	button.setOnMouseClicked(event -> {
+                            osobeTableView.getSelectionModel().select(item);
                             if(Util.showConfirmationAlert()) {
-                                try {
-                                    osobaDAO.delete(PrijavaController.konekcija, item);
-                                    osobeList.remove(item);
-                                    //OsobaDAO.getOsobeList().remove(item);
-                                    //getTableView().getItems().remove(item);
-                                    osobeTableView.refresh();
-                                    //System.out.println("Obrisano: " + item);
-                                    Util.getNotifications("Obavještenje", "Osoba obrisana.", "Information").show();
-                                } catch (SQLException | NotFoundException e) {
-                                    Util.showBugAlert();
-                                    Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+                                if(!OsnovnaSredstvaController.osnovnaSredstvaList.stream().anyMatch(os -> item.getId() == os.getIdOsobe())) {
+                                    try {
+                                        osobaDAO.delete(PrijavaController.konekcija, item);
+                                        osobeList.remove(item);
+                                        //OsobaDAO.getOsobeList().remove(item);
+                                        //getTableView().getItems().remove(item);
+                                        osobeTableView.refresh();
+                                        //System.out.println("Obrisano: " + item);
+                                        Util.getNotifications("Obavještenje", "Osoba obrisana.", "Information").show();
+                                    } catch (SQLException | NotFoundException e) {
+                                        Util.showBugAlert();
+                                        Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+                                    }
+                                } else {
+                                    Util.getNotifications("Greška", "Osoba ima zaduženja.", "Warning").show();
                                 }
                             }
                         });
@@ -348,7 +355,13 @@ public class OsobeController implements Initializable {
         obrisiColumn.setResizable(false);
         obrisiColumn.setSortable(false);
         
-        //osobeTableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        osobeTableView.setOnMouseClicked( event -> {
+            if(event.getButton().equals(MouseButton.PRIMARY)) {
+                if(event.getClickCount() == 2) {
+                    prikaziOsobu(osobeTableView.getSelectionModel().getSelectedItem());
+                }
+            }
+        });
         
         postaniNadzornikToggleButton.selectedProperty().addListener((observable, oldValue, newValue) -> {
             if(newValue) {
@@ -359,6 +372,24 @@ public class OsobeController implements Initializable {
             postaviPrivilegije();
             osobeTableView.refresh();
         });
+    }
+    
+    private void prikaziOsobu(Osoba item) {
+        try {
+            PrikazOsobeController.odabranaOsoba=item;
+
+            Parent root = FXMLLoader.load(getClass().getResource("/osnovnasredstva/administrator/PrikazOsobeView.fxml"));
+            Scene scene = new Scene(root);
+            scene.getStylesheets().add(getClass().getResource("/osnovnasredstva/osnovnasredstva.css").toExternalForm());
+            Stage stage=new Stage();
+            stage.setScene(scene);
+            stage.setResizable(false);
+            stage.initStyle(StageStyle.UNDECORATED);
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.showAndWait();
+        } catch(IOException e) {
+            Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+        }
     }
     
     @FXML
@@ -420,7 +451,7 @@ public class OsobeController implements Initializable {
                     document.add(new Paragraph("Izvještaj svih osoba", catFont));
                     document.add(new Paragraph(" "));
                     document.add(new Paragraph("Izvještaj kreirao: " + PrijavaController.korisnik.getKorisnickoIme(), smallBold));
-                    document.add(new Paragraph("Datum kreiranja: " + new SimpleDateFormat("dd/MM/yyyy, HH:mm:ss").format(new Date()), smallBold));
+                    document.add(new Paragraph("Datum i vrijeme kreiranja: " + new SimpleDateFormat("dd.MM.yyyy, HH:mm:ss").format(new Date()), smallBold));
                     document.add(new Paragraph(" "));
                     document.add(new Paragraph("Tabela svih osoba", smallBold));
                     document.add(new Paragraph(" "));
@@ -432,48 +463,63 @@ public class OsobeController implements Initializable {
                     PdfPTable table = new PdfPTable(8);
                     table.setWidthPercentage(100);
                     PdfPCell cell = new PdfPCell(new Phrase("Ime"));
+                    cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
                     cell.setHorizontalAlignment(Element.ALIGN_CENTER);
                     table.addCell(cell);
 
                     cell = new PdfPCell(new Phrase("Prezime"));
+                    cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
                     cell.setHorizontalAlignment(Element.ALIGN_CENTER);
                     table.addCell(cell);
 
                     cell = new PdfPCell(new Phrase("JMBG"));
+                    cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
                     cell.setHorizontalAlignment(Element.ALIGN_CENTER);
                     table.addCell(cell);
 
                     cell = new PdfPCell(new Phrase("Adresa"));
+                    cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
                     cell.setHorizontalAlignment(Element.ALIGN_CENTER);
                     table.addCell(cell);
 
                     cell = new PdfPCell(new Phrase("Titula"));
+                    cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
                     cell.setHorizontalAlignment(Element.ALIGN_CENTER);
                     table.addCell(cell);
 
                     cell = new PdfPCell(new Phrase("Zaposlenje"));
+                    cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
                     cell.setHorizontalAlignment(Element.ALIGN_CENTER);
                     table.addCell(cell);
 
                     cell = new PdfPCell(new Phrase("Broj telefona"));
+                    cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
                     cell.setHorizontalAlignment(Element.ALIGN_CENTER);
                     table.addCell(cell);
 
                     cell = new PdfPCell(new Phrase("E-mail"));
+                    cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
                     cell.setHorizontalAlignment(Element.ALIGN_CENTER);
                     table.addCell(cell);
 
                     table.setHeaderRows(1);
                     table.getDefaultCell().setHorizontalAlignment(Element.ALIGN_CENTER);
-                    for(Osoba os : osobeList){
-                        table.addCell(new Phrase(new Chunk(os.getIme(),font)));
-                        table.addCell(new Phrase(new Chunk(os.getPrezime(),font)));
-                        table.addCell(os.getJmbg());
-                        table.addCell(new Phrase(new Chunk(os.getAdresa(),font)));
-                        table.addCell(os.getTitula());
-                        table.addCell(new Phrase(new Chunk(os.getZaposlenje(),font)));
-                        table.addCell(os.getTelefon());
-                        table.addCell(os.getEmail());     
+                    if(!osobeList.isEmpty()) {
+                        for(Osoba os : osobeList){
+                            table.addCell(new Phrase(new Chunk(os.getIme(),font)));
+                            table.addCell(new Phrase(new Chunk(os.getPrezime(),font)));
+                            table.addCell(os.getJmbg());
+                            table.addCell(new Phrase(new Chunk(os.getAdresa(),font)));
+                            table.addCell(os.getTitula());
+                            table.addCell(new Phrase(new Chunk(os.getZaposlenje(),font)));
+                            table.addCell(os.getTelefon());
+                            table.addCell(os.getEmail());     
+                        }
+                    } else {
+                        cell = new PdfPCell(new Phrase(new Chunk("Nema podataka o osobama",font)));
+                        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                        cell.setColspan(8);
+                        table.addCell(cell);
                     }
 
                     document.add(table);
