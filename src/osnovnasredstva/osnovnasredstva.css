@@ -1186,7 +1186,7 @@
     -fx-text-alignment: right;
 }
 
-.opisTextField, opisTextArea {
+.opisTextField {
     -fx-text-fill: -fx-hover-color;
     -fx-prompt-text-fill: -fx-primary-color;
     -fx-font-size: 11px;
@@ -1205,6 +1205,37 @@
     -fx-min-height: -fx-pref-height;
     -fx-max-width: -fx-pref-width;
     -fx-max-height: -fx-pref-height;
+}
+
+.opisTextArea {
+    -fx-text-fill: -fx-hover-color;
+    -fx-prompt-text-fill: -fx-primary-color;
+    -fx-font-size: 11px;
+    /*-fx-highlight-fill: null;*/
+    /*-fx-highlight-text-fill: null;*/
+    -fx-border-radius: 20px;
+    -fx-border-color: -fx-primary-color;
+    -fx-background-radius: 0px;
+    -fx-background-color: transparent;
+    -fx-border-width: 1.25px;
+    /*-fx-cursor: normal;*/
+    -fx-focus-traversable: false;
+    -fx-pref-width: 175;
+    /*-fx-pref-height: 100;
+    -fx-min-width: -fx-pref-width;
+    -fx-min-height: -fx-pref-height;
+    -fx-max-width: -fx-pref-width;
+    -fx-max-height: -fx-pref-height;*/
+}
+
+.opisTextArea .scroll-pane {
+    -fx-background-color: transparent;
+}
+.opisTextArea .scroll-pane .viewport{
+    -fx-background-color: transparent;
+}
+.opisTextArea .scroll-pane .content{
+    -fx-background-color: transparent;
 }
 
 .jfx-toggle-button {

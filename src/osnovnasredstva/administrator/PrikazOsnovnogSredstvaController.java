@@ -196,19 +196,19 @@ public class PrikazOsnovnogSredstvaController implements Initializable {
         
         Util.preventColumnReordering(prelaznicaTableView);
         
-        datumColumn.setMinWidth(50);
+        datumColumn.setMinWidth(100);
         datumColumn.setMaxWidth(2000);
         
-        izProstorijeColumn.setMinWidth(50);
+        izProstorijeColumn.setMinWidth(100);
         izProstorijeColumn.setMaxWidth(3000);
         
-        uProstorijuColumn.setMinWidth(50);
+        uProstorijuColumn.setMinWidth(100);
         uProstorijuColumn.setMaxWidth(3000);
         
-        saOsobeColumn.setMinWidth(50);
+        saOsobeColumn.setMinWidth(100);
         saOsobeColumn.setMaxWidth(4000);
         
-        naOsobuColumn.setMinWidth(50);
+        naOsobuColumn.setMinWidth(100);
         naOsobuColumn.setMaxWidth(4000);
     }
 
@@ -257,7 +257,7 @@ public class PrikazOsnovnogSredstvaController implements Initializable {
                     document.add(new Paragraph(new Chunk("     Zaduženo kod: " + osobaTextField.getText(), font)));
                     document.add(new Paragraph(new Chunk("     Trenutno na: " + lokacijaTextField.getText(), font)));
                     document.add(new Paragraph(" "));
-                    document.add(new Paragraph("Istorija zaduživanja osnovnog sredstva", smallBold));
+                    document.add(new Paragraph("Istorija zaduživanja osnovnog sredstva:", smallBold));
                     document.add(new Paragraph(" "));
              
                     PdfPTable table = new PdfPTable(5);

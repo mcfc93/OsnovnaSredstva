@@ -318,7 +318,7 @@ public class Util {
         ValidatorBase lengthValidator = new ValidatorBase("Predugačak unos") {
             @Override
             protected void eval() {
-                if(!textField.getText().isEmpty()
+                if(textField.getText() != null && !textField.getText().isEmpty()
                         && textField.getText().length() > length) {
                     hasErrors.set(true);
                 } else {
