@@ -455,7 +455,7 @@ public class OsobeController implements Initializable {
                     document.add(new Paragraph(" "));
                     
                     BaseFont baseFont = null;
-                    baseFont = BaseFont.createFont(BaseFont.HELVETICA,BaseFont.CP1257,BaseFont.EMBEDDED);
+                    baseFont = BaseFont.createFont(BaseFont.HELVETICA,BaseFont.CP1250,BaseFont.EMBEDDED);
                     Font font = new Font(baseFont);
                     
                     PdfPTable table = new PdfPTable(8);

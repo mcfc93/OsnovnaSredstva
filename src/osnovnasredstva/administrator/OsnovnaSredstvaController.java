@@ -582,7 +582,7 @@ public class OsnovnaSredstvaController implements Initializable {
                     HeaderFooterPageEvent event = new HeaderFooterPageEvent();
                     writer.setPageEvent(event);
                     BaseFont baseFont = null;
-                    baseFont = BaseFont.createFont(BaseFont.HELVETICA,BaseFont.CP1257,BaseFont.EMBEDDED);
+                    baseFont = BaseFont.createFont(BaseFont.HELVETICA,BaseFont.CP1250,BaseFont.EMBEDDED);
                     Font font = new Font(baseFont);
                     document.open();
                     document.add(new Paragraph(" "));
@@ -594,7 +594,7 @@ public class OsnovnaSredstvaController implements Initializable {
                     document.add(new Paragraph("Tabela svih osnovnih sredstava", smallBold));
                     document.add(new Paragraph(" "));  
              
-                    PdfPTable table = new PdfPTable(4);
+                    PdfPTable table = new PdfPTable(9);
                     table.setWidthPercentage(100);
                     PdfPCell cell = new PdfPCell(new Phrase("Inventarni broj"));
                     cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
@@ -610,8 +610,33 @@ public class OsnovnaSredstvaController implements Initializable {
                     cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
                     cell.setHorizontalAlignment(Element.ALIGN_CENTER);
                     table.addCell(cell);
+                    
+                    cell = new PdfPCell(new Phrase("Datum i vrijeme nabavke"));
+                    cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
+                    cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                    table.addCell(cell);
+                    
+                    cell = new PdfPCell(new Phrase("Nabavna vrijednost"));
+                    cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
+                    cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                    table.addCell(cell);
+                    
+                    cell = new PdfPCell(new Phrase("Stopa amortizacije"));
+                    cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
+                    cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                    table.addCell(cell);
 
                     cell = new PdfPCell(new Phrase("Trenutna vrijednost"));
+                    cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
+                    cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                    table.addCell(cell);
+                    
+                    cell = new PdfPCell(new Phrase("Lokacija"));
+                    cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
+                    cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                    table.addCell(cell);
+                    
+                    cell = new PdfPCell(new Phrase("Zadužena osoba"));
                     cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
                     cell.setHorizontalAlignment(Element.ALIGN_CENTER);
                     table.addCell(cell);
@@ -623,13 +648,18 @@ public class OsnovnaSredstvaController implements Initializable {
                                 table.addCell(os.getInventarniBroj());
                                 table.addCell(new Phrase(new Chunk(os.getNaziv(), font)));
                                 table.addCell(new Phrase(new Chunk(os.getOpis(), font)));
-                                table.addCell(os.getVrijednost().toString());                       
+                                table.addCell(new SimpleDateFormat("dd.MM.yyyy, HH:mm:ss").format(os.getDatumNabavke()));
+                                table.addCell(os.getNabavnaVrijednost().toString());
+                                table.addCell(String.valueOf(os.getStopaAmortizacije()));
+                                table.addCell(os.getVrijednost().toString());      
+                                table.addCell(new Phrase(new Chunk(LokacijeController.prostorijeList.stream().filter( pr -> pr.getId() == os.getIdLokacije()).findFirst().get().toString(),font)));
+                                table.addCell(new Phrase(new Chunk(OsobeController.osobeList.stream().filter(o -> o.getId() == os.getIdOsobe()).findFirst().get().getImePrezime(),font)));
                         }
                 }
                     else{
                         cell = new PdfPCell(new Phrase(new Chunk("Nema podataka o osnovnim sredstvima",font)));
                         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                        cell.setColspan(4);
+                        cell.setColspan(9);
                         table.addCell(cell);
                     }
                     document.add(table);

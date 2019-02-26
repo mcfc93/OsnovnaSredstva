@@ -203,6 +203,6 @@ public class Prelaznica {
         
         return "Prelaznica_" + os.getNaziv();
         */
-        return "Prelaznica_" + OsnovnaSredstvaController.osnovnaSredstvaList.stream().filter(os -> os.getId() == idOsnovnogSredstva).findFirst().get().getNaziv();
+        return "Prelaznica_" + PrelaznicaController.osnovnaSredstvaList.stream().filter(os -> os.getId() == idOsnovnogSredstva).findFirst().get().getNaziv();
     }
 }

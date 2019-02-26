@@ -205,7 +205,7 @@ public class PrikazProstorijeController implements Initializable {
                     HeaderFooterPageEvent event = new HeaderFooterPageEvent();
                     writer.setPageEvent(event);
                     BaseFont baseFont = null;
-                    baseFont = BaseFont.createFont(BaseFont.HELVETICA,BaseFont.CP1257,BaseFont.EMBEDDED);
+                    baseFont = BaseFont.createFont(BaseFont.HELVETICA,BaseFont.CP1250,BaseFont.EMBEDDED);
                     Font font = new Font(baseFont);
                     document.open();
                     document.add(new Paragraph(" "));
@@ -213,20 +213,21 @@ public class PrikazProstorijeController implements Initializable {
                     document.add(new Paragraph(" "));
                     document.add(new Paragraph("Izvještaj kreirao: " + PrijavaController.korisnik.getKorisnickoIme(), smallBold));
                     document.add(new Paragraph("Datum i vrijeme kreiranja: " + new SimpleDateFormat("dd.MM.yyyy, HH:mm:ss").format(new Date()), smallBold));
-                    document.add(new Paragraph(" "));      
-                    document.add(new Paragraph("Šifra: " + odabranaProstorija.getSifra()));
-                    document.add(new Paragraph(new Chunk("Naziv: " + odabranaProstorija.getNaziv(), font)));
+                    document.add(new Paragraph(" "));  
+                    document.add(new Paragraph("Osnovni podaci o prostoriji:", smallBold));
+                    document.add(new Paragraph("     Šifra: " + odabranaProstorija.getSifra()));
+                    document.add(new Paragraph(new Chunk("     Naziv: " + odabranaProstorija.getNaziv(), font)));
                     LokacijeController.zgradeList.forEach((zg) -> {
                         if(odabranaProstorija.getIdZgrade() == zg.getId()){
                             try {
-                                document.add(new Paragraph(new Chunk("Zgrada: " + zg.getNaziv(), font)));
+                                document.add(new Paragraph(new Chunk("     Zgrada: " + zg.getNaziv(), font)));
                             } catch (DocumentException e) {
                                 Util.LOGGER.log(Level.SEVERE, e.toString(), e);
                             }
                         }
                     });
                     
-                    document.add(new Paragraph(new Chunk("Opis: " + odabranaProstorija.getOpis(), font)));
+                    document.add(new Paragraph(new Chunk("     Opis: " + odabranaProstorija.getOpis(), font)));
                     document.add(new Paragraph(" "));
                     document.add(new Paragraph("Osnovna sredstva u prostoriji", smallBold));
                     document.add(new Paragraph(" "));
