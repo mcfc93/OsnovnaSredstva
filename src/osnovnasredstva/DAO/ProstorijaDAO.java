@@ -42,37 +42,9 @@ public class ProstorijaDAO {
           return searchResults;
     }
     
-    public List loadAll2(Connection conn, int zgradaId) throws SQLException {
-        String sql = "SELECT * FROM prostorija WHERE (id_zgrade = ? ) AND status=true ORDER BY id ASC ";
-        PreparedStatement stmt = null;
-        
-        stmt=conn.prepareStatement(sql);
-        List searchResults = new ArrayList();
-        ResultSet result = null;
-
-          try {
-              stmt.setInt(1,zgradaId);
-              result = stmt.executeQuery();
-
-              while (result.next()) {
-                   Prostorija temp = createValueObject();
-
-                   temp.setId(result.getInt("id")); 
-                   temp.setSifra(result.getString("sifra")); 
-                   temp.setNaziv(result.getString("naziv")); 
-                   temp.setOpis(result.getString("opis")); 
-                   temp.setStatus(result.getBoolean("status")); 
-                   temp.setIdZgrade(result.getInt("id_zgrade")); 
-
-                   searchResults.add(temp);
-              }
-
-          } finally {
-              if (result != null)
-                  result.close();
-              if (stmt != null)
-                  stmt.close();
-          }
+    public List loadAll2(Connection conn) throws SQLException {
+          String sql = "SELECT * FROM prostorija ORDER BY id ASC ";
+          List searchResults = listQuery(conn, conn.prepareStatement(sql));
 
           return searchResults;
     }

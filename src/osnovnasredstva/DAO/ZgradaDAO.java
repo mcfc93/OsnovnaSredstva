@@ -42,6 +42,13 @@ public class ZgradaDAO {
 
           return searchResults;
     }
+    
+    public List loadAll2(Connection conn) throws SQLException {
+          String sql = "SELECT * FROM zgrada ORDER BY id ASC ";
+          List searchResults = listQuery(conn, conn.prepareStatement(sql));
+
+          return searchResults;
+    }
 
     public synchronized void create(Connection conn, Zgrada valueObject) throws SQLException {
           String sql = "";

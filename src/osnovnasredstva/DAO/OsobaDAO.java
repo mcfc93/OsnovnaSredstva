@@ -40,6 +40,13 @@ public class OsobaDAO {
 
           return searchResults;
     }
+    
+    public List loadAll2(Connection conn) throws SQLException {
+          String sql = "SELECT * FROM osoba ORDER BY id ASC ";
+          List searchResults = listQuery(conn, conn.prepareStatement(sql));
+
+          return searchResults;
+    }
 
     public synchronized void create(Connection conn, Osoba valueObject) throws SQLException {
           String sql = "";

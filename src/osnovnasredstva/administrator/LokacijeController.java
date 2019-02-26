@@ -351,6 +351,7 @@ public class LokacijeController implements Initializable {
                     	button.setOnMouseClicked(event -> {
                             lokacijeTableView.getSelectionModel().select(item);
                             if(Util.showConfirmationAlert()) {
+                                if(!OsnovnaSredstvaController.osnovnaSredstvaList.stream().anyMatch(os -> item.getId() == os.getIdLokacije())){
                                 try {
                                     prostorijaDAO.delete(PrijavaController.konekcija, item);
                                     lokacijeList.remove(item);
@@ -362,6 +363,10 @@ public class LokacijeController implements Initializable {
                                 } catch (SQLException | NotFoundException e) {
                                     Util.showBugAlert();
                                     Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+                                    }
+                                }
+                                else{
+                                    Util.getNotifications("Greška", "Prostorija nije prazna.", "Warning").show();
                                 }
                             }
                         });

@@ -42,43 +42,9 @@ public class OsnovnoSredstvoDAO {
           return searchResults;
     }
     
-    public List loadAll2(Connection conn, int vrstaId) throws SQLException {
-        String sql = "SELECT * FROM osnovno_sredstvo WHERE (id_vrste = ? ) AND status=true ORDER BY id ASC ";
-        PreparedStatement stmt = null;
-        
-        stmt=conn.prepareStatement(sql);
-        List searchResults = new ArrayList();
-        ResultSet result = null;
-
-          try {
-              stmt.setInt(1, vrstaId);
-              result = stmt.executeQuery();
-
-              while (result.next()) {
-                   OsnovnoSredstvo temp = createValueObject();
-
-                   temp.setId(result.getInt("id")); 
-                   temp.setInventarniBroj(result.getString("inventarni_broj")); 
-                   temp.setNaziv(result.getString("naziv")); 
-                   temp.setOpis(result.getString("opis")); 
-                   temp.setDatumNabavke(result.getTimestamp("datum_nabavke")); 
-                   temp.setNabavnaVrijednost(result.getBigDecimal("nabavna_vrijednost")); 
-                   temp.setStopaAmortizacije(result.getInt("stopa_amortizacije")); 
-                   temp.setStatus(result.getBoolean("status")); 
-                   temp.setIdLokacije(result.getInt("id_lokacije")); 
-                   temp.setIdOsobe(result.getInt("id_osobe")); 
-                   temp.setIdVrste(result.getInt("id_vrste")); 
-
-                   searchResults.add(temp);
-              }
-
-          } finally {
-              if (result != null)
-                  result.close();
-              if (stmt != null)
-                  stmt.close();
-          }
-
+   public List loadAll2(Connection conn) throws SQLException {
+          String sql = "SELECT * FROM osnovno_sredstvo ORDER BY id ASC ";
+          List searchResults = listQuery(conn, conn.prepareStatement(sql));
           return searchResults;
     }
     

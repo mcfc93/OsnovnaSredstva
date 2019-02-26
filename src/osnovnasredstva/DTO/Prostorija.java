@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import osnovnasredstva.DAO.ZgradaDAO;
 import osnovnasredstva.administrator.LokacijeController;
+import osnovnasredstva.administrator.OsnovnaSredstvaController;
 import osnovnasredstva.administrator.OsobeController;
 import osnovnasredstva.prijava.PrijavaController;
 import osnovnasredstva.util.NotFoundException;
@@ -104,20 +105,12 @@ public class Prostorija {
         }
         return true;
     }
-    /*
+    
     @Override
     public String toString() {
-        ZgradaDAO zgDAO = new ZgradaDAO();
-        Zgrada zg = new Zgrada();
-        zg.setId(idZgrade);
-        try {
-            zgDAO.load(PrijavaController.konekcija, zg);
-        } catch (NotFoundException | SQLException e) {
-            Util.LOGGER.log(Level.SEVERE, e.toString(), e);
-        }
-        return naziv + " (" + zg.getNaziv() + ")";
+        return naziv + " (" + OsnovnaSredstvaController.zgradeList.stream().filter(z -> z.getId() == getIdZgrade()).findFirst().get().getNaziv() + ")";
     }
-    */
+    
     public String getNazivZgrade() {
         return LokacijeController.zgradeList.stream().filter(z -> z.getId() == getIdZgrade()).findFirst().get().getNaziv();
     }
