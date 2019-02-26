@@ -229,7 +229,7 @@ public class PrikazProstorijeController implements Initializable {
                     
                     document.add(new Paragraph(new Chunk("     Opis: " + odabranaProstorija.getOpis(), font)));
                     document.add(new Paragraph(" "));
-                    document.add(new Paragraph("Osnovna sredstva u prostoriji", smallBold));
+                    document.add(new Paragraph("Osnovna sredstva u prostoriji:", smallBold));
                     document.add(new Paragraph(" "));
              
                     PdfPTable table = new PdfPTable(5);

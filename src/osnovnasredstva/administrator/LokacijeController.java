@@ -134,7 +134,9 @@ public class LokacijeController implements Initializable {
         clearImageView.setVisible(false);
 		
         traziTextField.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue)->{
-            filteredList.setPredicate(prostorija -> prostorija.getNaziv().toLowerCase().startsWith(newValue.toLowerCase()));
+            //filteredList.setPredicate(prostorija -> prostorija.getNaziv().toLowerCase().startsWith(newValue.toLowerCase()));
+            filteredList.setPredicate(prostorija -> zgradaComboBox.getValue().getNaziv() != null? prostorija.getIdZgrade() == zgradaComboBox.getValue().getId() && prostorija.getNaziv().toLowerCase().startsWith(newValue.toLowerCase()): prostorija.getNaziv().toLowerCase().startsWith(newValue.toLowerCase()));
+            
             if(!newValue.isEmpty()) {
                 clearImageView.setVisible(true);
             } else {
@@ -240,7 +242,12 @@ public class LokacijeController implements Initializable {
                     @Override
                     protected Void call() {
                         progressPane.setVisible(true);
+                        
                         filteredList.setPredicate(prostorija -> zgradaComboBox.getValue().getNaziv() != null? prostorija.getIdZgrade() == zgradaComboBox.getValue().getId(): true);
+                        
+                        Platform.runLater(() -> {
+                            traziTextField.clear();
+                        });
                         /*
                         try {
                             lokacijeList.clear();
@@ -531,6 +538,12 @@ public class LokacijeController implements Initializable {
             stage.showAndWait();
             
             DodavanjeZgradeController.izmjena = false;
+            lokacijeTableView.refresh();
+            int index=zgradaComboBox.getSelectionModel().getSelectedIndex();
+            zgradaComboBox.getItems().clear();
+            zgradaComboBox.getItems().add(0, new Zgrada());
+            zgradaComboBox.getItems().addAll(zgradeList);
+            zgradaComboBox.getSelectionModel().select(index);
         } catch(IOException e) {
             Util.LOGGER.log(Level.SEVERE, e.toString(), e);
         }
@@ -567,7 +580,7 @@ public class LokacijeController implements Initializable {
                     
                     
                     document.add(new Paragraph(" "));
-                    document.add(new Paragraph("Tabela svih prostorija", smallBold));
+                    document.add(new Paragraph("Tabela svih prostorija:", smallBold));
                     document.add(new Paragraph(" "));
              
                     PdfPTable table = new PdfPTable(4);

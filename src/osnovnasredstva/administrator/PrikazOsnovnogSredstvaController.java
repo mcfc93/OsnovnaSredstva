@@ -253,7 +253,7 @@ public class PrikazOsnovnogSredstvaController implements Initializable {
                     document.add(new Paragraph("     Stopa amortizacije: " + odabranoOS.getStopaAmortizacije()));
                     document.add(new Paragraph("     Trenutna vrijednost: " + odabranoOS.getVrijednost()));
                     document.add(new Paragraph(new Chunk("     Opis: " + odabranoOS.getOpis(), font)));
-                    document.add(new Paragraph("     Datum i vrijeme nabavke: " + new SimpleDateFormat("dd.MM.yyyy, HH:mm:ss").format(odabranoOS.getDatumNabavke())));
+                    document.add(new Paragraph("     Datum nabavke: " + new SimpleDateFormat("dd.MM.yyyy").format(odabranoOS.getDatumNabavke())));
                     document.add(new Paragraph(new Chunk("     Zaduženo kod: " + osobaTextField.getText(), font)));
                     document.add(new Paragraph(new Chunk("     Trenutno na: " + lokacijaTextField.getText(), font)));
                     document.add(new Paragraph(" "));

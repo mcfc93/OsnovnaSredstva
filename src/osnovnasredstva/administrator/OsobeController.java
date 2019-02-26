@@ -451,7 +451,7 @@ public class OsobeController implements Initializable {
                     document.add(new Paragraph("Izvještaj kreirao: " + PrijavaController.korisnik.getKorisnickoIme(), smallBold));
                     document.add(new Paragraph("Datum i vrijeme kreiranja: " + new SimpleDateFormat("dd.MM.yyyy, HH:mm:ss").format(new Date()), smallBold));
                     document.add(new Paragraph(" "));
-                    document.add(new Paragraph("Tabela svih osoba", smallBold));
+                    document.add(new Paragraph("Tabela svih osoba:", smallBold));
                     document.add(new Paragraph(" "));
                     
                     BaseFont baseFont = null;

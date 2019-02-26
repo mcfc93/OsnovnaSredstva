@@ -138,6 +138,8 @@ public class OsnovnaSredstvaController implements Initializable {
 		
         traziTextField.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue)->{
             filteredList.setPredicate(osnovnoSredstvo -> osnovnoSredstvo.getNaziv().toLowerCase().startsWith(newValue.toLowerCase()));
+            filteredList.setPredicate(osnovnoSredstvo -> vrstaComboBox.getValue().getNaziv() != null? osnovnoSredstvo.getIdVrste()== vrstaComboBox.getValue().getId() && osnovnoSredstvo.getNaziv().toLowerCase().startsWith(newValue.toLowerCase()): osnovnoSredstvo.getNaziv().toLowerCase().startsWith(newValue.toLowerCase()));
+
             //osnovnaSredstvaTableView.refresh();
             if(!newValue.isEmpty()) {
                 clearImageView.setVisible(true);
@@ -247,7 +249,12 @@ public class OsnovnaSredstvaController implements Initializable {
                     @Override
                     protected Void call() {
                         progressPane.setVisible(true);
+                        
                         filteredList.setPredicate(osnovnoSredstvo -> vrstaComboBox.getValue().getNaziv() != null? osnovnoSredstvo.getIdVrste()== vrstaComboBox.getValue().getId(): true);
+                        
+                        Platform.runLater(() -> {
+                            traziTextField.clear();
+                        });
                         /*
                         try {
                             osnovnaSredstvaList.clear();
@@ -543,6 +550,12 @@ public class OsnovnaSredstvaController implements Initializable {
             stage.showAndWait();
             
             DodavanjeVrsteOSController.izmjena = false;
+            osnovnaSredstvaTableView.refresh();
+            int index=vrstaComboBox.getSelectionModel().getSelectedIndex();
+            vrstaComboBox.getItems().clear();
+            vrstaComboBox.getItems().add(0, new VrstaOS());
+            vrstaComboBox.getItems().addAll(vrstaOsnovnogSredstvaList);
+            vrstaComboBox.getSelectionModel().select(index);
         } catch(IOException e) {
             Util.LOGGER.log(Level.SEVERE, e.toString(), e);
         }
@@ -591,7 +604,7 @@ public class OsnovnaSredstvaController implements Initializable {
                     document.add(new Paragraph("Izvještaj kreirao: " + PrijavaController.korisnik.getKorisnickoIme(), smallBold));
                     document.add(new Paragraph("Datum i vrijeme kreiranja: " + new SimpleDateFormat("dd.MM.yyyy, HH:mm:ss").format(new Date()), smallBold));
                     document.add(new Paragraph(" "));      
-                    document.add(new Paragraph("Tabela svih osnovnih sredstava", smallBold));
+                    document.add(new Paragraph("Tabela svih osnovnih sredstava:", smallBold));
                     document.add(new Paragraph(" "));  
              
                     PdfPTable table = new PdfPTable(9);

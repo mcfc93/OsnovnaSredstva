@@ -127,8 +127,8 @@ public class PrelaznicaController implements Initializable {
             protected Void call() {
                 progressPane.setVisible(true);
                 try {
-                    prelazniceList.addAll(prelaznicaDAO.loadAll(PrijavaController.konekcija));
                     osnovnaSredstvaList.addAll(osnovnoSredstvoDAO.loadAll2(PrijavaController.konekcija));
+                    prelazniceList.addAll(prelaznicaDAO.loadAll(PrijavaController.konekcija));
                     osobeList.addAll(osobaDAO.loadAll2(PrijavaController.konekcija));
                     prostorijeList.addAll(prostorijaDAO.loadAll2(PrijavaController.konekcija));
                     zgradeList.addAll(zgradaDAO.loadAll2(PrijavaController.konekcija));
