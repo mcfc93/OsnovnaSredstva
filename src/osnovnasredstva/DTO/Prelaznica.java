@@ -6,6 +6,7 @@ import java.util.logging.Level;
 import osnovnasredstva.DAO.OsnovnoSredstvoDAO;
 import osnovnasredstva.DAO.OsobaDAO;
 import osnovnasredstva.DAO.ProstorijaDAO;
+import osnovnasredstva.administrator.LokacijeController;
 import osnovnasredstva.administrator.OsnovnaSredstvaController;
 import osnovnasredstva.administrator.OsobeController;
 import osnovnasredstva.administrator.PrelaznicaController;
@@ -132,10 +133,10 @@ public class Prelaznica {
         }
         return prostorija.toString();
         */
-        Prostorija prostorija = OsnovnaSredstvaController.prostorijeList.stream().filter(p -> p.getId() == idProstorijeIz).findFirst().orElse(null);
+        Prostorija prostorija = LokacijeController.prostorijeList.stream().filter(p -> p.getId() == idProstorijeIz).findFirst().orElse(null);
         Zgrada zgrada = null;
         if(prostorija != null) {
-            zgrada = OsnovnaSredstvaController.zgradeList.stream().filter(z -> z.getId() == prostorija.getIdZgrade()).findFirst().orElse(null);
+            zgrada = LokacijeController.zgradeList.stream().filter(z -> z.getId() == prostorija.getIdZgrade()).findFirst().orElse(null);
         }
         return (prostorija!=null ?prostorija.getNaziv():"NEPOZNATO") + " (" + (zgrada!=null?zgrada.getNaziv():"NEPOZNATO") + ")";
     }
@@ -152,10 +153,10 @@ public class Prelaznica {
         }
         return prostorija.toString();
         */
-        Prostorija prostorija = OsnovnaSredstvaController.prostorijeList.stream().filter(p -> p.getId() == idProstorijeU).findFirst().orElse(null);
+        Prostorija prostorija = LokacijeController.prostorijeList.stream().filter(p -> p.getId() == idProstorijeU).findFirst().orElse(null);
         Zgrada zgrada = null;
         if(prostorija != null) {
-            zgrada = OsnovnaSredstvaController.zgradeList.stream().filter(z -> z.getId() == prostorija.getIdZgrade()).findFirst().orElse(null);
+            zgrada = LokacijeController.zgradeList.stream().filter(z -> z.getId() == prostorija.getIdZgrade()).findFirst().orElse(null);
         }
         return (prostorija!=null ?prostorija.getNaziv():"NEPOZNATO") + " (" + (zgrada!=null?zgrada.getNaziv():"NEPOZNATO") + ")";
     }
@@ -202,6 +203,6 @@ public class Prelaznica {
         
         return "Prelaznica_" + os.getNaziv();
         */
-        return "Prelaznica_" + PrelaznicaController.osnovnaSredstvaList.stream().filter(os -> os.getId() == idOsnovnogSredstva).findFirst().get().getNaziv();
+        return "Prelaznica_" + OsnovnaSredstvaController.osnovnaSredstvaList.stream().filter(os -> os.getId() == idOsnovnogSredstva).findFirst().get().getNaziv();
     }
 }

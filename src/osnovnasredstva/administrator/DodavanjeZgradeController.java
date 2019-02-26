@@ -8,6 +8,7 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -23,9 +24,13 @@ import javafx.stage.Stage;
 import osnovnasredstva.DAO.ZgradaDAO;
 import osnovnasredstva.DTO.Zgrada;
 import osnovnasredstva.prijava.PrijavaController;
+import osnovnasredstva.util.NotFoundException;
 import osnovnasredstva.util.Util;
 
 public class DodavanjeZgradeController implements Initializable {
+    
+    public static Zgrada odabranaZgrda;
+    public static boolean izmjena = false;
     
     private static ZgradaDAO zgradaDAO = new ZgradaDAO();
     
@@ -104,6 +109,14 @@ public class DodavanjeZgradeController implements Initializable {
         });
         
         zgrada=null;
+        
+        
+        if(izmjena) {
+            naslovLabel.setText("Izmjena zgrade");
+            sifraTextField.setText(odabranaZgrda.getSifra());
+            nazivTextField.setText(odabranaZgrda.getNaziv());
+            opisTextArea.setText(odabranaZgrda.getOpis());
+        }
     }
     
     public static ValidatorBase postojiZgradaValidator(JFXTextField textField) {
@@ -112,6 +125,9 @@ public class DodavanjeZgradeController implements Initializable {
             protected void eval() {
                 if(!textField.getText().isEmpty() && LokacijeController.zgradeList.stream().anyMatch(z -> z.getSifra().equalsIgnoreCase(textField.getText()))) {
                     hasErrors.set(true);
+                    if(izmjena && odabranaZgrda.getSifra().equalsIgnoreCase(textField.getText())) {
+                        hasErrors.set(false);
+                    }
                 } else {
                     hasErrors.set(false);
                 }
@@ -133,13 +149,26 @@ public class DodavanjeZgradeController implements Initializable {
         if(sifraTextField.validate() 
             & nazivTextField.validate()
                 & opisTextArea.validate()){
-            try {
-                zgrada=new Zgrada(sifraTextField.getText(), nazivTextField.getText(), opisTextArea.getText().trim());
-                zgradaDAO.create(PrijavaController.konekcija, zgrada);
-                Platform.runLater(() -> Util.getNotifications("Obavještenje", "Zgrada dodana.", "Information").show());
-            }catch (SQLException e) {
-                Util.LOGGER.log(Level.SEVERE, e.toString(), e);
-                Util.showBugAlert();
+            if(izmjena) {
+                odabranaZgrda.setSifra(sifraTextField.getText().trim());
+                odabranaZgrda.setNaziv(nazivTextField.getText());
+                odabranaZgrda.setOpis(opisTextArea.getText().trim());
+                try {
+                    zgradaDAO.save(PrijavaController.konekcija, odabranaZgrda);
+                    Platform.runLater(() -> Util.getNotifications("Obavještenje", "Zgrada izmjenjena.", "Information").show());
+                } catch (SQLException | NotFoundException e) {
+                    Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+                    Util.showBugAlert();
+                }
+            } else {
+                try {
+                    zgrada=new Zgrada(sifraTextField.getText(), nazivTextField.getText(), opisTextArea.getText().trim());
+                    zgradaDAO.create(PrijavaController.konekcija, zgrada);
+                    Platform.runLater(() -> Util.getNotifications("Obavještenje", "Zgrada dodana.", "Information").show());
+                } catch (SQLException e) {
+                    Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+                    Util.showBugAlert();
+                }
             }
             /*
             new Thread() {

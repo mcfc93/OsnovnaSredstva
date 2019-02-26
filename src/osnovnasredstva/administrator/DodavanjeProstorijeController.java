@@ -156,7 +156,7 @@ public class DodavanjeProstorijeController implements Initializable {
         ValidatorBase postojiProstorijaUZgradiValidator = new ValidatorBase("Prostorija postoji u zgradi") {
             @Override
             protected void eval() {
-                if(!textField.getText().isEmpty() && LokacijeController.lokacijeList.stream().anyMatch(p -> p.getSifra().equalsIgnoreCase(textField.getText()) && comboBox.getSelectionModel().getSelectedItem() != null && p.getIdZgrade() == comboBox.getSelectionModel().getSelectedItem().getId())) {
+                if(!textField.getText().isEmpty() && LokacijeController.prostorijeList.stream().anyMatch(p -> p.getSifra().equalsIgnoreCase(textField.getText()) && comboBox.getSelectionModel().getSelectedItem() != null && p.getIdZgrade() == comboBox.getSelectionModel().getSelectedItem().getId())) {
                     hasErrors.set(true);
                     if(izmjena && odabranaProstorija.getSifra().equalsIgnoreCase(textField.getText()) && odabranaProstorija.getIdZgrade() == comboBox.getSelectionModel().getSelectedItem().getId()) {
                         hasErrors.set(false);
@@ -207,7 +207,7 @@ public class DodavanjeProstorijeController implements Initializable {
                 odabranaProstorija=new Prostorija(sifraTextField.getText(), nazivTextField.getText(), opisTextArea.getText().trim(), zgradaComboBox.getSelectionModel().getSelectedItem().getId());
                 try {
                     prostorijaDAO.create(PrijavaController.konekcija, odabranaProstorija);
-                    LokacijeController.lokacijeList.add(odabranaProstorija);
+                    LokacijeController.prostorijeList.add(odabranaProstorija);
                     Platform.runLater(() -> Util.getNotifications("Obavještenje", "Prostorija dodana.", "Information").show());
                 } catch (SQLException e) {
                     Util.LOGGER.log(Level.SEVERE, e.toString(), e);

@@ -35,12 +35,26 @@ import javafx.stage.StageStyle;
 import org.controlsfx.control.MaskerPane;
 import osnovnasredstva.DTO.Korisnik;
 import osnovnasredstva.DAO.KorisnikDAO;
+import osnovnasredstva.DAO.OsnovnoSredstvoDAO;
+import osnovnasredstva.DAO.OsobaDAO;
+import osnovnasredstva.DAO.ProstorijaDAO;
+import osnovnasredstva.DAO.VrstaOSDAO;
+import osnovnasredstva.DAO.ZgradaDAO;
+import osnovnasredstva.administrator.LokacijeController;
+import osnovnasredstva.administrator.OsnovnaSredstvaController;
+import osnovnasredstva.administrator.OsobeController;
 import osnovnasredstva.util.Util;
 
 public class PrijavaController implements Initializable {
     
     public static Korisnik korisnik=null;
     public static Connection konekcija;
+    
+    private static OsobaDAO osobaDAO = new OsobaDAO();
+    private static ZgradaDAO zgradaDAO = new ZgradaDAO();
+    private static ProstorijaDAO prostorijaDAO = new ProstorijaDAO();
+    private static OsnovnoSredstvoDAO osnovnoSredstvoDAO = new OsnovnoSredstvoDAO();
+    private static VrstaOSDAO vrstaOSDAO = new VrstaOSDAO();
     
     @FXML
     private AnchorPane anchorPane;
@@ -141,7 +155,7 @@ public class PrijavaController implements Initializable {
             @Override
             protected Void call() throws Exception {
                 progressPane.setVisible(true);
-                Thread.sleep(500);
+                //Thread.sleep(500);
                 
                 try {
                     if((korisnik=KorisnikDAO.prijava(korisnickoImeTextField.getText(), lozinkaTextField.getText(), zapamtiMeCheckBox.isSelected())) != null) {
@@ -155,21 +169,22 @@ public class PrijavaController implements Initializable {
                         } catch(SQLException e){
                             Util.LOGGER.log(Level.SEVERE, e.toString(), e);
                         }
-                        Platform.runLater(() -> {
-                            ((Stage)((Node)event.getSource()).getScene().getWindow()).close();
-                            try {
-                                Parent root = FXMLLoader.load(getClass().getResource("/osnovnasredstva/administrator/AdministratorView.fxml"));
-                                Scene scene = new Scene(root);
-                                scene.getStylesheets().add(getClass().getResource("/osnovnasredstva/osnovnasredstva.css").toExternalForm());
-                                Stage stage=new Stage();
-                                stage.setScene(scene);
-                                stage.setResizable(false);
-                                stage.initStyle(StageStyle.UNDECORATED);
-                                stage.show();
-                            } catch(IOException e) {
-                                Util.LOGGER.log(Level.SEVERE, e.toString(), e);
-                            }
-                        });
+                        
+                        OsobeController.osobeList.clear();
+                        OsobeController.osobeList.addAll(osobaDAO.loadAll(PrijavaController.konekcija));
+                        
+                        LokacijeController.zgradeList.clear();
+                        LokacijeController.zgradeList.addAll(zgradaDAO.loadAll(PrijavaController.konekcija));
+                        LokacijeController.prostorijeList.clear();
+                        LokacijeController.prostorijeList.addAll(prostorijaDAO.loadAll(PrijavaController.konekcija));
+                        
+                        OsnovnaSredstvaController.vrstaOsnovnogSredstvaList.clear();
+                        OsnovnaSredstvaController.vrstaOsnovnogSredstvaList.addAll(vrstaOSDAO.loadAll(PrijavaController.konekcija));
+                        OsnovnaSredstvaController.osnovnaSredstvaList.clear();
+                        OsnovnaSredstvaController.osnovnaSredstvaList.addAll(osnovnoSredstvoDAO.loadAll(PrijavaController.konekcija));
+                        
+                        
+                        
                     } else {
                         Platform.runLater(() -> {
                             greskaLabel.setVisible(true);
@@ -199,6 +214,22 @@ public class PrijavaController implements Initializable {
             protected void succeeded(){
                 super.succeeded();
                 progressPane.setVisible(false);
+                
+                Platform.runLater(() -> {
+                    ((Stage)((Node)event.getSource()).getScene().getWindow()).close();
+                    try {
+                        Parent root = FXMLLoader.load(getClass().getResource("/osnovnasredstva/administrator/AdministratorView.fxml"));
+                        Scene scene = new Scene(root);
+                        scene.getStylesheets().add(getClass().getResource("/osnovnasredstva/osnovnasredstva.css").toExternalForm());
+                        Stage stage=new Stage();
+                        stage.setScene(scene);
+                        stage.setResizable(false);
+                        stage.initStyle(StageStyle.UNDECORATED);
+                        stage.show();
+                    } catch(IOException e) {
+                        Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+                    }
+                });
             }
         }).start();
     }

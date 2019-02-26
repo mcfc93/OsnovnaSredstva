@@ -29,7 +29,6 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.Date;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -255,7 +254,7 @@ public class DodavanjeOsnovnogSredstvaController implements Initializable {
                     if (item == null || empty) {
                         setGraphic(null);
                     } else {
-                        setText(item.getNaziv() + " (" + OsnovnaSredstvaController.zgradeList.stream().filter(z -> z.getId() == item.getIdZgrade()).findFirst().get().getNaziv() + ")");
+                        setText(item.getNaziv() + " (" + LokacijeController.zgradeList.stream().filter(z -> z.getId() == item.getIdZgrade()).findFirst().get().getNaziv() + ")");
                     }
                     
                 }
@@ -266,7 +265,7 @@ public class DodavanjeOsnovnogSredstvaController implements Initializable {
         lokacijaComboBox.setConverter(new StringConverter<Prostorija>() {
             @Override
             public String toString(Prostorija object) {
-                return object.getNaziv() + " (" + OsnovnaSredstvaController.zgradeList.stream().filter(z -> z.getId() == object.getIdZgrade()).findFirst().get().getNaziv() + ")";
+                return object.getNaziv() + " (" + LokacijeController.zgradeList.stream().filter(z -> z.getId() == object.getIdZgrade()).findFirst().get().getNaziv() + ")";
             }
             @Override
             public Prostorija fromString(String string) {
@@ -280,7 +279,7 @@ public class DodavanjeOsnovnogSredstvaController implements Initializable {
         */
         vrstaComboBox.getItems().setAll(OsnovnaSredstvaController.vrstaOsnovnogSredstvaList);
         osobaComboBox.getItems().setAll(OsobeController.osobeList);
-        lokacijaComboBox.getItems().setAll(OsnovnaSredstvaController.prostorijeList);
+        lokacijaComboBox.getItems().setAll(LokacijeController.prostorijeList);
         
         naslovLabel.setText("Dodavanje osnovnog sredstva");
         if(izmjena) {
@@ -447,7 +446,7 @@ public class DodavanjeOsnovnogSredstvaController implements Initializable {
                         }
                     });
                     
-                    OsnovnaSredstvaController.prostorijeList.forEach(lo -> {
+                    LokacijeController.prostorijeList.forEach(lo -> {
                         if(pr.getIdProstorijeIz() == lo.getId()){
                             try {
                                 document.add(new Paragraph(new Chunk("Prethodna prostorija: " + lo, font)));
@@ -456,7 +455,7 @@ public class DodavanjeOsnovnogSredstvaController implements Initializable {
                             }
                         }
                     });
-                    OsnovnaSredstvaController.prostorijeList.forEach(lo -> {
+                    LokacijeController.prostorijeList.forEach(lo -> {
                         if(pr.getIdProstorijeU()== lo.getId()){
                             try {
                                 document.add(new Paragraph(new Chunk("Trenutna prostorija: " + lo, font)));

@@ -57,8 +57,6 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.controlsfx.control.MaskerPane;
 import osnovnasredstva.DAO.OsobaDAO;
-import osnovnasredstva.DAO.ProstorijaDAO;
-import osnovnasredstva.DAO.ZgradaDAO;
 import osnovnasredstva.DTO.Osoba;
 import osnovnasredstva.DTO.Prostorija;
 import osnovnasredstva.DTO.Zgrada;
@@ -69,10 +67,10 @@ import osnovnasredstva.util.Util;
 public class OsobeController implements Initializable {
 
     private static OsobaDAO osobaDAO = new OsobaDAO();
-    private static ZgradaDAO zgradaDAO = new ZgradaDAO();
-    private static ProstorijaDAO prostorijaDAO = new ProstorijaDAO();
+    //private static ZgradaDAO zgradaDAO = new ZgradaDAO();
+    //private static ProstorijaDAO prostorijaDAO = new ProstorijaDAO();
     
-    public static int tip;
+    //public static int tip;
     
     @FXML
     private AnchorPane anchorPane;
@@ -116,8 +114,8 @@ public class OsobeController implements Initializable {
     @FXML
     private JFXToggleButton postaniNadzornikToggleButton;
     
-    public static ObservableList<Zgrada> zgradeList = FXCollections.observableArrayList();
-    public static ObservableList<Prostorija> prostorijeList = FXCollections.observableArrayList();
+    //public static ObservableList<Zgrada> zgradeList = FXCollections.observableArrayList();
+    //public static ObservableList<Prostorija> prostorijeList = FXCollections.observableArrayList();
     
     public static ObservableList<Osoba> osobeList = FXCollections.observableArrayList();
     private static FilteredList<Osoba> filteredList;
@@ -147,13 +145,13 @@ public class OsobeController implements Initializable {
             }
         }
         
-        zgradeList.clear();
-        prostorijeList.clear();
-        osobeList.clear();
+        //zgradeList.clear();
+        //prostorijeList.clear();
+        //osobeList.clear();
         filteredList = new FilteredList(osobeList);
         sortedList = new SortedList<>(filteredList);
         sortedList.comparatorProperty().bind(osobeTableView.comparatorProperty());
-
+/*
         MaskerPane progressPane=Util.getMaskerPane(anchorPane);
         new Thread(new Task<Void>() {
             @Override
@@ -177,7 +175,7 @@ public class OsobeController implements Initializable {
                 });
             }
         }).start();
-        
+*/
         
         osobeTableView.setItems(sortedList);
         osobeTableView.setPlaceholder(new Label("Nema osoba u tabeli."));

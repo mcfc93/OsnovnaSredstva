@@ -4,6 +4,7 @@ import java.sql.*;
 import java.math.*;
 import java.time.LocalDate;
 import java.time.Period;
+import osnovnasredstva.administrator.LokacijeController;
 import osnovnasredstva.administrator.OsnovnaSredstvaController;
 import osnovnasredstva.administrator.OsobeController;
 
@@ -142,10 +143,10 @@ public class OsnovnoSredstvo {
     }
     
     public String getProstorijaZgrada() {
-        Prostorija prostorija = OsobeController.prostorijeList.stream().filter(lokacija -> lokacija.getId() == getIdLokacije()).findFirst().orElse(null);
+        Prostorija prostorija = LokacijeController.prostorijeList.stream().filter(lokacija -> lokacija.getId() == getIdLokacije()).findFirst().orElse(null);
         Zgrada zgrada = null;
         if(prostorija != null) {
-            zgrada = OsobeController.zgradeList.stream().filter(z -> z.getId() == prostorija.getIdZgrade()).findFirst().orElse(null);
+            zgrada = LokacijeController.zgradeList.stream().filter(z -> z.getId() == prostorija.getIdZgrade()).findFirst().orElse(null);
         }
         return (prostorija!=null ?prostorija.getNaziv():"NEPOZNATO") + " (" + (zgrada!=null?zgrada.getNaziv():"NEPOZNATO") + ")";
     }

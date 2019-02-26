@@ -1,14 +1,6 @@
 package osnovnasredstva.DTO;
 
-import java.sql.SQLException;
-import java.util.logging.Level;
-import osnovnasredstva.DAO.ZgradaDAO;
 import osnovnasredstva.administrator.LokacijeController;
-import osnovnasredstva.administrator.OsnovnaSredstvaController;
-import osnovnasredstva.administrator.OsobeController;
-import osnovnasredstva.prijava.PrijavaController;
-import osnovnasredstva.util.NotFoundException;
-import osnovnasredstva.util.Util;
 
 public class Prostorija {
 
@@ -108,7 +100,7 @@ public class Prostorija {
     
     @Override
     public String toString() {
-        return naziv + " (" + OsnovnaSredstvaController.zgradeList.stream().filter(z -> z.getId() == getIdZgrade()).findFirst().get().getNaziv() + ")";
+        return naziv + " (" + LokacijeController.zgradeList.stream().filter(z -> z.getId() == getIdZgrade()).findFirst().get().getNaziv() + ")";
     }
     
     public String getNazivZgrade() {

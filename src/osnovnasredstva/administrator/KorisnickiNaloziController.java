@@ -102,6 +102,7 @@ public class KorisnickiNaloziController implements Initializable {
             @Override
             protected Void call() {
                 progressPane.setVisible(true);
+                korisnickiNaloziList.clear();
                 try {
                     korisnickiNaloziList.addAll(korisnikDAO.loadAll(PrijavaController.konekcija));
                 } catch (SQLException e) {

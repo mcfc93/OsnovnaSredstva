@@ -112,6 +112,9 @@ public class LokacijeController implements Initializable {
     @FXML
     private JFXComboBox<Zgrada> zgradaComboBox;
     
+    @FXML
+    private JFXButton izmjeniButton;
+    
     
     private static ZgradaDAO zgradaDAO = new ZgradaDAO();
     
@@ -122,7 +125,7 @@ public class LokacijeController implements Initializable {
     
     public static ObservableList<Zgrada> zgradeList = FXCollections.observableArrayList();
     
-    public static ObservableList<Prostorija> lokacijeList = FXCollections.observableArrayList();
+    public static ObservableList<Prostorija> prostorijeList = FXCollections.observableArrayList();
     private static FilteredList<Prostorija> filteredList;
     private SortedList<Prostorija> sortedList;
     
@@ -139,6 +142,7 @@ public class LokacijeController implements Initializable {
             }
         });
         
+        izmjeniButton.setVisible(false);
         if(PrijavaController.korisnik.getTip()==1) {
             izmjeniColumn.setVisible(false);
             obrisiColumn.setVisible(false);
@@ -151,13 +155,14 @@ public class LokacijeController implements Initializable {
             }
         }
 
-        zgradeList.clear();
-        lokacijeList.clear();
-        filteredList = new FilteredList(lokacijeList);
+        //zgradeList.clear();
+        //lokacijeList.clear();
+        filteredList = new FilteredList(prostorijeList);
         sortedList = new SortedList<>(filteredList);
         sortedList.comparatorProperty().bind(lokacijeTableView.comparatorProperty());
-        
+
         MaskerPane progressPane=Util.getMaskerPane(anchorPane);
+        /*
         new Thread(new Task<Void>() {
             @Override
             protected Void call() {
@@ -182,6 +187,10 @@ public class LokacijeController implements Initializable {
                 });
             }
         }).start();
+        */
+                zgradaComboBox.getItems().add(0, new Zgrada());
+                zgradaComboBox.getItems().addAll(zgradeList);
+                zgradaComboBox.getSelectionModel().selectFirst();
         
         zgradaComboBox.setVisibleRowCount(5);
 
@@ -222,6 +231,11 @@ public class LokacijeController implements Initializable {
         
         zgradaComboBox.valueProperty().addListener((observable, oldValue, newValue) -> {
             if(newValue != null) {
+                if(zgradaComboBox.getValue().getNaziv() != null) {
+                    izmjeniButton.setVisible(true);
+                } else {
+                    izmjeniButton.setVisible(false);
+                }
                 new Thread(new Task<Void>() {
                     @Override
                     protected Void call() {
@@ -354,7 +368,7 @@ public class LokacijeController implements Initializable {
                                 if(!OsnovnaSredstvaController.osnovnaSredstvaList.stream().anyMatch(os -> item.getId() == os.getIdLokacije())){
                                 try {
                                     prostorijaDAO.delete(PrijavaController.konekcija, item);
-                                    lokacijeList.remove(item);
+                                    prostorijeList.remove(item);
                                     //ProstorijaDAO.getProstorijeList().remove(item);
                                     //getTableView().getItems().remove(item);
                                     lokacijeTableView.refresh();
@@ -453,11 +467,13 @@ public class LokacijeController implements Initializable {
             obrisiColumn.setVisible(false);
             dodajProstorijuButton.setVisible(false);
             dodajZgraduButton.setVisible(false);
+            izmjeniButton.setVisible(false);
         } else {
             izmjeniColumn.setVisible(true);
             obrisiColumn.setVisible(true);
             dodajProstorijuButton.setVisible(true);
             dodajZgraduButton.setVisible(true);
+            izmjeniButton.setVisible(true);
         }
     }
 
@@ -494,6 +510,27 @@ public class LokacijeController implements Initializable {
                 zgradeList.add(DodavanjeZgradeController.zgrada);
                 zgradaComboBox.getItems().add(DodavanjeZgradeController.zgrada);
             }
+        } catch(IOException e) {
+            Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+        }
+    }
+    
+    @FXML
+    private void izmjeniZgradu(ActionEvent event) {
+        try {
+            DodavanjeZgradeController.odabranaZgrda = zgradaComboBox.getValue();
+            DodavanjeZgradeController.izmjena = true;
+            
+            Parent root = FXMLLoader.load(getClass().getResource("/osnovnasredstva/administrator/DodavanjeZgradeView.fxml"));
+            Scene scene = new Scene(root);
+            Stage stage=new Stage();
+            stage.setScene(scene);
+            stage.setResizable(false);
+            stage.initStyle(StageStyle.UNDECORATED);
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.showAndWait();
+            
+            DodavanjeZgradeController.izmjena = false;
         } catch(IOException e) {
             Util.LOGGER.log(Level.SEVERE, e.toString(), e);
         }
@@ -557,8 +594,8 @@ public class LokacijeController implements Initializable {
 
                     table.setHeaderRows(1);
                     table.getDefaultCell().setHorizontalAlignment(Element.ALIGN_CENTER);
-                    if(!lokacijeList.isEmpty()){
-                        lokacijeList.forEach(pr ->{
+                    if(!prostorijeList.isEmpty()){
+                        prostorijeList.forEach(pr ->{
                                 table.addCell(pr.getSifra());
                                 table.addCell(new Phrase(new Chunk(pr.getNaziv(), font)));
                                 table.addCell(new Phrase(new Chunk(pr.getOpis(), font)));

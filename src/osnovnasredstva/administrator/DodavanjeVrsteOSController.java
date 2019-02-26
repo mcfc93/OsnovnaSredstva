@@ -7,6 +7,7 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -21,9 +22,13 @@ import javafx.stage.Stage;
 import osnovnasredstva.DAO.VrstaOSDAO;
 import osnovnasredstva.DTO.VrstaOS;
 import osnovnasredstva.prijava.PrijavaController;
+import osnovnasredstva.util.NotFoundException;
 import osnovnasredstva.util.Util;
 
 public class DodavanjeVrsteOSController implements Initializable {
+    
+    public static VrstaOS odabranaVrsta;
+    public static boolean izmjena = false;
 
     private static VrstaOSDAO vrstaOSDAO = new VrstaOSDAO();
     
@@ -95,6 +100,13 @@ public class DodavanjeVrsteOSController implements Initializable {
         });
         
         vrstaOS=null;
+        
+        
+        if(izmjena) {
+            naslovLabel.setText("Izmjena vrste osnovnog sredstva");
+            nazivTextField.setText(odabranaVrsta.getNaziv());
+            opisTextArea.setText(odabranaVrsta.getOpis());
+        }
     }    
     
     @FXML
@@ -107,13 +119,25 @@ public class DodavanjeVrsteOSController implements Initializable {
     @FXML
     void sacuvaj(ActionEvent event) {
         if(nazivTextField.validate() & opisTextArea.validate()){
-            try {
-                vrstaOS=new VrstaOS(nazivTextField.getText().trim(), opisTextArea.getText().trim());
-                vrstaOSDAO.create(PrijavaController.konekcija, vrstaOS);
-                Platform.runLater(() -> Util.getNotifications("Obavještenje", "Vrsta osnovnog sredstva dodana.", "Information").show());
-            }catch (SQLException e) {
-                Util.LOGGER.log(Level.SEVERE, e.toString(), e);
-                Util.showBugAlert();
+            if(izmjena) {
+                odabranaVrsta.setNaziv(nazivTextField.getText());
+                odabranaVrsta.setOpis(opisTextArea.getText().trim());
+                try {
+                    vrstaOSDAO.save(PrijavaController.konekcija, odabranaVrsta);
+                    Platform.runLater(() -> Util.getNotifications("Obavještenje", "Vrsta osnovnog sredstva izmjenjena.", "Information").show());
+                } catch (SQLException | NotFoundException e) {
+                    Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+                    Util.showBugAlert();
+                }
+            } else {
+                try {
+                    vrstaOS=new VrstaOS(nazivTextField.getText().trim(), opisTextArea.getText().trim());
+                    vrstaOSDAO.create(PrijavaController.konekcija, vrstaOS);
+                    Platform.runLater(() -> Util.getNotifications("Obavještenje", "Vrsta osnovnog sredstva dodana.", "Information").show());
+                } catch (SQLException e) {
+                    Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+                    Util.showBugAlert();
+                }
             }
             ((Stage)((Node)event.getSource()).getScene().getWindow()).close();
         }

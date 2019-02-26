@@ -1148,6 +1148,21 @@
     -fx-background-radius: 5;
 }
 
+#izmjeniButton {
+    -fx-background-image: url('img/edit_white.png');
+    -fx-background-position: center;
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: 25,25;
+    -fx-pref-height: 30px;
+    -fx-pref-width: 30px;
+    -fx-border: none;
+    -fx-border-radius: 0px;
+    -fx-background-radius: 0px;
+    -fx-focus-traversable: false;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+}
+
 /* * * * * * *
  * 
  * - - - - -
@@ -1171,7 +1186,7 @@
     -fx-text-alignment: right;
 }
 
-.opisTextField {
+.opisTextField, opisTextArea {
     -fx-text-fill: -fx-hover-color;
     -fx-prompt-text-fill: -fx-primary-color;
     -fx-font-size: 11px;
