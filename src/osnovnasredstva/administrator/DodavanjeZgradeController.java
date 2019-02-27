@@ -95,8 +95,8 @@ public class DodavanjeZgradeController implements Initializable {
         sacuvajButton.setDefaultButton(true);
         naslovLabel.setText("Dodavanje zgrade");
         
-        nazivTextField.getValidators().addAll(Util.requiredFieldValidator(nazivTextField), Util.lengthValidator(nazivTextField, 255));
-        sifraTextField.getValidators().addAll(Util.requiredFieldValidator(sifraTextField), postojiZgradaValidator(sifraTextField), Util.lengthValidator(sifraTextField, 255));
+        nazivTextField.getValidators().addAll(Util.requiredFieldValidator(nazivTextField), postojiNazivValidator(nazivTextField), Util.nazivValidator(nazivTextField), Util.lengthValidator(nazivTextField, 255));
+        sifraTextField.getValidators().addAll(Util.requiredFieldValidator(sifraTextField), postojiZgradaValidator(sifraTextField), Util.sifraValidator(sifraTextField), Util.lengthValidator(sifraTextField, 255));
         opisTextArea.getValidators().addAll(Util.lengthValidator(opisTextArea, 1024));
         
         opisTextArea.focusedProperty().addListener((observable, oldValue, newValue)->{
@@ -135,6 +135,24 @@ public class DodavanjeZgradeController implements Initializable {
         };
         postojiZgradaValidator.setIcon(new ImageView());
         return postojiZgradaValidator;
+    }
+    
+    public static ValidatorBase postojiNazivValidator(JFXTextField textField) {
+        ValidatorBase postojiNazivValidator = new ValidatorBase("Zauzeto") {
+            @Override
+            protected void eval() {
+                if(!textField.getText().isEmpty() && LokacijeController.zgradeList.stream().anyMatch(z -> z.getNaziv().equalsIgnoreCase(textField.getText()))) {
+                    hasErrors.set(true);
+                    if(izmjena && odabranaZgrda.getNaziv().equalsIgnoreCase(textField.getText())) {
+                        hasErrors.set(false);
+                    }
+                } else {
+                    hasErrors.set(false);
+                }
+            }
+        };
+        postojiNazivValidator.setIcon(new ImageView());
+        return postojiNazivValidator;
     }
     
     @FXML

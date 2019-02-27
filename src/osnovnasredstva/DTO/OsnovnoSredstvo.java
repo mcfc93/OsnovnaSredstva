@@ -136,10 +136,19 @@ public class OsnovnoSredstvo {
         }
         return "NEPOZNATO";
     }
-    
+    /*
     public BigDecimal getVrijednost(){
         int godine=Period.between(datumNabavke.toLocalDateTime().toLocalDate(), LocalDate.now()).getYears();
         return nabavnaVrijednost.subtract(nabavnaVrijednost.multiply(new BigDecimal((double)godine/stopaAmortizacije))).setScale(2, BigDecimal.ROUND_HALF_EVEN);
+    }
+    */
+    public BigDecimal getVrijednost(){
+        int godine=Period.between(datumNabavke.toLocalDateTime().toLocalDate(), LocalDate.now()).getYears();
+        BigDecimal x = nabavnaVrijednost.subtract(nabavnaVrijednost.multiply(new BigDecimal((double)godine/stopaAmortizacije))).setScale(2, BigDecimal.ROUND_HALF_EVEN);
+        if(x.compareTo(new BigDecimal(0)) < 0)
+            return new BigDecimal(0);
+        else
+            return x;
     }
     
     public String getProstorijaZgrada() {

@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import javafx.application.Platform;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -103,11 +104,31 @@ public class DodavanjeOsobeController implements Initializable {
         imeTextField.getValidators().addAll(Util.requiredFieldValidator(imeTextField), Util.nameValidator(imeTextField), Util.lengthValidator(imeTextField, 255));
         prezimeTextField.getValidators().addAll(Util.requiredFieldValidator(prezimeTextField), Util.surnameValidator(prezimeTextField), Util.lengthValidator(prezimeTextField, 255));
         jmbgTextField.getValidators().addAll(Util.requiredFieldValidator(jmbgTextField), Util.jmbgValidator(jmbgTextField));
-        titulaTextField.getValidators().addAll(Util.requiredFieldValidator(titulaTextField), Util.lengthValidator(titulaTextField, 255));
+        titulaTextField.getValidators().addAll(Util.lengthValidator(titulaTextField, 255));
         zaposlenjeTextField.getValidators().addAll(Util.requiredFieldValidator(zaposlenjeTextField), Util.lengthValidator(zaposlenjeTextField, 255));
         brojTelefonaTextField.getValidators().addAll(Util.requiredFieldValidator(brojTelefonaTextField), Util.phoneValidator(brojTelefonaTextField), Util.lengthValidator(brojTelefonaTextField, 16));
-        emailTextField.getValidators().addAll(Util.requiredFieldValidator(emailTextField), Util.emailValidator(emailTextField), Util.lengthValidator(emailTextField, 50));
+        emailTextField.getValidators().addAll(Util.emailValidator(emailTextField), Util.lengthValidator(emailTextField, 50));
         adresaTextField.getValidators().addAll(Util.requiredFieldValidator(adresaTextField), Util.lengthValidator(adresaTextField, 255));
+        
+        
+        titulaTextField.focusedProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue)->{
+            if(!newValue) {
+                titulaTextField.validate();
+            }
+        });
+        titulaTextField.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue)->{
+            titulaTextField.validate();
+        });
+        
+        emailTextField.focusedProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue)->{
+            if(!newValue) {
+                emailTextField.validate();
+            }
+        });
+        emailTextField.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue)->{
+            emailTextField.validate();
+        });
+        
         
         naslovLabel.setText("Dodavanje osobe");
         if(izmjena) {

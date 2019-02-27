@@ -426,14 +426,14 @@ public class OsnovnaSredstvaController implements Initializable {
         
         Util.preventColumnReordering(osnovnaSredstvaTableView);
         
-        invertarniBrojColumn.setMinWidth(100);
+        invertarniBrojColumn.setMinWidth(75);
         invertarniBrojColumn.setMaxWidth(2000);
         
         nazivColumn.setMinWidth(100);
         nazivColumn.setMaxWidth(4000);
         
-        vrstaColumn.setMinWidth(100);
-        vrstaColumn.setMaxWidth(2000);
+        vrstaColumn.setMinWidth(75);
+        vrstaColumn.setMaxWidth(1500);
         
         vrijednostColumn.setMinWidth(100);
         vrijednostColumn.setMaxWidth(3000);

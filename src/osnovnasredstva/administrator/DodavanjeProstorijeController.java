@@ -98,8 +98,8 @@ public class DodavanjeProstorijeController implements Initializable {
         
         sacuvajButton.setDefaultButton(true);
         
-        nazivTextField.getValidators().addAll(Util.requiredFieldValidator(nazivTextField), Util.lengthValidator(nazivTextField, 255));
-        sifraTextField.getValidators().addAll(Util.requiredFieldValidator(sifraTextField), postojiProstorijaUZgradiValidator(sifraTextField, zgradaComboBox), Util.lengthValidator(sifraTextField, 255));
+        nazivTextField.getValidators().addAll(Util.requiredFieldValidator(nazivTextField), Util.nazivValidator(nazivTextField), Util.lengthValidator(nazivTextField, 255));
+        sifraTextField.getValidators().addAll(Util.requiredFieldValidator(sifraTextField), postojiProstorijaUZgradiValidator(sifraTextField, zgradaComboBox), Util.sifraValidator(sifraTextField), Util.lengthValidator(sifraTextField, 255));
         zgradaComboBox.getValidators().addAll(Util.requiredFieldValidator(zgradaComboBox));
         opisTextArea.getValidators().addAll(Util.lengthValidator(opisTextArea, 1024));
         

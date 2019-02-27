@@ -331,7 +331,7 @@ public class Util {
     }
     
     public static ValidatorBase usernameValidator(JFXTextField textField) {
-        ValidatorBase usernameValidator = new ValidatorBase("Format: A-Z, a-z, 0-9, _") {
+        ValidatorBase usernameValidator = new ValidatorBase("Nije alfanumerik") {
             @Override
             protected void eval() {
                 if(!textField.getText().isEmpty()
@@ -496,7 +496,7 @@ public class Util {
     }
     
     public static ValidatorBase nameValidator(JFXTextField textField) {
-        ValidatorBase nameValidator = new ValidatorBase("Format: Xxx[ Xxx]") {
+        ValidatorBase nameValidator = new ValidatorBase("Format: Abc[ Abc]") {
             @Override
             protected void eval() {
                 if(!textField.getText().isEmpty()
@@ -512,7 +512,7 @@ public class Util {
     }
     
     public static ValidatorBase surnameValidator(JFXTextField textField) {
-        ValidatorBase nameValidator = new ValidatorBase("Format: Xxx[-Xxx]") {
+        ValidatorBase nameValidator = new ValidatorBase("Format: Abc[-Abc]") {
             @Override
             protected void eval() {
                 if(!textField.getText().isEmpty()
@@ -541,6 +541,38 @@ public class Util {
         };
         inventarniBrojValidator.setIcon(new ImageView());
         return inventarniBrojValidator;
+    }
+    
+    public static ValidatorBase sifraValidator(JFXTextField textField) {
+        ValidatorBase sifraValidator = new ValidatorBase("Format: 3 do 10 cifara") {
+            @Override
+            protected void eval() {
+                if(!textField.getText().isEmpty()
+                        && !textField.getText().matches("^[0-9]{3,10}$")) {
+                    hasErrors.set(true);
+                } else {
+                     hasErrors.set(false);
+                }
+            }
+        };
+        sifraValidator.setIcon(new ImageView());
+        return sifraValidator;
+    }
+    
+    public static ValidatorBase nazivValidator(JFXTextField textField) {
+        ValidatorBase nazivValidator = new ValidatorBase("Nije alfanumerik") {
+            @Override
+            protected void eval() {
+                if(!textField.getText().isEmpty()
+                        && !textField.getText().matches("^[-_\\ \\p{Alnum}]*$")) {
+                    hasErrors.set(true);
+                } else {
+                     hasErrors.set(false);
+                }
+            }
+        };
+        nazivValidator.setIcon(new ImageView());
+        return nazivValidator;
     }
     
     public static <T> void preventColumnReordering(TableView<T> tableView) {

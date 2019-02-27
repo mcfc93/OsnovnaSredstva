@@ -175,7 +175,7 @@ public class DodavanjeOsnovnogSredstvaController implements Initializable {
         datumNabavkeDatePicker.setEditable(false);
         
         invertarniBrojTextField.getValidators().addAll(Util.requiredFieldValidator(invertarniBrojTextField), Util.inventarniBrojValidator(invertarniBrojTextField), postojiInventarniBrojValidator(invertarniBrojTextField), Util.lengthValidator(invertarniBrojTextField, 255));
-        nazivTextField.getValidators().addAll(Util.requiredFieldValidator(nazivTextField), Util.lengthValidator(nazivTextField, 255));
+        nazivTextField.getValidators().addAll(Util.requiredFieldValidator(nazivTextField), Util.nazivValidator(nazivTextField), Util.lengthValidator(nazivTextField, 255));
         opisTextArea.getValidators().addAll(Util.lengthValidator(opisTextArea, 1024));
                 
         opisTextArea.focusedProperty().addListener((observable, oldValue, newValue)->{

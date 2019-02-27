@@ -112,11 +112,6 @@ public class PrelaznicaController implements Initializable {
             }
         });
         
-        osnovnaSredstvaList.clear();
-        prelazniceList.clear();
-        osobeList.clear();
-        prostorijeList.clear();
-        zgradeList.clear();
         filteredList = new FilteredList<>(prelazniceList);
         sortedList = new SortedList<>(filteredList);
         sortedList.comparatorProperty().bind(prelazniceTableView.comparatorProperty());
@@ -127,11 +122,18 @@ public class PrelaznicaController implements Initializable {
             protected Void call() {
                 progressPane.setVisible(true);
                 try {
-                    osnovnaSredstvaList.addAll(osnovnoSredstvoDAO.loadAll2(PrijavaController.konekcija));
-                    prelazniceList.addAll(prelaznicaDAO.loadAll(PrijavaController.konekcija));
-                    osobeList.addAll(osobaDAO.loadAll2(PrijavaController.konekcija));
-                    prostorijeList.addAll(prostorijaDAO.loadAll2(PrijavaController.konekcija));
-                    zgradeList.addAll(zgradaDAO.loadAll2(PrijavaController.konekcija));
+                    synchronized(prelazniceList) {
+                        osnovnaSredstvaList.clear();
+                        prelazniceList.clear();
+                        osobeList.clear();
+                        prostorijeList.clear();
+                        zgradeList.clear();
+                        osnovnaSredstvaList.addAll(osnovnoSredstvoDAO.loadAll2(PrijavaController.konekcija));
+                        prelazniceList.addAll(prelaznicaDAO.loadAll(PrijavaController.konekcija));
+                        osobeList.addAll(osobaDAO.loadAll2(PrijavaController.konekcija));
+                        prostorijeList.addAll(prostorijaDAO.loadAll2(PrijavaController.konekcija));
+                        zgradeList.addAll(zgradaDAO.loadAll2(PrijavaController.konekcija));
+                    }
                 } catch (SQLException e) {
                     Util.LOGGER.log(Level.SEVERE, e.toString(), e);
                 }

@@ -3,6 +3,7 @@ package osnovnasredstva.administrator;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.validation.base.ValidatorBase;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
@@ -15,6 +16,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -87,7 +89,7 @@ public class DodavanjeVrsteOSController implements Initializable {
         sacuvajButton.setDefaultButton(true);
         naslovLabel.setText("Dodavanje vrste osnovnog sredstva");
         
-        nazivTextField.getValidators().addAll(Util.requiredFieldValidator(nazivTextField), Util.lengthValidator(nazivTextField, 255));
+        nazivTextField.getValidators().addAll(Util.requiredFieldValidator(nazivTextField), postojiNazivValidator(nazivTextField), Util.lengthValidator(nazivTextField, 255));
         opisTextArea.getValidators().addAll(Util.lengthValidator(opisTextArea, 1024));
         
         opisTextArea.focusedProperty().addListener((observable, oldValue, newValue)->{
@@ -107,7 +109,25 @@ public class DodavanjeVrsteOSController implements Initializable {
             nazivTextField.setText(odabranaVrsta.getNaziv());
             opisTextArea.setText(odabranaVrsta.getOpis());
         }
-    }    
+    }
+    
+    public static ValidatorBase postojiNazivValidator(JFXTextField textField) {
+        ValidatorBase postojiNazivValidator = new ValidatorBase("Zauzeto") {
+            @Override
+            protected void eval() {
+                if(!textField.getText().isEmpty() && OsnovnaSredstvaController.vrstaOsnovnogSredstvaList.stream().anyMatch(v -> v.getNaziv().equalsIgnoreCase(textField.getText()))) {
+                    hasErrors.set(true);
+                    if(izmjena && odabranaVrsta.getNaziv().equalsIgnoreCase(textField.getText())) {
+                        hasErrors.set(false);
+                    }
+                } else {
+                    hasErrors.set(false);
+                }
+            }
+        };
+        postojiNazivValidator.setIcon(new ImageView());
+        return postojiNazivValidator;
+    }
     
     @FXML
     void close(MouseEvent event) {
