@@ -624,7 +624,7 @@ public class OsnovnaSredstvaController implements Initializable {
                     cell.setHorizontalAlignment(Element.ALIGN_CENTER);
                     table.addCell(cell);
                     
-                    cell = new PdfPCell(new Phrase("Datum i vrijeme nabavke"));
+                    cell = new PdfPCell(new Phrase("Datum nabavke"));
                     cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
                     cell.setHorizontalAlignment(Element.ALIGN_CENTER);
                     table.addCell(cell);
@@ -661,7 +661,7 @@ public class OsnovnaSredstvaController implements Initializable {
                                 table.addCell(os.getInventarniBroj());
                                 table.addCell(new Phrase(new Chunk(os.getNaziv(), font)));
                                 table.addCell(new Phrase(new Chunk(os.getOpis(), font)));
-                                table.addCell(new SimpleDateFormat("dd.MM.yyyy, HH:mm:ss").format(os.getDatumNabavke()));
+                                table.addCell(new SimpleDateFormat("dd.MM.yyyy").format(os.getDatumNabavke()));
                                 table.addCell(os.getNabavnaVrijednost().toString());
                                 table.addCell(String.valueOf(os.getStopaAmortizacije()));
                                 table.addCell(os.getVrijednost().toString());      

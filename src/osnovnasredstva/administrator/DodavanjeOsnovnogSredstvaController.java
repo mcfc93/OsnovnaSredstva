@@ -428,7 +428,7 @@ public class DodavanjeOsnovnogSredstvaController implements Initializable {
                             try {
                                 document.add(new Paragraph(new Chunk("     Naziv osnovnog sredstva: " + os.getNaziv(), font)));
                                 document.add(new Paragraph(new Chunk("     Inventarni broj: " + os.getInventarniBroj(), font)));
-                                document.add(new Paragraph(new Chunk("     Datum i vrijeme nabavke: " + new SimpleDateFormat("dd.MM.yyyy, HH:mm:ss").format(os.getDatumNabavke()), font)));
+                                document.add(new Paragraph(new Chunk("     Datum nabavke: " + new SimpleDateFormat("dd.MM.yyyy").format(os.getDatumNabavke()), font)));
                                 document.add(new Paragraph(new Chunk("     Trenutna vrijednost: " + os.getVrijednost(), font)));
                                 document.add(new Paragraph(new Chunk("     Stopa amortizacije: " + os.getStopaAmortizacije(), font)));
                                 document.add(new Paragraph(new Chunk("     Nabavna vrijednost: " + os.getNabavnaVrijednost(), font)));
