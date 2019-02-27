@@ -89,7 +89,7 @@ public class DodavanjeVrsteOSController implements Initializable {
         sacuvajButton.setDefaultButton(true);
         naslovLabel.setText("Dodavanje vrste osnovnog sredstva");
         
-        nazivTextField.getValidators().addAll(Util.requiredFieldValidator(nazivTextField), postojiNazivValidator(nazivTextField), Util.lengthValidator(nazivTextField, 255));
+        nazivTextField.getValidators().addAll(Util.requiredFieldValidator(nazivTextField), postojiNazivValidator(nazivTextField), Util.nazivValidator(nazivTextField), Util.lengthValidator(nazivTextField, 255));
         opisTextArea.getValidators().addAll(Util.lengthValidator(opisTextArea, 1024));
         
         opisTextArea.focusedProperty().addListener((observable, oldValue, newValue)->{

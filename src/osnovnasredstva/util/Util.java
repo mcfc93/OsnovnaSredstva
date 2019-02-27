@@ -564,7 +564,7 @@ public class Util {
             @Override
             protected void eval() {
                 if(!textField.getText().isEmpty()
-                        && !textField.getText().matches("^[-_\\ \\p{Alnum}]*$")) {
+                        && !textField.getText().matches("^[-_\\ \\p{L}\\p{Nl}\\p{Nd}]*$")) {
                     hasErrors.set(true);
                 } else {
                      hasErrors.set(false);
