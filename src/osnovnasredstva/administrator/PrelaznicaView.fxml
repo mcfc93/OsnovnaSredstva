@@ -15,9 +15,13 @@
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
          </columnResizePolicy>
          <columns>
-            <TableColumn fx:id="nazivColumn" prefWidth="75.0" text="Naziv" />
-            <TableColumn fx:id="datumColumn" prefWidth="75.0" text="Datum i vrijeme prelaska" />
-            <TableColumn fx:id="otvoriColumn" prefWidth="75.0" text="OTVORI" />
+            <TableColumn fx:id="nazivColumn" prefWidth="81.0" text="Osnovno sredstvo" />
+            <TableColumn fx:id="invBrColumn" prefWidth="67.0" text="Inv. broj" />
+            <TableColumn fx:id="saColumn" prefWidth="81.0" text="Sa osobe" />
+            <TableColumn fx:id="naColumn" text="Na osobu" />
+            <TableColumn fx:id="izColumn" prefWidth="86.0" text="Iz prostorije" />
+            <TableColumn fx:id="uColumn" prefWidth="84.0" text="U prostoriju" />
+            <TableColumn fx:id="otvoriColumn" prefWidth="56.0" text="OTVORI" />
          </columns>
       </TableView>
       <TextField fx:id="traziTextField" layoutX="434.0" layoutY="93.0" maxWidth="150.0" minWidth="100.0" prefHeight="25.0" prefWidth="150.0" promptText="Traži" styleClass="searchTextField" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="40.0">

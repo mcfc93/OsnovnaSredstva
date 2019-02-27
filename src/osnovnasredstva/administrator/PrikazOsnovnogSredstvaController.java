@@ -249,9 +249,9 @@ public class PrikazOsnovnogSredstvaController implements Initializable {
                     document.add(new Paragraph("Osnovni podaci o osnovnom sredstvu: ", smallBold));
                     document.add(new Paragraph("     Inventarni broj: " + odabranoOS.getInventarniBroj()));
                     document.add(new Paragraph(new Chunk("     Naziv: " + odabranoOS.getNaziv(), font)));
-                    document.add(new Paragraph("     Nabavna vrijednost: " + odabranoOS.getNabavnaVrijednost()));
+                    document.add(new Paragraph("     Nabavna vrijednost [KM]: " + odabranoOS.getNabavnaVrijednost()));
                     document.add(new Paragraph("     Stopa amortizacije: " + odabranoOS.getStopaAmortizacije()));
-                    document.add(new Paragraph("     Trenutna vrijednost: " + odabranoOS.getVrijednost()));
+                    document.add(new Paragraph("     Trenutna vrijednost [KM]: " + odabranoOS.getVrijednost()));
                     document.add(new Paragraph(new Chunk("     Opis: " + odabranoOS.getOpis(), font)));
                     document.add(new Paragraph("     Datum nabavke: " + new SimpleDateFormat("dd.MM.yyyy").format(odabranoOS.getDatumNabavke())));
                     document.add(new Paragraph(new Chunk("     Zaduženo kod: " + osobaTextField.getText(), font)));
@@ -262,7 +262,7 @@ public class PrikazOsnovnogSredstvaController implements Initializable {
              
                     PdfPTable table = new PdfPTable(5);
                     table.setWidthPercentage(100);
-                    PdfPCell cell = new PdfPCell(new Phrase("Datum prelaska"));
+                    PdfPCell cell = new PdfPCell(new Phrase("Datum i vrijeme prelaska"));
                     cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
                     cell.setHorizontalAlignment(Element.ALIGN_CENTER);
                     table.addCell(cell);

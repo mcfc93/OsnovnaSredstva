@@ -1,9 +1,13 @@
 package osnovnasredstva.administrator;
 
+import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -23,6 +27,8 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -250,8 +256,49 @@ public class AdministratorController implements Initializable {
     
     @FXML
     void backup(ActionEvent event) {
-        dataAnchorPane.getChildren().removeAll();
-        dataAnchorPane.getChildren().setAll();
+        //dataAnchorPane.getChildren().removeAll();
+       // dataAnchorPane.getChildren().setAll();   
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save As");
+        fileChooser.getExtensionFilters().addAll(
+         new ExtensionFilter("SQL Files", "*.sql"));
+        File file = fileChooser.showSaveDialog(null);
+        String executeCmd = "";
+        if(file != null){
+        Process runtimeProcess;
+        Process proc;
+        String s="";
+        String tmp="";
+        try {
+            ProcessBuilder pb1 = new ProcessBuilder("cmd", "/c", "where mysqldump");
+            //pb1.redirectError();
+            Process p = pb1.start();
+            BufferedReader reader = 
+                new BufferedReader(new InputStreamReader(p.getInputStream()));
+            while ((s = reader.readLine()) != null) {
+                //System.out.println(s);
+                tmp = new String(s);
+            }
+            //System.out.println(tmp);
+            int exitCode = p.waitFor();
+            String com = "\"" + tmp + "\"" + " --user=root --password=root projektniis >  " + file.getAbsolutePath();
+            //System.out.println(com);
+            ProcessBuilder pb2 = new ProcessBuilder("cmd", "/c", com);
+            Process p2 = pb2.start();
+ 
+        int processComplete = p2.waitFor();
+        if(processComplete == 0){
+            Util.getNotifications("Obavještenje", "Backup baze napravljen.", "Confirmation").show();
+        } else {
+            Util.getNotifications("Obavještenje", "Greška prilikom pravljenja backupa.", "Error").show();
+            }
+        } catch (IOException | InterruptedException e) {
+            Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+        }
+        //System.out.println(file.getAbsolutePath());
+    }
+        backupButton.setSelected(false);
+        
     }
     
     @FXML

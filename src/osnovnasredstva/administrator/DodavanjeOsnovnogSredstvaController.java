@@ -429,14 +429,15 @@ public class DodavanjeOsnovnogSredstvaController implements Initializable {
                                 document.add(new Paragraph(new Chunk("     Naziv osnovnog sredstva: " + os.getNaziv(), font)));
                                 document.add(new Paragraph(new Chunk("     Inventarni broj: " + os.getInventarniBroj(), font)));
                                 document.add(new Paragraph(new Chunk("     Datum nabavke: " + new SimpleDateFormat("dd.MM.yyyy").format(os.getDatumNabavke()), font)));
-                                document.add(new Paragraph(new Chunk("     Trenutna vrijednost: " + os.getVrijednost(), font)));
+                                document.add(new Paragraph(new Chunk("     Trenutna vrijednost [KM]: " + os.getVrijednost(), font)));
                                 document.add(new Paragraph(new Chunk("     Stopa amortizacije: " + os.getStopaAmortizacije(), font)));
-                                document.add(new Paragraph(new Chunk("     Nabavna vrijednost: " + os.getNabavnaVrijednost(), font)));
+                                document.add(new Paragraph(new Chunk("     Nabavna vrijednost [KM]: " + os.getNabavnaVrijednost(), font)));
                             } catch (DocumentException e) {
                                 Util.LOGGER.log(Level.SEVERE, e.toString(), e);
                             }
                         }
                     });
+                    document.add(new Paragraph(new Chunk("     Datum i vrijeme prelaska: " + new SimpleDateFormat("dd.MM.yyyy, HH:mm:ss").format(pr.getDatumPrelaska()), font)));
                     document.add(new Paragraph(" "));
                     
                     PdfPTable table = new PdfPTable(4);

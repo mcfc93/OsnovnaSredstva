@@ -629,7 +629,7 @@ public class OsnovnaSredstvaController implements Initializable {
                     cell.setHorizontalAlignment(Element.ALIGN_CENTER);
                     table.addCell(cell);
                     
-                    cell = new PdfPCell(new Phrase("Nabavna vrijednost"));
+                    cell = new PdfPCell(new Phrase("Nabavna vrijednost [KM]"));
                     cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
                     cell.setHorizontalAlignment(Element.ALIGN_CENTER);
                     table.addCell(cell);
@@ -639,7 +639,7 @@ public class OsnovnaSredstvaController implements Initializable {
                     cell.setHorizontalAlignment(Element.ALIGN_CENTER);
                     table.addCell(cell);
 
-                    cell = new PdfPCell(new Phrase("Trenutna vrijednost"));
+                    cell = new PdfPCell(new Phrase("Trenutna vrijednost [KM]"));
                     cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
                     cell.setHorizontalAlignment(Element.ALIGN_CENTER);
                     table.addCell(cell);

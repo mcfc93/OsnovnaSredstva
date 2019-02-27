@@ -88,7 +88,7 @@ public class OsnovnoSredstvo {
     }
 
     public BigDecimal getNabavnaVrijednost() {
-          return this.nabavnaVrijednost;
+          return this.nabavnaVrijednost.setScale(2, BigDecimal.ROUND_HALF_EVEN);
     }
     public void setNabavnaVrijednost(BigDecimal nabavnaVrijednostIn) {
           this.nabavnaVrijednost = nabavnaVrijednostIn;

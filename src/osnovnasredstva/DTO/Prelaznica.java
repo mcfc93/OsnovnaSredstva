@@ -205,6 +205,23 @@ public class Prelaznica {
         */
         //return "Prelaznica_" + PrelaznicaController.osnovnaSredstvaList.stream().filter(os -> os.getId() == idOsnovnogSredstva).findFirst().get().getNaziv();
         OsnovnoSredstvo tmp = PrelaznicaController.osnovnaSredstvaList.stream().filter(os -> os.getId() == idOsnovnogSredstva).findFirst().orElse(null);
-        return "Prelaznica_" + (tmp != null?tmp.getNaziv():"NEPOZNATO");
+        return (tmp != null?tmp.getNaziv():"NEPOZNATO");
+    }
+    
+    public String getInvBr(){
+        OsnovnoSredstvo tmp = PrelaznicaController.osnovnaSredstvaList.stream().filter(os -> os.getId() == idOsnovnogSredstva).findFirst().orElse(null);
+        return (tmp != null?tmp.getInventarniBroj():"NEPOZNATO");
+    }
+    public String getSaOsobe(){
+        return PrelaznicaController.osobeList.stream().filter(os -> os.getId() == idOsobeSa).findFirst().get().getImePrezime();
+    }
+    public String getNaOsobu(){
+        return PrelaznicaController.osobeList.stream().filter(os -> os.getId() == idOsobeNa).findFirst().get().getImePrezime();
+    }
+    public String getIzProstorije(){
+        return PrelaznicaController.prostorijeList.stream().filter(pr -> pr.getId() == idProstorijeIz).findFirst().get().toString();
+    }
+    public String getUProstoriju(){
+        return PrelaznicaController.prostorijeList.stream().filter(pr -> pr.getId() == idProstorijeU).findFirst().get().toString();
     }
 }

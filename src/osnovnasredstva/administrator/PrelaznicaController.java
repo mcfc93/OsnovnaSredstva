@@ -4,10 +4,14 @@ import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
 import com.itextpdf.text.pdf.BaseFont;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXToggleButton;
@@ -72,8 +76,6 @@ public class PrelaznicaController implements Initializable {
     @FXML
     private TableView<Prelaznica> prelazniceTableView;
 
-    @FXML
-    private JFXButton pdfButton;
 
     @FXML
     private TextField traziTextField;
@@ -82,11 +84,7 @@ public class PrelaznicaController implements Initializable {
     private ImageView clearImageView;
 
     @FXML
-    private JFXToggleButton postaniNadzornikToggleButton;
-    @FXML
     private TableColumn<?, ?> nazivColumn;
-    @FXML
-    private TableColumn<?, ?> datumColumn;
     @FXML
     private TableColumn<Prelaznica, Prelaznica> otvoriColumn;
     
@@ -98,6 +96,16 @@ public class PrelaznicaController implements Initializable {
     public static ObservableList<Prelaznica> prelazniceList = FXCollections.observableArrayList();
     private static FilteredList<Prelaznica> filteredList;
     SortedList<Prelaznica> sortedList;
+    @FXML
+    private TableColumn<?, ?> invBrColumn;
+    @FXML
+    private TableColumn<?, ?> saColumn;
+    @FXML
+    private TableColumn<?, ?> naColumn;
+    @FXML
+    private TableColumn<?, ?> izColumn;
+    @FXML
+    private TableColumn<?, ?> uColumn;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -154,11 +162,15 @@ public class PrelaznicaController implements Initializable {
         }
         
         prelazniceTableView.setItems(sortedList);
-        prelazniceTableView.setPlaceholder(new Label("Nema korisničkih naloga."));
+        prelazniceTableView.setPlaceholder(new Label("Nema prelaznica."));
         prelazniceTableView.setFocusTraversable(false);
         
         nazivColumn.setCellValueFactory(new PropertyValueFactory<>("naziv"));
-        datumColumn.setCellValueFactory(new PropertyValueFactory<>("datum"));
+        invBrColumn.setCellValueFactory(new PropertyValueFactory<>("InvBr"));
+        saColumn.setCellValueFactory(new PropertyValueFactory<>("SaOsobe"));
+        naColumn.setCellValueFactory(new PropertyValueFactory<>("NaOsobu"));
+        izColumn.setCellValueFactory(new PropertyValueFactory<>("IzProstorije"));
+        uColumn.setCellValueFactory(new PropertyValueFactory<>("UProstoriju"));
         
         otvoriColumn.setVisible(true);
         
@@ -191,11 +203,11 @@ public class PrelaznicaController implements Initializable {
 
         Util.preventColumnReordering(prelazniceTableView);
         
-        nazivColumn.setMinWidth(100);
-        nazivColumn.setMaxWidth(5000);
+       // nazivColumn.setMinWidth(100);
+       // nazivColumn.setMaxWidth(5000);
                 
-        datumColumn.setMinWidth(100);
-        datumColumn.setMaxWidth(3000);
+      //  datumColumn.setMinWidth(100);
+      //  datumColumn.setMaxWidth(3000);
         
         otvoriColumn.setText("");
         otvoriColumn.setMinWidth(35);
@@ -228,7 +240,7 @@ public class PrelaznicaController implements Initializable {
                 Font subFont = new Font(Font.FontFamily.TIMES_ROMAN, 16, Font.BOLD);
                 Font smallBold = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD);
                 try {
-                    Document document = new Document(PageSize.A4);
+                    Document document = new Document(PageSize.A4.rotate());
                     PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(naziv));
                     HeaderFooterPageEvent event = new HeaderFooterPageEvent();
                     writer.setPageEvent(event);
@@ -244,55 +256,72 @@ public class PrelaznicaController implements Initializable {
                     document.add(new Paragraph(" "));      
                     document.add(new Paragraph(" "));
                     
+                    document.add(new Paragraph("Podaci o osnovnom sredstvu:", smallBold));
                     
-                    osnovnaSredstvaList.forEach(os ->{
+                    OsnovnaSredstvaController.osnovnaSredstvaList.forEach(os ->{
                         if(os.getId() == pr.getIdOsnovnogSredstva()){
                             try {
-                                document.add(new Paragraph(new Chunk("Naziv osnovnog sredstva: " + os.getNaziv(), font)));
-                                document.add(new Paragraph(new Chunk("Inventarni broj: " + os.getInventarniBroj(), font)));
+                                document.add(new Paragraph(new Chunk("     Naziv osnovnog sredstva: " + os.getNaziv(), font)));
+                                document.add(new Paragraph(new Chunk("     Inventarni broj: " + os.getInventarniBroj(), font)));
+                                document.add(new Paragraph(new Chunk("     Datum nabavke: " + new SimpleDateFormat("dd.MM.yyyy").format(os.getDatumNabavke()), font)));
+                                document.add(new Paragraph(new Chunk("     Trenutna vrijednost [KM]: " + os.getVrijednost(), font)));
+                                document.add(new Paragraph(new Chunk("     Stopa amortizacije: " + os.getStopaAmortizacije(), font)));
+                                document.add(new Paragraph(new Chunk("     Nabavna vrijednost [KM]: " + os.getNabavnaVrijednost(), font)));
                             } catch (DocumentException e) {
                                 Util.LOGGER.log(Level.SEVERE, e.toString(), e);
                             }
                         }
                     });
-                    osobeList.forEach(os ->{
+                    document.add(new Paragraph(new Chunk("     Datum i vrijeme prelaska: " + new SimpleDateFormat("dd.MM.yyyy, HH:mm:ss").format(pr.getDatumPrelaska()), font)));
+                    document.add(new Paragraph(" "));
+                    
+                    PdfPTable table = new PdfPTable(4);
+                    table.setWidthPercentage(100);
+                    PdfPCell cell = new PdfPCell(new Phrase("Sa osobe"));
+                    cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
+                    cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                    table.addCell(cell);
+                    
+                    cell = new PdfPCell(new Phrase("Na osobu"));
+                    cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
+                    cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                    table.addCell(cell);
+                    
+                    cell = new PdfPCell(new Phrase("Iz prostorije"));
+                    cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
+                    cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                    table.addCell(cell);
+                    
+                    cell = new PdfPCell(new Phrase("U prostoriju"));
+                    cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
+                    cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                    table.addCell(cell);
+                    
+                    table.setHeaderRows(1);
+                    table.getDefaultCell().setHorizontalAlignment(Element.ALIGN_CENTER);
+                    
+                    OsobeController.osobeList.forEach(os ->{
                         if(pr.getIdOsobeSa() == os.getId()){
-                            try {
-                                document.add(new Paragraph(new Chunk("Prethodno zaduženo kod: " + os.getIme() + " " + os.getPrezime(), font)));
-                            } catch (DocumentException e) {
-                                Util.LOGGER.log(Level.SEVERE, e.toString(), e);
-                            }
+                            table.addCell(new Phrase(new Chunk(os.getImePrezime(), font)));
                         }
                     });
-                    osobeList.forEach(os ->{
+                    OsobeController.osobeList.forEach(os ->{
                         if(pr.getIdOsobeNa()== os.getId()){
-                            try {
-                                document.add(new Paragraph(new Chunk("Trenutno zaduženo kod: " + os.getIme() + " " + os.getPrezime(), font)));
-                            } catch (DocumentException e) {
-                                Util.LOGGER.log(Level.SEVERE, e.toString(), e);
-                            }
+                            table.addCell(new Phrase(new Chunk(os.getImePrezime(), font)));
                         }
                     });
                     
-                    prostorijeList.forEach(lo -> {
+                    LokacijeController.prostorijeList.forEach(lo -> {
                         if(pr.getIdProstorijeIz() == lo.getId()){
-                            try {
-                                document.add(new Paragraph(new Chunk("Prethodna prostorija: " + lo.getNaziv() + " (" + zgradeList.stream().filter(z -> z.getId() == lo.getIdZgrade()).findFirst().get().getNaziv() + ")", font)));
-                            } catch (DocumentException e) {
-                                Util.LOGGER.log(Level.SEVERE, e.toString(), e);
-                            }
+                            table.addCell(new Phrase(new Chunk(lo.toString(), font)));
                         }
                     });
-                    prostorijeList.forEach(lo -> {
+                    LokacijeController.prostorijeList.forEach(lo -> {
                         if(pr.getIdProstorijeU()== lo.getId()){
-                            try {
-                                document.add(new Paragraph(new Chunk("Trenutna prostorija: " + lo.getNaziv() + " (" + zgradeList.stream().filter(z -> z.getId() == lo.getIdZgrade()).findFirst().get().getNaziv() + ")", font)));
-                            } catch (DocumentException e) {
-                                Util.LOGGER.log(Level.SEVERE, e.toString(), e);
-                            }
+                            table.addCell(new Phrase(new Chunk(lo.toString(), font)));
                         }
                     });
-                    
+                    document.add(table);
                     document.close();
                 } catch (DocumentException | FileNotFoundException e) {
                     Util.LOGGER.log(Level.SEVERE, e.toString(), e);
