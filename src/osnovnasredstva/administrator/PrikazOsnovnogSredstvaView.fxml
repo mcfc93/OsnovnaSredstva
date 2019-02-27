@@ -41,7 +41,7 @@
       <Label alignment="CENTER_RIGHT" layoutX="368.0" layoutY="221.0" prefHeight="17.0" prefWidth="100.0" styleClass="opisLabel" text="Zaduženo kod" AnchorPane.rightAnchor="235.0" AnchorPane.topAnchor="219.0" />
       <Label alignment="CENTER_RIGHT" layoutX="370.0" layoutY="256.0" prefHeight="17.0" prefWidth="100.0" styleClass="opisLabel" text="Trenutno na" AnchorPane.rightAnchor="235.0" AnchorPane.topAnchor="254.0" />
       <TextField fx:id="datumTextField" editable="false" layoutX="175.0" layoutY="256.0" prefWidth="200.0" styleClass="opisTextField" AnchorPane.leftAnchor="165.0" AnchorPane.topAnchor="250.0" />
-      <TextArea fx:id="opisTextArea" layoutX="402.0" layoutY="60.0" prefHeight="130.0" prefWidth="200.0" styleClass="opisTextArea" AnchorPane.rightAnchor="45.0" AnchorPane.topAnchor="75.0" />
+      <TextArea fx:id="opisTextArea" editable="false" layoutX="402.0" layoutY="60.0" prefHeight="130.0" prefWidth="200.0" styleClass="opisTextArea" AnchorPane.rightAnchor="45.0" AnchorPane.topAnchor="75.0" />
       <Label alignment="CENTER_RIGHT" layoutX="378.0" layoutY="81.0" prefHeight="17.0" prefWidth="100.0" styleClass="opisLabel" text="Opis" AnchorPane.rightAnchor="235.0" AnchorPane.topAnchor="77.0" />
       <TableView fx:id="prelaznicaTableView" layoutX="14.0" layoutY="332.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="320.0">
         <columns>

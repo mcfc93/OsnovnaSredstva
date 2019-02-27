@@ -61,6 +61,8 @@ public class AdministratorController implements Initializable {
     @FXML
     private ToggleButton korisnickiNaloziButton;
     @FXML
+    private ToggleButton backupButton;
+    @FXML
     private Button closeButton;
     @FXML
     private Button maximizeButton;
@@ -119,6 +121,7 @@ public class AdministratorController implements Initializable {
         
         if(PrijavaController.korisnik.getTip() == 1) {
             korisnickiNaloziButton.setVisible(false);
+            backupButton.setVisible(false);
         }
         
         x(null);
@@ -243,6 +246,12 @@ public class AdministratorController implements Initializable {
         } catch(IOException e) {
             Util.LOGGER.log(Level.SEVERE, e.toString(), e);
         }
+    }
+    
+    @FXML
+    void backup(ActionEvent event) {
+        dataAnchorPane.getChildren().removeAll();
+        dataAnchorPane.getChildren().setAll();
     }
     
     @FXML

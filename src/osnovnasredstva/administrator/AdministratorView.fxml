@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<GridPane fx:id="gridPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="800.0" styleClass="rootBorder" stylesheets="@../osnovnasredstva.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="osnovnasredstva.administrator.AdministratorController">
+<GridPane fx:id="gridPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="800.0" styleClass="rootBorder" stylesheets="@../osnovnasredstva.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="osnovnasredstva.administrator.AdministratorController">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="270.0" minWidth="196.0" prefWidth="196.0" />
     <ColumnConstraints hgrow="SOMETIMES" minWidth="600.0" prefWidth="600.0" />
@@ -30,7 +30,7 @@
                   <Font name="System Bold" size="12.0" />
                </font>
             </Label>
-            <ToggleButton fx:id="osobeButton" alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="15.0" layoutY="165.0" mnemonicParsing="false" onAction="#x" prefHeight="40.0" prefWidth="200.0" selected="true" text="Osobe" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+            <ToggleButton fx:id="osobeButton" alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="15.0" layoutY="155.0" mnemonicParsing="false" onAction="#x" prefHeight="40.0" prefWidth="200.0" selected="true" text="Osobe" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                <toggleGroup>
                   <ToggleGroup fx:id="toggleGroup" />
                </toggleGroup>
@@ -48,7 +48,7 @@
                   </ImageView>
                </graphic>
             </ToggleButton>
-            <ToggleButton fx:id="lokacijeButton" alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="15.0" layoutY="205.0" mnemonicParsing="false" onAction="#y" prefHeight="40.0" prefWidth="200.0" text="Lokacije" toggleGroup="$toggleGroup" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+            <ToggleButton fx:id="lokacijeButton" alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="15.0" layoutY="195.0" mnemonicParsing="false" onAction="#y" prefHeight="40.0" prefWidth="200.0" text="Lokacije" toggleGroup="$toggleGroup" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                <opaqueInsets>
                   <Insets />
                </opaqueInsets>
@@ -63,7 +63,7 @@
                   </ImageView>
                </graphic>
             </ToggleButton>
-            <ToggleButton fx:id="osnovnaSredstvaButton" alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="15.0" layoutY="245.0" mnemonicParsing="false" onAction="#z" prefHeight="40.0" prefWidth="200.0" text="Osnovna sredstva" toggleGroup="$toggleGroup" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+            <ToggleButton fx:id="osnovnaSredstvaButton" alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="15.0" layoutY="235.0" mnemonicParsing="false" onAction="#z" prefHeight="40.0" prefWidth="200.0" text="Osnovna sredstva" toggleGroup="$toggleGroup" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                <opaqueInsets>
                   <Insets />
                </opaqueInsets>
@@ -78,7 +78,7 @@
                   </ImageView>
                </graphic>
             </ToggleButton>
-            <ToggleButton fx:id="wButton" alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="15.0" layoutY="452.0" mnemonicParsing="false" onAction="#odjava" prefHeight="40.0" prefWidth="200.0" text="Odjava" toggleGroup="$toggleGroup" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+            <ToggleButton fx:id="wButton" alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="15.0" layoutY="452.0" mnemonicParsing="false" onAction="#odjava" prefHeight="40.0" prefWidth="200.0" text="Odjava" toggleGroup="$toggleGroup" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                <opaqueInsets>
                   <Insets />
                </opaqueInsets>
@@ -108,7 +108,7 @@
                   </ImageView>
                </children>
             </GridPane>
-            <ToggleButton fx:id="korisnickiNaloziButton" alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="15.0" layoutY="325.0" mnemonicParsing="false" onAction="#w" prefHeight="40.0" prefWidth="200.0" text="Korisnički nalozi" toggleGroup="$toggleGroup" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+            <ToggleButton fx:id="korisnickiNaloziButton" alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="15.0" layoutY="315.0" mnemonicParsing="false" onAction="#w" prefHeight="40.0" prefWidth="200.0" text="Korisnički nalozi" toggleGroup="$toggleGroup" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                <opaqueInsets>
                   <Insets />
                </opaqueInsets>
@@ -123,7 +123,7 @@
                   </ImageView>
                </graphic>
             </ToggleButton>
-            <ToggleButton fx:id="prelaznicaButton" alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="15.0" layoutY="285.0" mnemonicParsing="false" onAction="#v" prefHeight="40.0" prefWidth="200.0" text="Prelaznice" toggleGroup="$toggleGroup" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+            <ToggleButton fx:id="prelaznicaButton" alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="15.0" layoutY="275.0" mnemonicParsing="false" onAction="#v" prefHeight="40.0" prefWidth="200.0" text="Prelaznice" toggleGroup="$toggleGroup" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                <opaqueInsets>
                   <Insets />
                </opaqueInsets>
@@ -134,6 +134,21 @@
                   <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../img/transfer.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </ToggleButton>
+            <ToggleButton fx:id="backupButton" alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="15.0" layoutY="371.0" mnemonicParsing="false" onAction="#backup" prefHeight="40.0" prefWidth="200.0" text="Backup baze podataka" toggleGroup="$toggleGroup" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <padding>
+                  <Insets left="20.0" />
+               </padding>
+               <graphic>
+                  <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../img/backup.png" />
                      </image>
                   </ImageView>
                </graphic>

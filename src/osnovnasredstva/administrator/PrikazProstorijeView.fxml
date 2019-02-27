@@ -58,7 +58,7 @@
          <tooltip>
             <Tooltip maxWidth="125.0" text="Kreiraj PDF" wrapText="true" />
          </tooltip></JFXButton>
-      <TextArea fx:id="opisTextArea" layoutX="351.0" layoutY="64.0" prefHeight="95.0" prefWidth="200.0" styleClass="opisTextArea" wrapText="true" AnchorPane.rightAnchor="45.0" AnchorPane.topAnchor="75.0" />
+      <TextArea fx:id="opisTextArea" editable="false" layoutX="351.0" layoutY="64.0" prefHeight="95.0" prefWidth="200.0" styleClass="opisTextArea" wrapText="true" AnchorPane.rightAnchor="45.0" AnchorPane.topAnchor="75.0" />
       <Label alignment="CENTER_RIGHT" layoutX="294.0" layoutY="116.0" prefHeight="17.0" prefWidth="70.0" styleClass="opisLabel" text="Opis" AnchorPane.rightAnchor="235.0" AnchorPane.topAnchor="77.0" />
    </children>
 </AnchorPane>
