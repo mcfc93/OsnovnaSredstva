@@ -56,6 +56,8 @@ public class PrijavaController implements Initializable {
     private static OsnovnoSredstvoDAO osnovnoSredstvoDAO = new OsnovnoSredstvoDAO();
     private static VrstaOSDAO vrstaOSDAO = new VrstaOSDAO();
     
+    private boolean autentifikacijaUspjesna=false;
+    
     @FXML
     private AnchorPane anchorPane;
 	
@@ -159,7 +161,6 @@ public class PrijavaController implements Initializable {
                 
                 try {
                     if((korisnik=KorisnikDAO.prijava(korisnickoImeTextField.getText(), lozinkaTextField.getText(), zapamtiMeCheckBox.isSelected())) != null) {
-
                         Platform.runLater(() -> {
                             korisnickoImeTextField.clear();
                             lozinkaTextField.clear();
@@ -184,7 +185,7 @@ public class PrijavaController implements Initializable {
                         OsnovnaSredstvaController.osnovnaSredstvaList.addAll(osnovnoSredstvoDAO.loadAll(PrijavaController.konekcija));
                         
                         
-                        
+                        autentifikacijaUspjesna=true;
                     } else {
                         Platform.runLater(() -> {
                             greskaLabel.setVisible(true);
@@ -214,22 +215,24 @@ public class PrijavaController implements Initializable {
             protected void succeeded(){
                 super.succeeded();
                 progressPane.setVisible(false);
-                
-                Platform.runLater(() -> {
-                    ((Stage)((Node)event.getSource()).getScene().getWindow()).close();
-                    try {
-                        Parent root = FXMLLoader.load(getClass().getResource("/osnovnasredstva/administrator/AdministratorView.fxml"));
-                        Scene scene = new Scene(root);
-                        scene.getStylesheets().add(getClass().getResource("/osnovnasredstva/osnovnasredstva.css").toExternalForm());
-                        Stage stage=new Stage();
-                        stage.setScene(scene);
-                        stage.setResizable(false);
-                        stage.initStyle(StageStyle.UNDECORATED);
-                        stage.show();
-                    } catch(IOException e) {
-                        Util.LOGGER.log(Level.SEVERE, e.toString(), e);
-                    }
-                });
+                if(autentifikacijaUspjesna) {
+                    autentifikacijaUspjesna=false;
+                    Platform.runLater(() -> {
+                        ((Stage)((Node)event.getSource()).getScene().getWindow()).close();
+                        try {
+                            Parent root = FXMLLoader.load(getClass().getResource("/osnovnasredstva/administrator/AdministratorView.fxml"));
+                            Scene scene = new Scene(root);
+                            scene.getStylesheets().add(getClass().getResource("/osnovnasredstva/osnovnasredstva.css").toExternalForm());
+                            Stage stage=new Stage();
+                            stage.setScene(scene);
+                            stage.setResizable(false);
+                            stage.initStyle(StageStyle.UNDECORATED);
+                            stage.show();
+                        } catch(IOException e) {
+                            Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+                        }
+                    });
+                }
             }
         }).start();
     }
