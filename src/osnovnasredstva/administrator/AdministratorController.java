@@ -264,64 +264,48 @@ public class AdministratorController implements Initializable {
     
     @FXML
     void backup(ActionEvent event) {
-        //dataAnchorPane.getChildren().removeAll();
-       // dataAnchorPane.getChildren().setAll();
-       //ToggleButton tmpButton = (ToggleButton)toggleGroup.getSelectedToggle();
-        //System.out.println(tmpButton.getText());
-       //int index = toggleGroup.getToggles().indexOf(tmpButton);
-        //System.out.println(index);
-       //toggleGroup.getToggles().get(index).setSelected(false);
-       tmpButton.setSelected(false);
+        tmpButton.setSelected(false);
        
-       MaskerPane progressPane=Util.getMaskerPane(gridPane);
-       FileChooser fileChooser = new FileChooser();
-       fileChooser.setTitle("Save As");
-        fileChooser.getExtensionFilters().addAll(
-         new ExtensionFilter("SQL Files", "*.sql"));
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save As");
+        fileChooser.getExtensionFilters().addAll(new ExtensionFilter("SQL Files", "*.sql"));
         File path = new File(System.getProperty("user.home"));//fileChooser.showSaveDialog(null);
         fileChooser.setInitialDirectory(path);
         File file=fileChooser.showSaveDialog(((Node)event.getSource()).getScene().getWindow());
-       new Thread(new Task<Void>() {
+        
+        MaskerPane progressPane=Util.getMaskerPane(dataAnchorPane);
+        
+        new Thread(new Task<Void>() {
             @Override
             protected Void call() {
-                //progressPane.setVisible(true);
-                
-                
                 String executeCmd = "";
                 if(file != null){
-                Process runtimeProcess;
-                Process proc;
-                String s="";
-                String tmp="";
-                try {
-                    /*
-                    ProcessBuilder pb1 = new ProcessBuilder("cmd", "/c", "where mysqldump");
-                    //pb1.redirectError();
-                    Process p = pb1.start();
-                    BufferedReader reader = 
-                        new BufferedReader(new InputStreamReader(p.getInputStream()));
-                    while ((s = reader.readLine()) != null) {
-                        System.out.println(s);
-                        tmp = new String(s);
-                    }
-                    System.out.println(tmp);
-                    int exitCode = p.waitFor();
-                    */
-                    String com = "\"" + Util.PROPERTY.getProperty("db.dump") + "\"" + " --user=" + Util.PROPERTY.getProperty("db.username") + " --password=" + Util.PROPERTY.getProperty("db.password") + " " + Util.PROPERTY.getProperty("db.schema") + " >  " + file.getAbsolutePath();
-                    //System.out.println(com);
-                    ProcessBuilder pb2 = new ProcessBuilder("cmd", "/c", com);
-                    Process p2 = pb2.start();
+                    progressPane.setVisible(true);
+                    Process runtimeProcess;
+                    Process proc;
+                    String s="";
+                    String tmp="";
+                    try {
 
-                    int processComplete = p2.waitFor();
-                    if(processComplete == 0){
-                        Platform.runLater(() -> Util.getNotifications("Obavještenje", "Backup baze napravljen.", "Confirmation").show());
-                    } else {
-                        Platform.runLater(() -> Util.getNotifications("Greška", "Greška prilikom pravljenja backupa.", "Error").show());
+                        String com = "\"" + Util.PROPERTY.getProperty("db.dump") + "\"" + " --user=" + Util.PROPERTY.getProperty("db.username") + " --password=" + Util.PROPERTY.getProperty("db.password") + " " + Util.PROPERTY.getProperty("db.schema") + " >  " + file.getAbsolutePath();
+                        //System.out.println(com);
+                        ProcessBuilder pb2 = null;
+                        if(System.getProperty("os.name").toLowerCase().startsWith("windows")){
+                            pb2 = new ProcessBuilder("cmd", "/c", com);
+                        } else {
+                            pb2 = new ProcessBuilder("/bin/bash", "-c", com);
+                        }
+                        Process p2 = pb2.start();
+
+                        int processComplete = p2.waitFor();
+                        if(processComplete == 0){
+                            Platform.runLater(() -> Util.getNotifications("Obavještenje", "Backup baze napravljen.", "Confirmation").show());
+                        } else {
+                            Platform.runLater(() -> Util.getNotifications("Greška", "Greška prilikom pravljenja backupa.", "Error").show());
                         }
                     } catch (IOException | InterruptedException e) {
                         Util.LOGGER.log(Level.SEVERE, e.toString(), e);
                     }
-                    //System.out.println(file.getAbsolutePath());
                 }
                 return null;
             }

@@ -38,6 +38,7 @@ import javafx.scene.control.TextInputControl;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
 import org.controlsfx.control.MaskerPane;
@@ -198,6 +199,9 @@ public class Util {
             AnchorPane.setBottomAnchor(progressPane,0.0);
             AnchorPane.setLeftAnchor(progressPane,0.0);
             AnchorPane.setRightAnchor(progressPane,0.0);
+        } else if(pane instanceof GridPane) {
+            GridPane.setColumnIndex(pane, 1);
+            GridPane.setRowIndex(pane, 1);
         }
         return progressPane;
     }
