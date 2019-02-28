@@ -580,7 +580,7 @@ public class OsnovnaSredstvaController implements Initializable {
     @FXML
     private void pdf(ActionEvent event) {
         MaskerPane progressPane=Util.getMaskerPane(anchorPane);
-        String naziv = "PDF/" + "Izvjestaj_OsnovnaSredstva" + "_" + new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(new Date()) + ".pdf";
+        String naziv = "PDF/osnovna_sredstva/" + "OsnovnaSredstvaIzvjestaj_" + new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(new Date()) + ".pdf";
         new Thread(new Task<Void>() {
             @Override
             protected Void call() {

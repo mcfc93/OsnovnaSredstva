@@ -137,10 +137,10 @@ public class PrelaznicaController implements Initializable {
                         prostorijeList.clear();
                         zgradeList.clear();
                         osnovnaSredstvaList.addAll(osnovnoSredstvoDAO.loadAll2(PrijavaController.konekcija));
-                        prelazniceList.addAll(prelaznicaDAO.loadAll(PrijavaController.konekcija));
                         osobeList.addAll(osobaDAO.loadAll2(PrijavaController.konekcija));
                         prostorijeList.addAll(prostorijaDAO.loadAll2(PrijavaController.konekcija));
                         zgradeList.addAll(zgradaDAO.loadAll2(PrijavaController.konekcija));
+                        prelazniceList.addAll(prelaznicaDAO.loadAll(PrijavaController.konekcija));
                     }
                 } catch (SQLException e) {
                     Util.LOGGER.log(Level.SEVERE, e.toString(), e);
@@ -225,11 +225,11 @@ public class PrelaznicaController implements Initializable {
     }
     
     private void otvoriPrelaznicu(Prelaznica pr) {
-        String naziv = "PDF/prelaznica/" + "Prelaznica_" + new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(pr.getDatumPrelaska()) + ".pdf";
+        String naziv = "PDF/prelaznice/" + "Prelaznica_" + pr.getId() + "_" + new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(pr.getDatumPrelaska()) + ".pdf";
         File file = new File(naziv);
         if(!file.exists()){
             MaskerPane progressPane=Util.getMaskerPane(anchorPane);
-        //String naziv = "PDF/prelaznica/" + "Prelaznica_" + new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(pr.getDatumPrelaska()) + ".pdf";
+        //String naziv = "PDF/prelaznice/" + "Prelaznica_" + new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(pr.getDatumPrelaska()) + ".pdf";
         
         new Thread(new Task<Void>() {
             @Override
@@ -322,6 +322,9 @@ public class PrelaznicaController implements Initializable {
                         }
                     });
                     document.add(table);
+                    
+                    document.add(new Paragraph(new Chunk("Napomena: " + pr.getNapomena(), font)));
+                    
                     document.close();
                 } catch (DocumentException | FileNotFoundException e) {
                     Util.LOGGER.log(Level.SEVERE, e.toString(), e);

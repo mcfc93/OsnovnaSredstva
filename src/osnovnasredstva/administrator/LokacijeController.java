@@ -552,7 +552,7 @@ public class LokacijeController implements Initializable {
     @FXML
     private void pdf(ActionEvent event) {
         MaskerPane progressPane=Util.getMaskerPane(anchorPane);
-        String naziv = "PDF/" + "ProstorijeIzvjestaj_" + new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(new Date()) + ".pdf";
+        String naziv = "PDF/prostorije/" + "ProstorijeIzvjestaj_" + new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(new Date()) + ".pdf";
         
         new Thread(new Task<Void>() {
             @Override

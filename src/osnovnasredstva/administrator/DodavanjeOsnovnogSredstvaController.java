@@ -394,7 +394,7 @@ public class DodavanjeOsnovnogSredstvaController implements Initializable {
     }
     public void generisiPDF(Prelaznica pr){
         MaskerPane progressPane=Util.getMaskerPane(anchorPane);
-        String naziv = "PDF/prelaznica/" + "Prelaznica_" + new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(pr.getDatumPrelaska()) + ".pdf";
+        String naziv = "PDF/prelaznice/" + "Prelaznica_" + pr.getId() + "_" + new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(pr.getDatumPrelaska()) + ".pdf";
         
         new Thread(new Task<Void>() {
             @Override
@@ -487,6 +487,9 @@ public class DodavanjeOsnovnogSredstvaController implements Initializable {
                         }
                     });
                     document.add(table);
+                    
+                    document.add(new Paragraph(new Chunk("Napomena: " + pr.getNapomena(), font)));
+                    
                     document.close();
                 } catch (DocumentException | FileNotFoundException e) {
                     Util.LOGGER.log(Level.SEVERE, e.toString(), e);

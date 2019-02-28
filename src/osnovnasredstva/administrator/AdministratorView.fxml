@@ -138,7 +138,7 @@
                   </ImageView>
                </graphic>
             </ToggleButton>
-            <ToggleButton fx:id="backupButton" alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="15.0" layoutY="371.0" mnemonicParsing="false" onAction="#backup" prefHeight="40.0" prefWidth="200.0" text="Backup baze podataka" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+            <ToggleButton fx:id="backupButton" alignment="BASELINE_LEFT" focusTraversable="false" graphicTextGap="15.0" layoutY="371.0" mnemonicParsing="false" onAction="#backup" prefHeight="40.0" prefWidth="200.0" text="Backup baze podataka" toggleGroup="$toggleGroup" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                <opaqueInsets>
                   <Insets />
                </opaqueInsets>
@@ -152,9 +152,6 @@
                      </image>
                   </ImageView>
                </graphic>
-               <toggleGroup>
-                  <ToggleGroup fx:id="toggleGroup1" />
-               </toggleGroup>
             </ToggleButton>
          </children>
       </AnchorPane>

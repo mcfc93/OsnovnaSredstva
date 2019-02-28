@@ -58,16 +58,26 @@ public class Util {
             if(!f.exists()) {
                     f.mkdirs();
             }
-            f=new File("PDF/prelaznica");
+            f=new File("PDF");
             if(!f.exists()) {
                     f.mkdirs();
             }
-            /*
-            f=new File("prelaznica");
+            f=new File("osobe");
             if(!f.exists()) {
                     f.mkdirs();
             }
-            */
+            f=new File("prostorije");
+            if(!f.exists()) {
+                    f.mkdirs();
+            }
+            f=new File("osnovna_sredstva");
+            if(!f.exists()) {
+                    f.mkdirs();
+            }
+            f=new File("prelaznice");
+            if(!f.exists()) {
+                    f.mkdirs();
+            }
             //new FileHandler(System.getProperty("user.home") + File.separator + "error.log", true);
             fileHandler = new FileHandler(LOG_PATH, true);	//append
             LOGGER.addHandler(Util.fileHandler);

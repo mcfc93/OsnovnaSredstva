@@ -429,7 +429,7 @@ public class OsobeController implements Initializable {
     @FXML
     private void pdf(ActionEvent event) {
         MaskerPane progressPane=Util.getMaskerPane(anchorPane);
-        String naziv = "PDF/OsobeIzvjestaj_" + new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(new Date()) + ".pdf";
+        String naziv = "PDF/osobe/" + "OsobeIzvjestaj_" + new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(new Date()) + ".pdf";
         new Thread(new Task<Void>() {
             @Override
             protected Void call() throws IOException {

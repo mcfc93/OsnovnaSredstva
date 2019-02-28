@@ -205,7 +205,7 @@ public class PrikazOsobeController implements Initializable {
     @FXML
     private void pdf(ActionEvent event) {
         MaskerPane progressPane=Util.getMaskerPane(anchorPane);
-        String naziv = "PDF/" + odabranaOsoba.getIme() + "_" + odabranaOsoba.getPrezime() + "_" + new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(new Date()) + ".pdf";
+        String naziv = "PDF/osobe/" + odabranaOsoba.getIme() + "_" + odabranaOsoba.getPrezime() + "_" + odabranaOsoba.getId() + "_" + new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(new Date()) + ".pdf";
         new Thread(new Task<Void>() {
             @Override
             protected Void call() {

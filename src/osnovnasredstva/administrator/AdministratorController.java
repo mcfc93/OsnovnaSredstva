@@ -8,7 +8,9 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -32,6 +34,7 @@ import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import org.controlsfx.control.MaskerPane;
 import osnovnasredstva.prijava.PrijavaController;
 import osnovnasredstva.util.Util;
 
@@ -74,6 +77,9 @@ public class AdministratorController implements Initializable {
     private Button maximizeButton;
     @FXML
     private Button minimizeButton;
+    
+    @FXML
+    private ToggleButton tmpButton;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -107,6 +113,8 @@ public class AdministratorController implements Initializable {
         toggleGroup.selectedToggleProperty().addListener((ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) -> {
             if (newValue == null) {
                 oldValue.setSelected(true);
+            } else {
+                tmpButton=toggleGroup.getToggles().indexOf(newValue) != 6? (ToggleButton)newValue : (ToggleButton)oldValue; 
             }
         });
         
@@ -257,48 +265,74 @@ public class AdministratorController implements Initializable {
     @FXML
     void backup(ActionEvent event) {
         //dataAnchorPane.getChildren().removeAll();
-       // dataAnchorPane.getChildren().setAll();   
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Save As");
+       // dataAnchorPane.getChildren().setAll();
+       //ToggleButton tmpButton = (ToggleButton)toggleGroup.getSelectedToggle();
+        //System.out.println(tmpButton.getText());
+       //int index = toggleGroup.getToggles().indexOf(tmpButton);
+        //System.out.println(index);
+       //toggleGroup.getToggles().get(index).setSelected(false);
+       tmpButton.setSelected(false);
+       
+       MaskerPane progressPane=Util.getMaskerPane(gridPane);
+       FileChooser fileChooser = new FileChooser();
+       fileChooser.setTitle("Save As");
         fileChooser.getExtensionFilters().addAll(
          new ExtensionFilter("SQL Files", "*.sql"));
-        File file = fileChooser.showSaveDialog(null);
-        String executeCmd = "";
-        if(file != null){
-        Process runtimeProcess;
-        Process proc;
-        String s="";
-        String tmp="";
-        try {
-            ProcessBuilder pb1 = new ProcessBuilder("cmd", "/c", "where mysqldump");
-            //pb1.redirectError();
-            Process p = pb1.start();
-            BufferedReader reader = 
-                new BufferedReader(new InputStreamReader(p.getInputStream()));
-            while ((s = reader.readLine()) != null) {
-                //System.out.println(s);
-                tmp = new String(s);
+        File path = new File(System.getProperty("user.home"));//fileChooser.showSaveDialog(null);
+        fileChooser.setInitialDirectory(path);
+        File file=fileChooser.showSaveDialog(((Node)event.getSource()).getScene().getWindow());
+       new Thread(new Task<Void>() {
+            @Override
+            protected Void call() {
+                //progressPane.setVisible(true);
+                
+                
+                String executeCmd = "";
+                if(file != null){
+                Process runtimeProcess;
+                Process proc;
+                String s="";
+                String tmp="";
+                try {
+                    ProcessBuilder pb1 = new ProcessBuilder("cmd", "/c", "where mysqldump");
+                    //pb1.redirectError();
+                    Process p = pb1.start();
+                    BufferedReader reader = 
+                        new BufferedReader(new InputStreamReader(p.getInputStream()));
+                    while ((s = reader.readLine()) != null) {
+                        //System.out.println(s);
+                        tmp = new String(s);
+                    }
+                    //System.out.println(tmp);
+                    int exitCode = p.waitFor();
+                    String com = "\"" + tmp + "\"" + " --user=" + Util.PROPERTY.getProperty("db.username") + " --password=" + Util.PROPERTY.getProperty("db.password") + " " + Util.PROPERTY.getProperty("db.schema") + " >  " + file.getAbsolutePath();
+                    //System.out.println(com);
+                    ProcessBuilder pb2 = new ProcessBuilder("cmd", "/c", com);
+                    Process p2 = pb2.start();
+
+                    int processComplete = p2.waitFor();
+                    if(processComplete == 0){
+                        Platform.runLater(() -> Util.getNotifications("Obavještenje", "Backup baze napravljen.", "Confirmation").show());
+                    } else {
+                        Platform.runLater(() -> Util.getNotifications("Greška", "Greška prilikom pravljenja backupa.", "Error").show());
+                        }
+                    } catch (IOException | InterruptedException e) {
+                        Util.LOGGER.log(Level.SEVERE, e.toString(), e);
+                    }
+                    //System.out.println(file.getAbsolutePath());
+                }
+                return null;
             }
-            //System.out.println(tmp);
-            int exitCode = p.waitFor();
-            String com = "\"" + tmp + "\"" + " --user=root --password=root projektniis >  " + file.getAbsolutePath();
-            //System.out.println(com);
-            ProcessBuilder pb2 = new ProcessBuilder("cmd", "/c", com);
-            Process p2 = pb2.start();
- 
-        int processComplete = p2.waitFor();
-        if(processComplete == 0){
-            Util.getNotifications("Obavještenje", "Backup baze napravljen.", "Confirmation").show();
-        } else {
-            Util.getNotifications("Obavještenje", "Greška prilikom pravljenja backupa.", "Error").show();
+            @Override
+            protected void succeeded(){
+                super.succeeded();
+                progressPane.setVisible(false);
+                Platform.runLater(() -> {
+                    tmpButton.setSelected(true);
+                    backupButton.setSelected(false);
+                });
             }
-        } catch (IOException | InterruptedException e) {
-            Util.LOGGER.log(Level.SEVERE, e.toString(), e);
-        }
-        //System.out.println(file.getAbsolutePath());
-    }
-        backupButton.setSelected(false);
-        
+        }).start();
     }
     
     @FXML
