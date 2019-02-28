@@ -294,18 +294,20 @@ public class AdministratorController implements Initializable {
                 String s="";
                 String tmp="";
                 try {
+                    /*
                     ProcessBuilder pb1 = new ProcessBuilder("cmd", "/c", "where mysqldump");
                     //pb1.redirectError();
                     Process p = pb1.start();
                     BufferedReader reader = 
                         new BufferedReader(new InputStreamReader(p.getInputStream()));
                     while ((s = reader.readLine()) != null) {
-                        //System.out.println(s);
+                        System.out.println(s);
                         tmp = new String(s);
                     }
-                    //System.out.println(tmp);
+                    System.out.println(tmp);
                     int exitCode = p.waitFor();
-                    String com = "\"" + tmp + "\"" + " --user=" + Util.PROPERTY.getProperty("db.username") + " --password=" + Util.PROPERTY.getProperty("db.password") + " " + Util.PROPERTY.getProperty("db.schema") + " >  " + file.getAbsolutePath();
+                    */
+                    String com = "\"" + Util.PROPERTY.getProperty("db.dump") + "\"" + " --user=" + Util.PROPERTY.getProperty("db.username") + " --password=" + Util.PROPERTY.getProperty("db.password") + " " + Util.PROPERTY.getProperty("db.schema") + " >  " + file.getAbsolutePath();
                     //System.out.println(com);
                     ProcessBuilder pb2 = new ProcessBuilder("cmd", "/c", com);
                     Process p2 = pb2.start();
