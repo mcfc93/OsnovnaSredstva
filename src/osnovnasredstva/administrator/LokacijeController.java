@@ -135,7 +135,7 @@ public class LokacijeController implements Initializable {
 		
         traziTextField.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue)->{
             //filteredList.setPredicate(prostorija -> prostorija.getNaziv().toLowerCase().startsWith(newValue.toLowerCase()));
-            filteredList.setPredicate(prostorija -> zgradaComboBox.getValue().getNaziv() != null? prostorija.getIdZgrade() == zgradaComboBox.getValue().getId() && prostorija.getNaziv().toLowerCase().startsWith(newValue.toLowerCase()): prostorija.getNaziv().toLowerCase().startsWith(newValue.toLowerCase()));
+            filteredList.setPredicate(prostorija -> zgradaComboBox.getValue().getNaziv() != null? prostorija.getIdZgrade() == zgradaComboBox.getValue().getId() && prostorija.getNaziv().toLowerCase().contains(newValue.toLowerCase()): prostorija.getNaziv().toLowerCase().contains(newValue.toLowerCase()));
             
             if(!newValue.isEmpty()) {
                 clearImageView.setVisible(true);

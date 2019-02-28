@@ -176,7 +176,7 @@ public class PrikazProstorijeController implements Initializable {
         osobaColumn.setMaxWidth(4000);
         
         vrijednostColumn.setMinWidth(100);
-        vrijednostColumn.setMaxWidth(3000);
+        vrijednostColumn.setMaxWidth(3500);
     }
 
     @FXML
@@ -272,7 +272,7 @@ public class PrikazProstorijeController implements Initializable {
                     } else{
                         cell = new PdfPCell(new Phrase(new Chunk("Nema podataka o zaduživanjima",font)));
                         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                        cell.setColspan(4);
+                        cell.setColspan(5);
                         table.addCell(cell);
                     }
                     document.add(table);
