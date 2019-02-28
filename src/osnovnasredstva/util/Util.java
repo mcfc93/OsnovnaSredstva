@@ -62,19 +62,19 @@ public class Util {
             if(!f.exists()) {
                     f.mkdirs();
             }
-            f=new File("osobe");
+            f=new File("PDF/osobe");
             if(!f.exists()) {
                     f.mkdirs();
             }
-            f=new File("prostorije");
+            f=new File("PDF/prostorije");
             if(!f.exists()) {
                     f.mkdirs();
             }
-            f=new File("osnovna_sredstva");
+            f=new File("PDF/osnovna_sredstva");
             if(!f.exists()) {
                     f.mkdirs();
             }
-            f=new File("prelaznice");
+            f=new File("PDF/prelaznice");
             if(!f.exists()) {
                     f.mkdirs();
             }
